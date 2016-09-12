@@ -1,0 +1,265 @@
+---
+title:  Züchtungslehre
+author: Peter von Rohr
+date: 04-09-2016
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=TRUE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psDate = "2016-09-05",
+                                 psStatus = "Erstellung",
+                                 psProject = "ZLHS2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Status des Dokuments")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Einführung in Lineare Algebra
+Aus der linearen Algebra brauchen wir für diese Vorlesung nur das Rechnen mit Vektoren und Matrizen. Der Grund, weshalb Vektoren und Matrizen wchtig sind, ist dass sie uns das Aufstellen und das Lösen von Gleichungssystemen wesentlich erleichtern. Lineare Gleichungssysteme sind in der traditionellen Zuchtwertschätzung, d.h. überall dort, wo die genomische Selektion noch nicht angewendet wird, sehr wichtig.
+
+## Was ist ein Vektor
+Ein Vektor ist durch seine __Länge__ und seine __Richtung__ eindeutig bestimmt. Das heisst, sind zwei Vektoren $v$ und $w$ gleich lang und haben die gleich Richtung, dann sind die beiden Vektoren gleich und somit gilt $v=w$. Haben zwei Vektoren $v$ und $x$ nicht die gleiche Richtung oder sind nicht gleich lang, dann sind die Vektoren nicht gleich und somit gilt $v \ne x$ und somit auch $w \ne x$.
+
+```{r VectorEquality}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "VectorEquality", pnPaperWidthScale = 0.5)
+```
+
+### Koordinaten
+Durch die Einführung eines Koordinatensystems wird jedem Punkt im n-dimensionalen Raum ein n-tupel von Zahlen -die sogenannten Koordinaten - zugewiesen. Zum Beispiel bekommt jeder Punkt in einer Ebene (zweidimensionaler Raum) ein Paar von Koordinaten zugewiesen.
+
+ Die Koordinaten eines Vektors errechnen sich aus der Differenz der Koordinaten des Endpunktes des Vektors minus die Koordinaten des Anfangspuktes des Vektors. Betrachten wir als Beispiel im nachfolgenden Bild den Vektor $v$ mit Anfangspunkt $A$ und Endpunkt $E$, dann errechnen sich die Koordinaten als Differenzen zwischen den Koordinaten von $E$ minus die Koordinaten von $A$, das bedeutet
+ 
+$$ v = \left[\begin{array}{c} e_x - a_x \\ e_y - a_y \end{array}\right]$$
+ 
+```{r VektorKoordinaten}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "VektorKoordinaten", pnPaperWidthScale = 0.75)
+```
+
+ 
+### Geometrie
+In der elementaren Geometrie  werden Vektoren häufig durch Pfeile dargestellt. Parallele Pfeile mit gleicher Länge werden Repräsentanten des gleichen Vektors bezeichnet. Repräsentanten, welche ihren Anfangspunkt im Ursprung des Koordinatensystems haben, sind speziell und werden als Ortsvektoren des jeweiligen Endpunkts bezeichnet. Die Koordinaten des Endpuntes und die Koordinaten des Vektors sind identisch.
+
+
+## Operationen mit Vektoren
+Vektoren als solches werden erst dann richtig nützlich, wenn man sie mit Operationen verküpfen kann. Konkret heisst das, die Einführung von Operationen zwischen Vektoren erlaubt es uns mit ihnen zu rechnen.
+
+### Addition und Subtraktion
+Die Addition zweier Vektoren $v$ und $w$ hat als Resultat wieder einen Vektor, sagen wir er heisse $u$. Es gilt somit, dass 
+
+$$v + w = u$$
+
+Die Koordinaten des Summenvektors berechnen sich als die Summen der Koordinaten der Summandenvektoren. Angenommen die Koordinaten der Summandenvektoren $v$ und $w$ werden mit $v_x$, $v_y$, $w_x$ und $w_y$ bezeichnet, dann entsprechen die Koordinaten von $u$
+
+$$ u = \left[\begin{array}{c} u_x \\ u_y\end{array}\right]
+     = \left[\begin{array}{c} v_x + w_x \\ v_y + w_y\end{array}\right]$$
+
+Graphisch entspricht die Addition zweier Vektoren $v$ und $w$ der Verkettung der beiden Pfeile. 
+
+```{r VektorAddition}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "VektorAddition", pnPaperWidthScale = 0.8)
+```
+
+Die Reihenfolge der beiden Summanden ist nicht wichtig. Es gilt also, dass $v + w = u = w + v$. Dies ist auch aus der obigen Abbildung ersichtlich.
+
+Die Subtraktion kann aus der Addition abgeleitet werden. Subtrahiert man auf beiden Seiten der Additionsgleichung einer der Vektoren, dann folgt
+
+$$v = u - w$$
+
+und 
+
+$$w = u - v$$
+
+
+### Multiplikation mit einem Skalar
+Die Multiplikation eines Vektors mit einer skalaren Grösse, d.h. mit einer Zahl führt zu einer Streckung oder einer Stauchung des Vektors. Die Koordinaten des Resultatvektors entsprechen den Koordinaten des Ursprungsvektors, welche mit dem skalaren Faktor multipliziert werden.
+
+$$ u = \lambda * v 
+     = \left[\begin{array}{c} u_x \\ u_y\end{array}\right]
+     = \left[\begin{array}{c} \lambda * v_x \\ \lambda * v_y\end{array}\right]$$
+
+Je nach Wert von $\lambda$ verändert $v$ die Länge und die Richtung. Folgende Tabelle gibt eine Übersicht zu den Änderungen. 
+
+
+
+\begin{tabular}{|c|c|c|}
+\hline
+Faktor              &  Richtung  &  L\"ange \\
+\hline
+$\lambda < -1$      &  entgegengesetzt  &  länger \\
+\hline
+$\lambda = -1$      &  entgegengesetzt  &  gleich \\
+\hline
+$-1 < \lambda < 0$  &  entgegengesetzt  &  kürzer \\
+\hline
+$\lambda = 0$       &  unbestimmt       &  kürzer \\
+\hline
+$0 < \lambda < 1$   &  gleich           & kürzer  \\
+\hline
+$\lambda = 1$       &  gleich           & gleich  \\
+\hline
+$\lambda > 1$       &  gleich           & länger  \\
+\hline
+\end{tabular}
+
+
+### Skalarprodukt
+Das Skalarprodukt zweier Vektoren entspricht einer Zahl. Diese berechnet sich aus den Produkten der einzelnen Koordinaten, welche dann additiert werden. Konkret bedeutet das
+
+$$v \cdot w = v_x * w_x + v_y + w_y$$
+
+Wird das Skalarprodukt zweier Vektoren um das Produkt der Längen der beiden Vektoren skaliert, so resultiert der Cosinus des Zwischenwinkels der beiden Vektoren. Somit liefert das Skalarprodukt einen Vergleich bezüglich der Richtungen von zwei Vektoren. 
+
+```{r VektorenWinkel}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "VektorenWinkel", pnPaperWidthScale = 0.8)
+```
+
+In einer Formel geschrieben, heisst das
+
+$$ cos(\alpha) = \frac{v \cdot w}{||v||*||w||}$$
+
+Aufgrund der Eigenschaften der Winkelfunktion $cos$ können wir sagen, dass Vektoren, deren Skalarprodukt $0$ ist, senkrecht zueinander stehen. Vektoren deren Skalarprodukt gleich $1$ ist, haben einen Zwischenwinkel von $0$ und verlaufen somit parallel zueinander.
+
+
+## Was ist eine Matrix
+Werden mehrere Vektoren "nebeneinander" gestellt, resultiert ein neues Objekt, welches wir als __Matrix__ bezeichnen. Stellen wir als Beispiel die Vektoren $v$ und $w$ nebeneinander, dann erhalten wir die Matrix $M$
+
+$$M = \left[\begin{array}{cc} v & w \end{array}\right] 
+    = \left[\begin{array}{cc} v_x & w_x \\ v_y & w_y \end{array}\right]$$
+    
+Eine Matrix kann auch als Schema von $m * n$ Zahlen definiert werden, welche in $m$ Zeilen und $n$ Kolonnen angeordnet sind. Man spricht dann auch von einer $m * n$ - Matrix. Matrizen werden im allgemeinen mit Grossbuchstaben bezeichnet. Die Elemente einer bestimmten Matrix $A$ werden mit $a_{ij}$ bezeichnet, wobei $i$ dem Zeilenindex und $j$ dem Kolonnenindex entsprechen. 
+
+Als Beispiel betrachten wir die $2 * 3$-Matrix $A$
+
+$$A = \left[\begin{array}{ccc} 2 & 3 & 0\\ -1 & 4 & 7\end{array}\right]$$
+
+Das Element $a_{12}$ ist das Element aus der ersten Zeile und der zweiten Kolonne von $A$ also ist $a_{12}=3$.
+
+
+### Eigenschaften von Matrizen
+Die Anzahl Zeilen und Kolonnen einer Matrix werden auch als __Dimension__ bezeichnet. Als Beispiel ist die Dimension der Matrix $M$, welche wir oben aus den Vektoren $v$ und $w$ zusammengesetzt haben ist $2*2$. 
+
+### Matrixoperationen
+__Addition__ und __Subtraktion__ von Matrizen sind analog zu den entsprechenden Operationen zwischen Vektoren definiert. Die Addition und Subtraktion von Matrizen wird element-weise durchgeführt. Nehmen wir an, wir haben die Matrizen $A$ und $B$, dann ist deren Summen $S$ wieder eine Matrix, 
+
+$$S = A + B = \left[\begin{array}{cc} a_{11} & a_{12} \\ a_{21} & a_{22}\end{array}\right]
+    + \left[\begin{array}{cc} b_{11} & b_{12} \\ b_{21} & b_{22}\end{array}\right]
+    = \left[\begin{array}{cc} a_{11}+b_{11} & a_{12}+b_{12} \\ a_{21}+b_{21} & a_{22}+b_{22}\end{array}\right]$$
+
+Für die Subtraktion können wir schreiben 
+
+$$A = S - B = \left[\begin{array}{cc} s_{11} & s_{12} \\ s_{21} & s_{22}\end{array}\right]
+    - \left[\begin{array}{cc} b_{11} & b_{12} \\ b_{21} & b_{22}\end{array}\right]
+    = \left[\begin{array}{cc} s_{11}-b_{11} & s_{12}-b_{12} \\ s_{21}-b_{21} & s_{22}-b_{22}\end{array}\right]$$
+
+Die Addition und die Subtraktion ist nur zwischen Matrizen mit gleicher Dimension möglich.
+
+Die __Matrixmultiplikation__ zwischen den Matrizen $A$ und $B$ lässt sich als eine Serie von Skalarprodukten zwischen den Zeilen von $A$ und den Kolonnen von $B$ auffassen. Die nachfolgende Formel gibt eine formale Definition der Matrixmultiplikation. Das Produkt der Matrizen $A\cdot B$ ist wieder eine Matrix. Der Term $(A\cdot B)_{ij}$ steht für das Element auf Zeile $i$ und Kolonne $j$ der Produktmatrix. Dieses Element $(A\cdot B)_{ij}$ entspricht
+
+$$(A\cdot B)_{ij} = \sum_{k=1}^n a_{ik} * b_{kj}$$
+
+Die Summation in der oben gezeigten Formel läuft über die Kolonnen von Matrix $A$ und über die Zeilen von Matrix $B$. 
+
+Die Matrixmultiplikation ist nur möglich, falls die Dimensionen der beiden Matrixfaktoren kompatibel sind. Die Anzahl Kolonnen des ersten Faktors $A$ muss der Anzahl Zeilen des zweiten Faktors $B$ entsprechen, nur dann kann das Produkt 
+$A\cdot B$ berechnet werden. Es können also nur Matrizen der Dimension $m*n$ mit Matrizen der Dimension $n*p$ multipliziert werden. Im allgemeinen können die Faktoren auch nicht vertauscht werden, d.h. im allgemeinen Fall gilt, dass 
+
+$$A\cdot B \ne B\cdot A$$
+
+Werden Addition und Multiplikation kombiniert, gilt für entsprechend kompatible Matrizen $A$, $B$ und $C$ das Kommutativgesetz. 
+
+$$(A + B)\cdot C = A\cdot C + B\cdot C$$
+
+Wichtig ist aber auch hier die Einhaltung der Reihenfolge der Faktoren, das heisst, da Matrix $C$ von links zur Summe $(A + B)$ multipliziert wird, muss sie auch zu jedem Summanden von links multipliziert werden.
+
+
+### Spezielle Matrizen
+Die __Nullmatrix__ $O$ ist die Matrix, deren Elemente $o_{ij}$ alle gleich $0$ sind. 
+
+$$O = \left[\begin{array}{ccc} 0 & 0 & 0\\ 0 & 0 & 0\end{array}\right]$$
+
+Diese Matrix ist das Neutralelement der Addition und der Subtraktion. Somit gilt, dass 
+
+$$ A + O = A - O = A$$
+
+für alle Matrizen $A$. Das Produkt einer beliebigen Matrix $A$ mit der Nullmatrix $O$ ist wieder gleich der Nullmatrix. 
+
+$$A\cdot O = O$$
+
+Eine quadratische Matrix $R$ heisst __obere Dreiecksmatrix__ oder __Rechtsmatrix__ falls $(R)_{ij}=0$ für alle $i>j$. Als Beispiel ist 
+
+$$R = \left[\begin{array}{ccc} 1 & 3 & -7\\ 0 & 2 & 5\\ 0 & 0 & 9\end{array}\right]$$
+
+eine obere Dreiecksmatrix.
+
+Eine quadratische Matrix $L$ heisst __untere Dreiecksmatrix__ oder __Linksmatrix__ falls $(L)_{ij}=0$ für alle $i<j$. Die folgende Matrix $L$ ist ein Beispiel für eine untere Dreiecksmatrix.
+
+$$L = \left[\begin{array}{ccc} 1 & 0 & 0\\ 2 & 2 & 0\\ -2 & 4 & 9\end{array}\right]$$
+
+Die __Einheitsmatrix__ $I$ ist eine quadratische Matrix, deren Diagonolaelemente alle gleich $1$ sind und deren Off-Diagonalelemente alle gleich $0$ sind.
+
+$$I = \left[\begin{array}{ccc} 1 & 0 & 0\\ 0 & 1 & 0\\ 0 & 0 & 1\end{array}\right]$$
+
+Die Einheitsmatrix $I$ ist das Neutralelement der Matrixmultiplikation. Wir können also schreiben
+
+$$A \cdot I = A$$
+
+Die __Transponierte__ $A^T$ einer Matrix $A$ entsteht durch vertauschen von Zeilen und Kolonnen. Somit hat die Matrix $A^T$ einer $m*n$-Matrix die Dimensionen $n*m$. Die Elemente in Matrix $A$ werden einfach an der Hauptdiagonalen gespiegelt. 
+
+$$(A)_{ij} = (A^T)_{ji}$$
+
+Folgende Regeln im Bezug auf transponierte Matrizen gelten:
+
+* die Transponierte von von $A^T$ ist wieder die Matrix $A$: $(A^T)^T = A$
+* Summe: $(A + B)^T = A^T + B^T$
+* Produkt: $(A\cdot B)^T = B^T \cdot A^T$
+* Einheitsmatrix: $I^T = I$
+
+Bei einer symmetrischen Matrix $A$, bei welcher gilt, dass $(A)_{ij} = (A)_{ji}$, ist die transponierte Matrix $A^T$ gleich der ursprünglichen Matrix $A$. 
+
+Die __Inverse__ $A^{-1}$ einer Matrix $A$ ist definiert, als diejenige Matrix für welche gilt, dass
+
+$$A\cdot A^{-1} = I$$
+
+Falls die inverse Matrix $A^{-1}$ existiert, dann wird die Matrix $A$ als invertierbar bezeichnet. Die Inverse ist eindeutig, das heisst, es gibt zu jeder Matrix $A$ nur eine inverse Matrix. Falls wir eine Matrix $B$ finden für welche gilt, dass 
+
+$$A\cdot B = I$$
+
+dann wissen wir sofort, dass $B = A^{-1}$. 
+
+Folgende Regeln gelten im Bezug auf inverse Matrizen.
+
+* Inverse der Inversen: $(A^{-1})^{-1} = A$
+* Produkt: $(A\cdot B)^{-1} = B^{-1} \cdot A^{-1}$
+* Transponierte: $(A^T)^{-1} = (A^{-1})^T$
+* Einheitsmatrix: $I^{-1} = I$
+
+
+## Gleichungssysteme
+Lineare Gleichhungssysteme spielen in der Züchtung, namentlich bei der Zuchtwertschätzung eine wichtige Rolle. In einem Gleichungssystem werden Beziehungen zwischen bekannten und unbekannten Grössen verwendet um Lösungen für die unbekannten Grössen ableiten zu können. Bei der Klasse der linearen Gleichungssysteme beschränkt man sich auf lineare Beziehungen zwischen bekannten und unbekannten Grössen. Für unser Anwendungsbeispiel der Zuchtwertschätzung werden wir Beziehungen zwischen unbekannten Umwelteffekten und unbekannten Zuchtwerten den phänotypischen Leistungen für alle Tiere in einer Population gleichsetzen. Daraus resultieren sehr grosse Gleichungssystem, d.h. die Anzahl Gleichungen kann sehr gross sein.
+
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->
+
+
+
+
+
+
+
+
