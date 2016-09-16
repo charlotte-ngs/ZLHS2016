@@ -15,6 +15,18 @@ r6obj_docstat$set_current_status(psVersion = "0.0.901",
                                  psDate = "2016-09-05",
                                  psStatus = "Erstellung",
                                  psProject = "ZLHS2016")
+r6obj_docstat$set_current_status(psVersion = "0.0.902",
+                                 psDate = "2016-09-06",
+                                 psStatus = "Vektoren",
+                                 psProject = "ZLHS2016")
+r6obj_docstat$set_current_status(psVersion = "0.0.903",
+                                 psDate = "2016-09-07",
+                                 psStatus = "Matrizen",
+                                 psProject = "ZLHS2016")
+r6obj_docstat$set_current_status(psVersion = "0.0.904",
+                                 psDate = "2016-09-08",
+                                 psStatus = "Gleichungssysteme",
+                                 psProject = "ZLHS2016")
 r6obj_docstat$include_doc_stat(psTitle = "## Status des Dokuments")
 ```
 
@@ -27,7 +39,7 @@ if (!r6ob_abbrtable$is_empty_abbr())
 ```
 
 ## Einführung in Lineare Algebra
-Aus der linearen Algebra brauchen wir für diese Vorlesung nur das Rechnen mit Vektoren und Matrizen. Der Grund, weshalb Vektoren und Matrizen wchtig sind, ist dass sie uns das Aufstellen und das Lösen von Gleichungssystemen wesentlich erleichtern. Lineare Gleichungssysteme sind in der traditionellen Zuchtwertschätzung, d.h. überall dort, wo die genomische Selektion noch nicht angewendet wird, sehr wichtig.
+Aus der linearen Algebra brauchen wir für diese Vorlesung nur das Rechnen mit Vektoren und Matrizen. Der Grund, weshalb Vektoren und Matrizen wichtig sind, ist dass sie uns das Aufstellen und das Lösen von Gleichungssystemen wesentlich erleichtern. Lineare Gleichungssysteme sind in der traditionellen Zuchtwertschätzung, d.h. überall dort, wo die genomische Selektion noch nicht angewendet wird, sehr wichtig.
 
 ## Was ist ein Vektor
 Ein Vektor ist durch seine __Länge__ und seine __Richtung__ eindeutig bestimmt. Das heisst, sind zwei Vektoren $v$ und $w$ gleich lang und haben die gleich Richtung, dann sind die beiden Vektoren gleich und somit gilt $v=w$. Haben zwei Vektoren $v$ und $x$ nicht die gleiche Richtung oder sind nicht gleich lang, dann sind die Vektoren nicht gleich und somit gilt $v \ne x$ und somit auch $w \ne x$.
@@ -37,9 +49,9 @@ rmddochelper::insertOdgAsPdf(psOdgFileStem = "VectorEquality", pnPaperWidthScale
 ```
 
 ### Koordinaten
-Durch die Einführung eines Koordinatensystems wird jedem Punkt im n-dimensionalen Raum ein n-tupel von Zahlen -die sogenannten Koordinaten - zugewiesen. Zum Beispiel bekommt jeder Punkt in einer Ebene (zweidimensionaler Raum) ein Paar von Koordinaten zugewiesen.
+Durch die Einführung eines Koordinatensystems wird jedem Punkt im n-dimensionalen Raum ein n-Tupel von Zahlen -die so genannten Koordinaten - zugewiesen. Zum Beispiel bekommt jeder Punkt in einer Ebene (zweidimensionaler Raum) ein Paar von Koordinaten zugewiesen.
 
- Die Koordinaten eines Vektors errechnen sich aus der Differenz der Koordinaten des Endpunktes des Vektors minus die Koordinaten des Anfangspuktes des Vektors. Betrachten wir als Beispiel im nachfolgenden Bild den Vektor $v$ mit Anfangspunkt $A$ und Endpunkt $E$, dann errechnen sich die Koordinaten als Differenzen zwischen den Koordinaten von $E$ minus die Koordinaten von $A$, das bedeutet
+ Die Koordinaten eines Vektors errechnen sich aus der Differenz der Koordinaten des Endpunktes des Vektors minus die Koordinaten des Ausgangspunktes des Vektors. Betrachten wir als Beispiel im nachfolgenden Bild den Vektor $v$ mit Anfangspunkt $A$ und Endpunkt $E$, dann errechnen sich die Koordinaten als Differenzen zwischen den Koordinaten von $E$ minus die Koordinaten von $A$, das bedeutet
  
 $$ v = \left[\begin{array}{c} e_x - a_x \\ e_y - a_y \end{array}\right]$$
  
@@ -49,11 +61,11 @@ rmddochelper::insertOdgAsPdf(psOdgFileStem = "VektorKoordinaten", pnPaperWidthSc
 
  
 ### Geometrie
-In der elementaren Geometrie  werden Vektoren häufig durch Pfeile dargestellt. Parallele Pfeile mit gleicher Länge werden Repräsentanten des gleichen Vektors bezeichnet. Repräsentanten, welche ihren Anfangspunkt im Ursprung des Koordinatensystems haben, sind speziell und werden als Ortsvektoren des jeweiligen Endpunkts bezeichnet. Die Koordinaten des Endpuntes und die Koordinaten des Vektors sind identisch.
+In der elementaren Geometrie  werden Vektoren häufig durch Pfeile dargestellt. Parallele Pfeile mit gleicher Länge werden Repräsentanten des gleichen Vektors bezeichnet. Repräsentanten, welche ihren Anfangspunkt im Ursprung des Koordinatensystems haben, sind speziell und werden als Ortsvektoren des jeweiligen Endpunkts bezeichnet. Die Koordinaten des Endpunktes und die Koordinaten des Vektors sind identisch.
 
 
 ## Operationen mit Vektoren
-Vektoren als solches werden erst dann richtig nützlich, wenn man sie mit Operationen verküpfen kann. Konkret heisst das, die Einführung von Operationen zwischen Vektoren erlaubt es uns mit ihnen zu rechnen.
+Vektoren als solches werden erst dann richtig nützlich, wenn man sie mit Operationen verknüpfen kann. Konkret heisst das, die Einführung von Operationen zwischen Vektoren erlaubt es uns mit ihnen zu rechnen.
 
 ### Addition und Subtraktion
 Die Addition zweier Vektoren $v$ und $w$ hat als Resultat wieder einen Vektor, sagen wir er heisse $u$. Es gilt somit, dass 
@@ -115,11 +127,11 @@ $\lambda > 1$       &  gleich           & länger  \\
 
 
 ### Skalarprodukt
-Das Skalarprodukt zweier Vektoren entspricht einer Zahl. Diese berechnet sich aus den Produkten der einzelnen Koordinaten, welche dann additiert werden. Konkret bedeutet das
+Das Skalarprodukt zweier Vektoren entspricht einer Zahl. Diese berechnet sich aus den Produkten der einzelnen Koordinaten, welche dann addiert werden. Konkret bedeutet das
 
 $$v \cdot w = v_x * w_x + v_y + w_y$$
 
-Wird das Skalarprodukt zweier Vektoren um das Produkt der Längen der beiden Vektoren skaliert, so resultiert der Cosinus des Zwischenwinkels der beiden Vektoren. Somit liefert das Skalarprodukt einen Vergleich bezüglich der Richtungen von zwei Vektoren. 
+Wird das Skalarprodukt zweier Vektoren um das Produkt der Längen der beiden Vektoren skaliert, so resultiert der Kosinus des Zwischenwinkels der beiden Vektoren. Somit liefert das Skalarprodukt einen Vergleich bezüglich der Richtungen von zwei Vektoren. 
 
 ```{r VektorenWinkel}
 rmddochelper::insertOdgAsPdf(psOdgFileStem = "VektorenWinkel", pnPaperWidthScale = 0.8)
@@ -151,7 +163,7 @@ Das Element $a_{12}$ ist das Element aus der ersten Zeile und der zweiten Kolonn
 Die Anzahl Zeilen und Kolonnen einer Matrix werden auch als __Dimension__ bezeichnet. Als Beispiel ist die Dimension der Matrix $M$, welche wir oben aus den Vektoren $v$ und $w$ zusammengesetzt haben ist $2*2$. 
 
 ### Matrixoperationen
-__Addition__ und __Subtraktion__ von Matrizen sind analog zu den entsprechenden Operationen zwischen Vektoren definiert. Die Addition und Subtraktion von Matrizen wird element-weise durchgeführt. Nehmen wir an, wir haben die Matrizen $A$ und $B$, dann ist deren Summen $S$ wieder eine Matrix, 
+__Addition__ und __Subtraktion__ von Matrizen sind analog zu den entsprechenden Operationen zwischen Vektoren definiert. Die Addition und Subtraktion von Matrizen wird Element-weise durchgeführt. Nehmen wir an, wir haben die Matrizen $A$ und $B$, dann ist deren Summen $S$ wieder eine Matrix, 
 
 $$S = A + B = \left[\begin{array}{cc} a_{11} & a_{12} \\ a_{21} & a_{22}\end{array}\right]
     + \left[\begin{array}{cc} b_{11} & b_{12} \\ b_{21} & b_{22}\end{array}\right]
@@ -246,8 +258,133 @@ Folgende Regeln gelten im Bezug auf inverse Matrizen.
 
 
 ## Gleichungssysteme
-Lineare Gleichhungssysteme spielen in der Züchtung, namentlich bei der Zuchtwertschätzung eine wichtige Rolle. In einem Gleichungssystem werden Beziehungen zwischen bekannten und unbekannten Grössen verwendet um Lösungen für die unbekannten Grössen ableiten zu können. Bei der Klasse der linearen Gleichungssysteme beschränkt man sich auf lineare Beziehungen zwischen bekannten und unbekannten Grössen. Für unser Anwendungsbeispiel der Zuchtwertschätzung werden wir Beziehungen zwischen unbekannten Umwelteffekten und unbekannten Zuchtwerten den phänotypischen Leistungen für alle Tiere in einer Population gleichsetzen. Daraus resultieren sehr grosse Gleichungssystem, d.h. die Anzahl Gleichungen kann sehr gross sein.
+Lineare Gleichungssysteme spielen in der Züchtung, namentlich bei der Zuchtwertschätzung eine wichtige Rolle. In einem Gleichungssystem werden Beziehungen zwischen bekannten und unbekannten Grössen verwendet um Lösungen für die unbekannten Grössen berechnen zu können. Bei der Klasse der linearen Gleichungssysteme beschränkt man sich auf lineare Beziehungen zwischen bekannten und unbekannten Grössen. Für unser Anwendungsbeispiel der Zuchtwertschätzung werden wir Beziehungen zwischen unbekannten Umwelteffekten und unbekannten Zuchtwerten den phänotypischen Leistungen für alle Tiere in einer Population gleichsetzen. Daraus resultieren sehr grosse Gleichungssystem, d.h. die Anzahl Gleichungen kann sehr gross sein.
 
+Als einführendes Beispiel schauen wir uns folgendes Gleichungssystem mit zwei Gleichungen und zwei Unbekannten $x_1$ und $x_2$ an.
+
+\begin{eqnarray}
+ x_1 + 2x_2 & = & 5 \nonumber\\
+2x_1 + 3x_2 & = & 8
+\end{eqnarray}
+
+Wir wollen nun Zahlen für die Unbekannten $x_1$ und $x_2$ finden, so dass beide Gleichungen erfüllt sind. Die Zahlen $x_1=1$ und $x_2=2$ erfüllen beide Gleichungen. Sie stellen somit die __Lösung__ für unser Gleichungssystem dar. Im allgemeinen besteht ein Gleichungssystem aus $m$ Gleichungen mit $n$ unbekannten. Für unser erstes Beispiel ist $m=2$ und $n=2$. 
+
+Aufgrund des folgenden Beispiels erkennen wir, dass nicht jedes Gleichungssystem eine Lösung hat. 
+
+\begin{eqnarray}
+ x_1 +  x_2 & = & 4 \nonumber\\
+2x_1 + 2x_2 & = & 5
+\end{eqnarray}
+
+Da wir keine Zahlen $x_1$ und $x_2$ finden können, deren Summe gleich $4$ ist und deren doppelte Summe gleichzeitig gleich $5$ ist. Aus der ersten Gleichung folgt, dass $2x_1 + 2x_2  =  8$ und das ist ein Widerspruch zur zweiten Gleichung.
+
+Als drittes Beispiel betrachten wir ein Gleichungssystem mit $m=2$ Gleichungen und $n=3$ Unbekannten. 
+
+\begin{eqnarray}
+ x_1 -  x_2  +  x_3 & = & 2 \nonumber\\
+2x_1 +  x_2  -  x_3 & = & 4
+\end{eqnarray}
+
+Es gilt $x_1 = 2$ und $x_2 = x_3$. Somit haben wir unendlich viele Lösungen, nämlich $x_1 = 2$, $x_2 = \alpha$ und $x_3 = \alpha$ für jede reelle Zahl $\alpha$.
+
+Für die gezeigten Beispiele von Gleichungssystem hatten wir gesehen, dass diese entweder eine Lösung, keine Lösung oder unendlich viele Lösungen haben können. Damit wir das Finden von Lösungen für Gleichungssysteme verallgemeinern können, ist der Begriff der __Lösungsmenge__ wichtig. Die Lösungsmenge eines Gleichungssystems ist definiert als die Menge aller Lösungen des Gleichungssystems.
+
+
+## Bestimmung der Lösungsmenge - das Gaussverfahren
+Das Ziel dieses Abschnitts ist es ein allgemein gültiges Verfahren zu entwickeln, welches uns für ein lineares Gleichungssystem die Lösungsmenge bestimmt. Die grundlegende Idee wird sein, ein existierendes Gleichungssystem mit bestimmten Operationen so umzuformen, dass die Bestimmung der Lösungsmenge einfach ist. Dieses Verfahren heisst __Gauss'sches Eliminationsverfahren__.
+
+Für die Herleitung des Gaussverfahrens müssen wir zuerst noch den Begriff der __Äquivalenz__ zwischen Gleichungssystemen einführen. Zwei Gleichungssystem $A$ und $B$ sind dann äquivalent zueinander, falls die beiden Gleichungssysteme $A$ und $B$ die gleichen Lösungsmengen haben. Mit zwei Operationen lässt sich aus einem bestehenden Gleichungssystem $A$ ein äquivalentes Gleichungssystem $B$ erzeugen.
+
+1. Vertauschen der Reihenfolge der Gleichungen
+2. Addition (oder Subtraktion) eines vielfachen einer Gleichung aus dem Gleichungssystem $A$ zur einer anderen Gleichung des Gleichungssystems $A$.
+
+### Vertauschen der Reihenfolge
+Als Beispiel sei das folgende lineare Gleichungssystem gegeben.
+
+\begin{eqnarray}
+ x_1 + 2x_2 & = & 5 \nonumber\\
+2x_1 + 3x_2 & = & 8
+\end{eqnarray}
+
+Dieses Gleichungssystem ist äquivalent zum folgenden Gleichungssystem
+
+\begin{eqnarray}
+2x_1 + 3x_2 & = & 8 \nonumber\\
+ x_1 + 2x_2 & = & 5
+\end{eqnarray}
+
+Die Gleichungssysteme sind äquivalent, da beide die Lösungsmenge $L = \{x_1=1, x_2=2 \}$ haben.
+
+### Addition eines Vielfachen der einen zur anderen Gleichung
+Gegeben sei das folgende Gleichungssystem
+
+\begin{eqnarray}
+ x_1 + 2x_2 & = & 5 \nonumber\\
+2x_1 + 3x_2 & = & 8
+\label{eq:OrigEq}     
+\end{eqnarray}
+
+Lassen wir die erste Gleichung unverändert und ersetzen die zweite Gleichung durch eine neue Gleichung, welche wir erhalten durch Subtraktion des Zweifachen der ersten Gleichung von der zweiten Gleichung, erhalten wir folgendes äquivalentes Gleichungssystem.
+
+\begin{eqnarray}
+ x_1 + 2x_2 & = & 5 \nonumber\\
+     -  x_2 & = & -2
+\label{eq:EquivTriangleEq}     
+\end{eqnarray}
+
+Aufgrund der zweiten Gleichung im Gleichungssystem (\ref{eq:EquivTriangleEq}) sehen wir sofort, dass $x_2=2$ ein Teil der Lösungsmenge des Gleichungssystems sein muss. Setzen wir $x_2=2$ in der ersten Gleichung von (\ref{eq:EquivTriangleEq}) ein, dann folgt $x_1 = 1$ und die Lösungsmenge $L = \{x_1=1, x_2=2 \}$ ist komplett. Wir haben also die Lösungsmenge des Gleichungssystems (\ref{eq:EquivTriangleEq}) gefunden. Wir können das Gleichungssystem (\ref{eq:OrigEq}) aus (\ref{eq:EquivTriangleEq}) herleiten, indem wir die erste Gleichung unverändert lassen und die zweite Gleichung durch eine neue Gleichung ersetzen, welche wir als Summe der zweiten Gleichung aus (\ref{eq:EquivTriangleEq}) plus das doppelte der ersten Gleichung aus (\ref{eq:EquivTriangleEq}) berechnen. Das heisst aber, dass die Lösungsmenge $L = \{x_1=1, x_2=2 \}$, welche wir für (\ref{eq:EquivTriangleEq}) gefunden hatten, auch die Lösungsmenge für (\ref{eq:OrigEq}) ist. Somit sind die Gleichungssystem (\ref{eq:OrigEq}) und (\ref{eq:EquivTriangleEq}) äquivalent.
+
+### Verfahren zur Bestimmung der Lösungsmenge
+Bei der Herleitung eines Verfahrens zur Bestimmung der Lösungsmenge eines Gleichungssystems, stellt sich die Frage, wann ist ein lineares Gleichungssystem einfach zu lösen? Ein Hinweis für eine mögliche Antwort liefert uns der Vergleich der äquivalenten Gleichungssysteme (\ref{eq:OrigEq}) und (\ref{eq:EquivTriangleEq}) im Bezug auf die Bestimmung der Lösungsmenge. Beim Gleichungssystem (\ref{eq:EquivTriangleEq}) konnten wir in der zweiten Gleichung den Lösungswert für die Variable $x_2$ sofort ablesen. Die Lösung für $x_1$ erhielten wir dann einfach durch Einsetzen des Wertes für $x_2$. Diese Vorgehensweise wie beim Gleichunssystem (\ref{eq:EquivTriangleEq}) ist beim Gleichungssystem (\ref{eq:OrigEq}) nicht möglich. 
+
+Die Einfachheit der Bestimmung der Lösungsmenge für das Gleichungssystem (\ref{eq:EquivTriangleEq}) basiert auf seiner speziellen Struktur. Der Fachterminus für diese Struktur lautet __Dreiecksgestalt__. Wir können aus unseren Beobachtungen also ableiten, dass Gleichungssystem mit einer Dreiecksgestalt einfach zu lösen sind.
+
+Das __Gaussverfahren__ zur Bestimmung der Lösungsmenge eines linearen Gleichungssystems besteht nun darin, die besprochenen Operationen zur Transformation von äquivalenten Gleichungssystem geschickt einzusetzen, damit ein gegebenes Gleichungssystem mit beliebiger Struktur in eine Dreiecksgestalt zu verwandeln. Dann können die Lösungswerte der unbekannten Variablen vom der letzten Gleichung her bestimmt und durch Rückwärtseinsetzen zur Berechnung der weiteren Variablen verwendet werden.
+
+
+## Matrix- und Vektorschreibweise
+Bisher haben wir Gleichungssysteme explizit als Liste von Gleichungen notiert. Als Beispiel sieht das allgemeine Gleichungssystem mit $m=3$ Gleichungen und $n=3$ Unbekannte in dieser Notation wie folgt aus.
+
+\begin{eqnarray}
+a_{11}x_1 + a_{12}x_2 + a_{13}x_3 & = & b_1 \nonumber\\
+a_{21}x_1 + a_{22}x_2 + a_{23}x_3 & = & b_2 \nonumber\\
+a_{31}x_1 + a_{32}x_2 + a_{33}x_3 & = & b_3
+\label{eq:AllgLinEqSysM3N3}     
+\end{eqnarray}
+
+Für kleine Gleichungssystem wie (\ref{eq:AllgLinEqSysM3N3}) ist diese Notation befriedigend. Für praktische Anwendungen, wie z. Bsp. die Zuchtwertschätzung, wo die Anzahl Gleichungen in einem Gleichungssystem in der Grössenordnung von $10^6$ liegt, ist die Notation, wie sie in (\ref{eq:AllgLinEqSysM3N3}) verwendet wurde, ungeeignet. Somit brauchen wir für grosse Gleichungssystem eine effizientere Notation. Eine mögliche solche Notation ist die Schreibweise mit Matrizen und Vektoren.
+
+Wir definieren die Matrix $A$ und die Vektoren $x$ und $b$, wie folgt.
+
+$$A = \left[
+        \begin{array}{ccc} 
+          a_{11} & a_{12} & a_{13} \\ 
+          a_{21} & a_{22} & a_{23} \\
+          a_{31} & a_{32} & a_{33}
+      \end{array}\right]$$
+      
+$$x = \left[
+        \begin{array}{c}
+        x_1\\
+        x_2\\
+        x_3
+      \end{array}\right]$$
+      
+$$b = \left[
+        \begin{array}{c}
+        b_1\\
+        b_2\\
+        b_3
+      \end{array}\right]$$
+      
+Die Matrix $A$ und Vektoren $x$ und $b$ lassen sich nun zur Matrix-Vektorschreibweise des Gleichungssystems (\ref{eq:AllgLinEqSysM3N3}) kombinieren.
+
+\begin{eqnarray}
+A \cdot x & = & b
+\label{eq:AllgLinEqSysMatVec}     
+\end{eqnarray}
+
+Mit $\cdot$ ist die im Kapitel zu den Matrizen eingeführte Matrixmultiplikation gemeint. Aus der in (\ref{eq:AllgLinEqSysMatVec}) ist die Information zur Anzahl Gleichungen und zur Anzahl Unbekannten im Gleichungssystem verloren gegangen. Diese Information wird erst durch die Definitionen von $A$, $x$ und $b$ sichtbar. Was hier wie ein Nachteil der Matrix-Vektorschreibweise erscheinen mag, ist effektiv der grosse Vorteil dieser Notation. Denn ob wir über ein kleines Gleichungssystem wie in (\ref{eq:AllgLinEqSysM3N3}) oder über ein System mit $10^6$ Gleichungen sprechen wollen, wir können immer die Notation in (\ref{eq:AllgLinEqSysMatVec}) verwenden.
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
