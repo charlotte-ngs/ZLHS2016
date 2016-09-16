@@ -1,5 +1,5 @@
 ---
-title:  Züchtungslehre
+title:  Züchtungslehre - Einführung in Lineare Algebra
 author: Peter von Rohr
 date: 04-09-2016
 output: pdf_document
@@ -341,9 +341,64 @@ Die Einfachheit der Bestimmung der Lösungsmenge für das Gleichungssystem (\ref
 
 Das __Gaussverfahren__ zur Bestimmung der Lösungsmenge eines linearen Gleichungssystems besteht nun darin, die besprochenen Operationen zur Transformation von äquivalenten Gleichungssystem geschickt einzusetzen, damit ein gegebenes Gleichungssystem mit beliebiger Struktur in eine Dreiecksgestalt zu verwandeln. Dann können die Lösungswerte der unbekannten Variablen vom der letzten Gleichung her bestimmt und durch Rückwärtseinsetzen zur Berechnung der weiteren Variablen verwendet werden.
 
+Wir wollen das Gaussverfahren an einem allgemeinen Gleichungssystem mit $m=3$ Gleichungen und $n=3$ Unbekannten demonstrieren. Gegeben ist also das allgemeine lineare Gleichungssystem 
+
+\begin{eqnarray}
+a_{11}x_1 + a_{12}x_2 + a_{13}x_3 & = & b_1 \nonumber\\
+a_{21}x_1 + a_{22}x_2 + a_{23}x_3 & = & b_2 \nonumber\\
+a_{31}x_1 + a_{32}x_2 + a_{33}x_3 & = & b_3
+\label{eq:GaussElimM3N3Schema1}     
+\end{eqnarray}
+
+Zur Veranschaulichung der Schritte im Gaussverfahren wandeln wir das Gleichungssystem (\ref{eq:GaussElimM3N3Schema1}) in das folgende tabellarische Eliminationsschema um.
+
+\vspace{5ex}
+\begin{center}
+\begin{tabular}{|ccc|c|}
+\hline
+$a_{11}$  &  $a_{12}$  &  $a_{13}$  &  $b_1$\\
+$a_{21}$  &  $a_{22}$  &  $a_{23}$  &  $b_2$\\
+$a_{31}$  &  $a_{32}$  &  $a_{33}$  &  $b_3$\\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{5ex}
+
+Wir nehmen an, dass $a_{11} \ne 0$. Trifft diese Annahme nicht zu wird die Reihenfolge der Gleichungen im Gleichungssystem so geändert, dass $a_{11} \ne 0$ ist. Nun bilden wir ein äquivalentes Gleichungssystem, indem wir von der zweiten Zeile des Ausgangsschemas das $a_{21}/a_{11}$-fache der ersten Zeile subtrahieren und von der dritten das $a_{31}/a_{11}$-fache der ersten Zeile. Dadurch stehen im neuen Gleichungssystem an der ersten Stelle der zweiten und der dritten Zeile eine Null. Die anderen Koeffizienten werden mit dem oberen Index $(2)$ bezeichnet.  
+
+\vspace{5ex}
+\begin{center}
+\begin{tabular}{|ccc|c|}
+\hline
+$a_{11}$  &  $a_{12}$        &  $a_{13}$        &  $b_1$\\
+$0$       &  $a_{22}^{(2)}$  &  $a_{23}^{(2)}$  &  $b_2^{(2)}$\\
+$0$       &  $a_{32}^{(2)}$  &  $a_{33}^{(2)}$  &  $b_3^{(2)}$\\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{5ex}
+
+Im zweiten Schritt des Verfahrens wird das gleiche wie im Schritt 1 wiederholt mit dem Untersystem, welches durch die oberen Indices $(2)$ bezeichnet ist. Dabei wird als erstes wieder angenommen, dass $a_{22}^{(2)} \ne 0$ gilt. Von der dritten Gleichung wird das $a_{32}^{(2)}/a_{22}^{(2)}$-fache der zweiten Gleichung abgezogen. Daraus entsteht das folgende dritte Eliminationsschema, welches schon die gewünschte Dreiecksgestalt aufweist. 
+
+\vspace{5ex}
+\begin{center}
+\begin{tabular}{|ccc|c|}
+\hline
+$a_{11}$  &  $a_{12}$        &  $a_{13}$        &  $b_1$\\
+$0$       &  $a_{22}^{(2)}$  &  $a_{23}^{(2)}$  &  $b_2^{(2)}$\\
+$0$       &  $0$             &  $a_{33}^{(3)}$  &  $b_3^{(3)}$\\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{5ex}
+
+
 
 ## Matrix- und Vektorschreibweise
-Bisher haben wir Gleichungssysteme explizit als Liste von Gleichungen notiert. Als Beispiel sieht das allgemeine Gleichungssystem mit $m=3$ Gleichungen und $n=3$ Unbekannte in dieser Notation wie folgt aus.
+Bisher haben wir Gleichungssysteme explizit als Liste von Gleichungen notiert. Für das allgemeine lineare Gleichungssystem kennen wir das bereits schon aus der Beschreibung des Gaussverfahrens.
 
 \begin{eqnarray}
 a_{11}x_1 + a_{12}x_2 + a_{13}x_3 & = & b_1 \nonumber\\
@@ -384,7 +439,16 @@ A \cdot x & = & b
 \label{eq:AllgLinEqSysMatVec}     
 \end{eqnarray}
 
-Mit $\cdot$ ist die im Kapitel zu den Matrizen eingeführte Matrixmultiplikation gemeint. Aus der in (\ref{eq:AllgLinEqSysMatVec}) ist die Information zur Anzahl Gleichungen und zur Anzahl Unbekannten im Gleichungssystem verloren gegangen. Diese Information wird erst durch die Definitionen von $A$, $x$ und $b$ sichtbar. Was hier wie ein Nachteil der Matrix-Vektorschreibweise erscheinen mag, ist effektiv der grosse Vorteil dieser Notation. Denn ob wir über ein kleines Gleichungssystem wie in (\ref{eq:AllgLinEqSysM3N3}) oder über ein System mit $10^6$ Gleichungen sprechen wollen, wir können immer die Notation in (\ref{eq:AllgLinEqSysMatVec}) verwenden.
+Mit $\cdot$ ist die im Kapitel zu den Matrizen eingeführte Matrixmultiplikation gemeint. Aus der in (\ref{eq:AllgLinEqSysMatVec}) ist die Information zur Anzahl Gleichungen und zur Anzahl Unbekannten im Gleichungssystem verloren gegangen. Diese Information wird erst durch die Definitionen von $A$, $x$ und $b$ sichtbar. Die Matrix $A$ wird als Koeffizienten-Matrix, der Vektor $x$ als Vektor der Unbekannten und der Vektor $b$ als rechte Handseite bezeichnet.
+
+Was hier wie ein Nachteil der Matrix-Vektorschreibweise erscheinen mag, ist effektiv der grosse Vorteil dieser Notation. Denn ob wir über ein kleines Gleichungssystem wie in (\ref{eq:AllgLinEqSysM3N3}) oder über ein System mit $10^6$ Gleichungen sprechen wollen, wir können immer die Notation in (\ref{eq:AllgLinEqSysMatVec}) verwenden.
+
+Des weiteren können wir auch alle Eigenschaften der Matrizenrechnung zur Lösung des Gleichungssystems verwenden. Als Beispiel können wir unter Verwendung der Inversen $A^{-1}$ der Koeffzienten-Matrix, die Lösung für $x$ berechnen als
+
+$$ x = A^{-1} \cdot b$$
+
+Die Inverse $A^{-1}$ der Koeffizienten-Matrix ist zunächst unbekannt. Wir werden aber zu einem späteren Zeitpunkt noch sehen, dass uns auch bei der Berechnng von $A^{-1}$ das Gaussverfahren sehr nützlich sein kann.
+
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
