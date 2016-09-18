@@ -1,0 +1,90 @@
+---
+title:  Züchtungslehre - Einführung in R
+author: Peter von Rohr
+date:   2016-09-16
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=TRUE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZLHS2016")
+r6obj_docstat$set_current_status(psVersion = "0.0.902",
+                                 psStatus  = "Einführung",
+                                 psProject = "ZLHS2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+```
+
+## Einführung
+R (https://www.r-project.org/) ist ein sehr populäres System im Bereich der Datenanalyse. Ursprünglich wurde R von den Statistikern Ross Ihaka und Robert Gentlemen kreiert. Da R über die eigene Programmiersprache erweiterbar ist, wird es aktuell in sehr verschiedenen Gebieten eingesetzt. Das System wird als Open Source vertrieben und kann gratis für die gängigen Betriebssystem heruntergeladen werden. Eine Vielzahl von Dokumentationen zu R ist unter https://cran.r-project.org/manuals.html erhältlich. Unter https://cran.r-project.org/other-docs.html sind auch Anleitungen in Deutsch und vielen weiteren Sprachen erhältlich. 
+
+Dieses Dokument basiert auf einigen der oben genannten Quellen und versucht die wichtigsten Punkte von R für diese Vorlesung zusammenzufassen.
+
+### Voraussetzung für die Verwendung von R
+R muss zuerst heruntergeladen und dann installiert werden. Unter den sogennannten `r r6ob_abbrtable$add_abbrev(psAbbrev = "CRAN", psMeaning = "Comprehensive R Archive Network")`-Mirror Webseiten ist R als ausführbares Programm für die Betriebssystem `Windows`, `Mac OSX` und `Linux` erhältlich.
+
+```{r ScreenShotCRAN}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "ScreenShotCRAN")
+```
+
+
+Zusätzlich zu R empfielt es sich, die Entwicklungsumgebung RStudio (https://www.rstudio.com/) zu verwenden.
+
+```{r ScreenShotRstudio}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "ScreenShotRstudio")
+```
+
+### Interaktiver Modus
+R kann wie ein Taschenrechner verwendet werden. Man spricht dann auch vom so genannten __interaktiven__ Modus, d.h. die/der BenutzerIn gibt einen Befehl ein und bekommt eine Antwort zurück. In Rstudio werden die Befehle in das Fenster, welches mit dem Tab namens `Console` überschrieben ist, eingegeben. Beispiele für mögliche Eingaben im interaktiven Modus sind
+
+```{r InteractiveMode1, echo=TRUE}
+43-15
+```
+
+```{r InteractiveMode2, echo=TRUE}
+76/8
+```
+
+R befolgt die in der Arithmetik üblichen Rechenregeln, so gilt beispielsweise, dass Klammern vor Punkt vor Strich
+
+```{r ArithRule1, echo=TRUE}
+65 - 18 / 3
+```
+
+```{r ArithRule2, echo=TRUE}
+(65 - 18) / 3
+```
+
+Die folgende Tabelle enthält die Liste mit den in R verwendeten arithmetischen Operationen
+
+```{r AritheticOperators}
+dfArOp <- data.frame( Operator  = c("+","-","*","/","^", "e"),
+                      Operation = c("Addition", "Subtraktion","Multiplikation","Division","Potenz","Zehnerpotenz"),
+                      stringsAsFactors = FALSE)
+knitr::kable(dfArOp)
+```
+
+\pagebreak
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->
+
+```{r IncludeTableAbbrev}
+### # include table of abbreviations only, if there are any
+#if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abkürzungen")
+```
+
