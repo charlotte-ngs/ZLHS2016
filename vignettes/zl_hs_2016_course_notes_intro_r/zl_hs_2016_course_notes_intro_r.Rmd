@@ -30,7 +30,7 @@ R (https://www.r-project.org/) ist ein sehr populäres System im Bereich der Dat
 
 Dieses Dokument basiert auf einigen der oben genannten Quellen und versucht die wichtigsten Punkte von R für diese Vorlesung zusammenzufassen.
 
-### Voraussetzung für die Verwendung von R
+## Voraussetzung für die Verwendung von R
 R muss zuerst heruntergeladen und dann installiert werden. Unter den sogennannten `r r6ob_abbrtable$add_abbrev(psAbbrev = "CRAN", psMeaning = "Comprehensive R Archive Network")`-Mirror Webseiten ist R als ausführbares Programm für die Betriebssystem `Windows`, `Mac OSX` und `Linux` erhältlich.
 
 ```{r ScreenShotCRAN}
@@ -44,7 +44,7 @@ Zusätzlich zu R empfielt es sich, die Entwicklungsumgebung RStudio (https://www
 rmddochelper::insertOdgAsPdf(psOdgFileStem = "ScreenShotRstudio")
 ```
 
-### Interaktiver Modus
+## Interaktiver Modus
 R kann wie ein Taschenrechner verwendet werden. Man spricht dann auch vom so genannten __interaktiven__ Modus, d.h. die/der BenutzerIn gibt einen Befehl ein und bekommt eine Antwort zurück. In Rstudio werden die Befehle in das Fenster, welches mit dem Tab namens `Console` überschrieben ist, eingegeben. Beispiele für mögliche Eingaben im interaktiven Modus sind
 
 ```{r InteractiveMode1, echo=TRUE}
@@ -65,14 +65,87 @@ R befolgt die in der Arithmetik üblichen Rechenregeln, so gilt beispielsweise, 
 (65 - 18) / 3
 ```
 
+### Arithmetische Operationen
 Die folgende Tabelle enthält die Liste mit den in R verwendeten arithmetischen Operationen
 
 ```{r AritheticOperators}
-dfArOp <- data.frame( Operator  = c("+","-","*","/","^", "e"),
+dfArOp <- data.frame( Operator  = c("$+$","$-$","$*$","$/$","^", "e"),
                       Operation = c("Addition", "Subtraktion","Multiplikation","Division","Potenz","Zehnerpotenz"),
                       stringsAsFactors = FALSE)
 knitr::kable(dfArOp)
 ```
+
+### Logische Operationen
+Abgesehen von arithmetischen Rechenoperationen lassen sich auch logische Operationen durchführen. Mithilfe dieser Operationen lassen sich Vergleiche machen oder Beziehungen überprüfen. Das Resultat eines solchen Vergleichs ist immer entweder `TRUE` (wahr) oder `FALSE` (falsch). (Im Abschnitt zu den Datentypen werden wir sehen, dass es für die Vergleichsresultaten einen speziellen Datentyp - den `BOOLEAN` Datentyp - gibt.) Die folgende Liste zeigt die Vergleichsoperatoren in R.
+
+```{r ComparisonOperators}
+dfCompOp <- data.frame( Operator  = c("$==$","$!=$","$>$","$<=$","&", "|"),
+                      Operation = c("ist gleich", "ist ungleich","ist grösser","ist kleiner gleich","und","oder"),
+                      stringsAsFactors = FALSE)
+knitr::kable(dfCompOp)
+```
+
+Die folgenden Beispiele zeigen, wie logische Vergleiche ausgewertet werden
+
+```{r CompOpEx1, echo=TRUE}
+3 == 3
+```
+
+```{r CompOpEx2, echo=TRUE}
+3 == 4
+```
+
+```{r CompOpEx3, echo=TRUE}
+3 != 4
+```
+
+```{r CompOpEx4, echo=TRUE}
+3 <= 4 & 3 == 3
+```
+
+```{r CompOpEx5, echo=TRUE}
+3 <= 4 | 3 == 4
+```
+
+```{r CompOpEx6, echo=TRUE}
+(3 <= 4 | 3 == 3) & 3 == 4
+```
+
+
+## Variablen - Objekte
+Die Begriffe `Variablen` und `Objekte` werden hier als Synonyme verwendet. Das Rechnen im Taschenrechner-Modus ist sicher sehr nützlich, aber wir wollen auch in der Lage sein, bestimmte Grössen an speziellen Orten im Speicher abzulegen. Dazu verwenden wir Variablen. Damit wir besser verstehen, was bei der Verwendung bei Variablen passiert, schauen wir uns das so genannte `Von Neumann`-Modell eines Computers an.
+
+```{r vonNeumannComputerArch}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "vonNeumannComputerArch")
+```
+
+Schauen wir uns den Arbeitsspeicher etwas genauer an, dann können wir uns den als eine Art Setzkasten, in dem man verschiedene Objekte ablegen kann, vorstellen.
+
+```{r Arbeitsspeicher1}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "Arbeitsspeicher1", pnPaperWidthScale=0.5)
+```
+
+
+## Datentypen
+
+### Vektoren
+
+### Matrizen
+
+### Listen
+
+### Dataframes
+
+
+## Einlesen von Daten
+
+
+## Erweiterungen
+
+### Packages
+
+###Eigene Funktionen
+
 
 \pagebreak
 
