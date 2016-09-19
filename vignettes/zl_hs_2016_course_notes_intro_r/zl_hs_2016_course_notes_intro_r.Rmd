@@ -125,6 +125,20 @@ Schauen wir uns den Arbeitsspeicher etwas genauer an, dann können wir uns den a
 rmddochelper::insertOdgAsPdf(psOdgFileStem = "Arbeitsspeicher1", pnPaperWidthScale=0.5)
 ```
 
+Wenn wir in der Console von Rstudio als Beispiel der Variablen `n` den Wert $5$ zuweisen, dann wird das mit folgender Anweisung gemacht
+
+```{rVarNAssign, echo=TRUE}
+n <- 5
+```
+
+Das folgende Diagramm zeigt, wie sich durch diese Anweisung der Arbeitsspeicher verändert.
+
+```{r Arbeitsspeicher2}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "Arbeitsspeicher2", pnPaperWidthScale=0.5)
+```
+
+
+
 
 ## Datentypen
 
