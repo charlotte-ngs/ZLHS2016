@@ -127,7 +127,7 @@ rmddochelper::insertOdgAsPdf(psOdgFileStem = "Arbeitsspeicher1", pnPaperWidthSca
 
 Wenn wir in der Console von Rstudio als Beispiel der Variablen `n` den Wert $5$ zuweisen, dann wird das mit folgender Anweisung gemacht
 
-```{rVarNAssign, echo=TRUE}
+```{r VarNAssign, echo=TRUE}
 n <- 5
 ```
 
@@ -137,10 +137,70 @@ Das folgende Diagramm zeigt, wie sich durch diese Anweisung der Arbeitsspeicher 
 rmddochelper::insertOdgAsPdf(psOdgFileStem = "Arbeitsspeicher2", pnPaperWidthScale=0.5)
 ```
 
+Berechnung und Zuweisung zu Variablen können kombiniert werden. 
 
+```{r VarNAssign2, echo=TRUE}
+summe <- 15 + 9 + 8 + 34 + 76
+summeq <- 15^2 + 9^2 + 8^2 + 34^2 + 76^2
+```
+
+Die obige Berechnung und Zuweisung ist im nachfolgenden Diagramm dargestellt.
+
+```{r Arbeitsspeicher3}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "Arbeitsspeicher3", pnPaperWidthScale=0.5)
+```
+
+Der Zugriff auf die Werte, welche unter einer Variablen abgelegt sind, erfolgt durch die Eingabe des Variablennamens an der Console.
+
+```{r VariableAccessConsole, echo=TRUE}
+n
+```
+
+
+```{r ArbeitsspeicherZugriff}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "ArbeitsspeicherZugriff", pnPaperWidthScale=0.5)
+```
+
+Bezüglich der Namengebung von Variablen müssen einige Regeln eingehalten werden. Variablennamen können Buchstaben, Zahlen und Zeichen wie "-"", "_" oder "." enthalten. Sie sollen aber nicht mit einer Zahl beginnen. Es wird empfohlen Namen von schon existierenden Funktionen nicht als Variablen zu verwenden. Allgemeine Hinweise zu Style, Namen und Notationen sind unter http://r-pkgs.had.co.nz/style.html erhältlich.
+
+Mit Variablen kann wie mit Zahlen gerechnet werden. Für die Berechnung werden die im Arbeitsspeicher unter dem entsprechenden Variablennamen abgelegten Werte verwendet. Wollen wir als Beispiel aus den Werten, welche wir unter den Variablennamen `summe` und `summeq` abgelegt haben, den Mittelwert und die Standardabweichung berechnen, dann sieht das wie folgt aus.
+
+```{r ComputeMeanSq, echo=TRUE}
+m <- summe / n
+s <- sqrt((summeq - summe^2/n)/(n-1))
+```
+
+Bei einer normalen Zuweisung wird kein Output generiert. Für die Anzeige der Resultate muss der Variablenname eingeben oder die Funktion `print()` verwendet werden.
+
+```{r AccessVarMean, echo=TRUE}
+m
+```
+
+```{r AccessVarSd, echo=TRUE}
+print(s)
+```
 
 
 ## Datentypen
+Bis anhin hatten wir in R mit Zahlen gerechnet. Abgesehen von Zahlen gibt es noch die folgenden Datentypen in R. 
+
+```{r TableDataType}
+dfDataType <- data.frame(Datentyp = c("numeric","integer","complex","character","factor"),
+                         Beschreibung = c("reelle Zahlen","ganze Zahlen","Quadratwurzel aus negativen Zahlen",
+                                          "Buchstaben, Zeichen", "Datentyp für lineare Modelle"),
+                         stringsAsFactors = FALSE)
+knitr::kable(dfDataType)
+```
+
+### Wichtige Punkte zu Datentypen
+R kennt keine strenge Prüfung von Datentypen, d.h. R erlaubt es der gleichen Variablen einmal eine Zahl und dann ein Character zuzuweisen. Falls nötig und möglich macht R eine automatische Umwandlung zwischen Datentypen. Diese Umwandlung wird als __coersion__ bezeichnet.
+
+Hilfreiche Funktionen im Zusammenhang mit Datentypen sind:
+
+* `class()` gibt den Typ eines Objekts zurück
+* `is.<data.type>()` prüft, ob Objekt vom Datentype `<data.type>` ist. Als Beispiel überprüft `is.integer(5)`, ob $5$ eine ganze Zahl ist.
+* `as.<data.type>()` kann für explizite Umwandlungen verwendet werden. Zum Beispiel wandelt `as.character(12)` die Zahl $12$ in den String "12" um.
+
 
 ### Vektoren
 
