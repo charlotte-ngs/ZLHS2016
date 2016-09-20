@@ -25,6 +25,10 @@ r6obj_docstat$set_current_status(psVersion = "0.0.904",
                                  psStatus  = "Plots, Diagramme und lineares Modell",
                                  psProject = "ZLHS2016",
                                  psDate = "2016-09-20")
+r6obj_docstat$set_current_status(psVersion = "0.0.905",
+                                 psStatus  = "Packages und Funktionen",
+                                 psProject = "ZLHS2016",
+                                 psDate = "2016-09-20")
 r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
 ```
 
@@ -533,12 +537,41 @@ abline(coef = coefficients(lmBrGew), col = "red")
 ```
 
 
-
 ## Erweiterungen
+Die Popularität von R ist auch bedingt durch, dass das System als solches fast beliebig erweitert werden kann. Grundsätzlich sind zwei Arten der Erweiterung denkbar.
+
+1. Packages
+2. Benutzer-definierte Funktionen
 
 ### Packages
+Unter einem Package versteht man eine Sammlung von Funktionen, welche von Autoren zur Verfügung gestellt werden. Als BenutzerIn von R können diese Packages mit der Funktion `install.packages()` verwendet werden. Wenn wir als Beispiel das Package namens `pedigreemm` verwenden wollen, dann können wir dieses mit folgendem Befehl installieren.
+
+```{r InstallPedigreeMM, eval=FALSE}
+install.packages(pkgs = "pedigreemm")
+```
+
+Nach einer erfolgreichen Installation von `pedigreemm` können die Funktionen in `pedigreemm` verwendet werden. 
 
 ### Eigene Funktionen
+Müssen gewisse Befehle wiederholt und häufig ausgeführt werden, dann empfielt es sich die Befehle in eine BenutzerIn-definierte Funktion zu verpacken. Nach der Definition der Funktion, kann diese genau wie jede andere R-Funktion aufgerufen werden.
+
+Nehmen wir beispielsweise an, wir möchten Temperaturwerte von der Celsius- auf die Fahrenheit-Skala umrechnen, dann können wir das mit einer Funktion machen.
+
+```{r CelToF}
+celcius_in_fahrenheit <- function(pnCelsius){
+  nResultFahrenheit <- 32 + 9/5 * pnCelsius
+  return(nResultFahrenheit)
+}
+```
+
+Die Umrechnung für einen bestimmten Wert geschieht jetzt über folgenden Aufruf.
+
+```{r CelToFCall}
+celcius_in_fahrenheit(pnCelsius = 0)
+celcius_in_fahrenheit(pnCelsius = 7)
+celcius_in_fahrenheit(pnCelsius = 25)
+
+```
 
 
 \pagebreak
