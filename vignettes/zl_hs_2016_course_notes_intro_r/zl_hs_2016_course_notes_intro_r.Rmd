@@ -17,6 +17,14 @@ r6obj_docstat$set_current_status(psVersion = "0.0.901",
 r6obj_docstat$set_current_status(psVersion = "0.0.902",
                                  psStatus  = "Einführung",
                                  psProject = "ZLHS2016")
+r6obj_docstat$set_current_status(psVersion = "0.0.903",
+                                 psStatus  = "Vektor und Matrix",
+                                 psProject = "ZLHS2016",
+                                 psDate = "2016-09-19")
+r6obj_docstat$set_current_status(psVersion = "0.0.904",
+                                 psStatus  = "Plots, Diagramme und lineares Modell",
+                                 psProject = "ZLHS2016",
+                                 psDate = "2016-09-20")
 r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
 ```
 
@@ -496,7 +504,33 @@ dfBrGew <- read.csv2(file = "csv/br_gew.csv")
 dim(dfBrGew)
 ```
 
-Die Funktion `dim()` gibt die Dimension der eingelesenen Daten. Dies ist eine gute Kontrolle, ob der Einleseprozess auch wirklich funktioniert hat.
+Die Funktion `dim()` gibt die Dimension der eingelesenen Daten. Dies ist eine gute Kontrolle, ob der Einleseprozess auch wirklich funktioniert hat. Als Resultat gibt die Funktion `read.csv2()` ein Dataframe zurück. Die Funktion `head()` liefert die ersten paar Zeilen des eingelesenen Dataframes.
+
+```{r HeadDataframe}
+head(dfBrGew)
+```
+
+Die umgekehrte Vorgang des Lesens von Daten, das __Schreiben von Daten__ in Dateien, kann je nachdem auch wichtig sein. Dazu gibt es die zu `read.table()` analogen Funktionen namens `write.table()`. Sollen die Daten im CSV-Format geschrieben werden dann können wir das mit `write.csv2()` tun. Für den Output von Daten, welche nicht Tabellen-artig organisiert sind, kann auch die Funktion `cat()` verwendet werden.
+
+
+## Plots und Diagramme
+Sobald die Daten in R eingelesen sind, ist ein erster Schritt häufig eine Beschreibung der Daten mithilfe von graphischen Hilfsmitteln. R hat eine grosse Auswahl an Möglichkeiten für die graphische Darstellung von Daten. Hier sind nur die einfachsten erwähnt. 
+
+Die Funktion `plot()` kann verwendet werden, um einfache zwei-dimensionale Darstellungen zu erzeugen. Wenn wir als Beispiel das Gewicht gegen den Brustumfang aus dem Dataframe `dfBrGew` darstellen wollen, dann geschieht das mit folgendem Statement.
+
+```{r PlotDfBrGew, fig.show=TRUE}
+plot(dfBrGew$Brustumfang, dfBrGew$Gewicht, xlab = "Brustumfang", ylab = "Gewicht")
+```
+
+
+## Einfaches lineares Modell
+Zur Überprüfung eines statistischen Zusammenhangs zwischen den Variablen `Gewicht` und `Brustumfang` können wir ein einfaches lineares Modell anpassen. Wie gut das angepasste lineare Modell zu den Daten passt, können wir visuell durch den Vergleich der Daten zur gefundenen Regressionsgeraden beurteilen. Die Modellanpassung und die Erstellung des Plots werden mit folgenden Statements erzeugt.
+
+```{r LinModAbline, fig.show=TRUE}
+lmBrGew <- lm(Gewicht ~ Brustumfang, data = dfBrGew)
+plot(dfBrGew$Brustumfang, dfBrGew$Gewicht, xlab = "Brustumfang", ylab = "Gewicht")
+abline(coef = coefficients(lmBrGew), col = "red")
+```
 
 
 
@@ -504,7 +538,7 @@ Die Funktion `dim()` gibt die Dimension der eingelesenen Daten. Dies ist eine gu
 
 ### Packages
 
-###Eigene Funktionen
+### Eigene Funktionen
 
 
 \pagebreak
