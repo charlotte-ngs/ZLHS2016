@@ -47,22 +47,30 @@ rmddochelper::insertOdgAsPdf(psOdgFileStem = "ScreenShotRstudio")
 ## Interaktiver Modus
 R kann wie ein Taschenrechner verwendet werden. Man spricht dann auch vom so genannten __interaktiven__ Modus, d.h. die/der BenutzerIn gibt einen Befehl ein und bekommt eine Antwort zurück. In Rstudio werden die Befehle in das Fenster, welches mit dem Tab namens `Console` überschrieben ist, eingegeben. Beispiele für mögliche Eingaben im interaktiven Modus sind
 
-```{r InteractiveMode1, echo=TRUE}
+```{r include=FALSE, echo=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = TRUE, results = 'markup')
+```
+
+```{r InteractiveMode1}
 43-15
 ```
 
-```{r InteractiveMode2, echo=TRUE}
+```{r InteractiveMode2}
 76/8
 ```
 
 R befolgt die in der Arithmetik üblichen Rechenregeln, so gilt beispielsweise, dass Klammern vor Punkt vor Strich
 
-```{r ArithRule1, echo=TRUE}
+```{r ArithRule1}
 65 - 18 / 3
 ```
 
-```{r ArithRule2, echo=TRUE}
+```{r ArithRule2}
 (65 - 18) / 3
+```
+
+```{r include=FALSE, echo=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
 ```
 
 ### Arithmetische Operationen
@@ -87,33 +95,41 @@ knitr::kable(dfCompOp)
 
 Die folgenden Beispiele zeigen, wie logische Vergleiche ausgewertet werden
 
-```{r CompOpEx1, echo=TRUE}
+```{r include=FALSE, echo=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = TRUE, results = 'markup')
+```
+
+```{r CompOpEx1}
 3 == 3
 ```
 
-```{r CompOpEx2, echo=TRUE}
+```{r CompOpEx2}
 3 == 4
 ```
 
-```{r CompOpEx3, echo=TRUE}
+```{r CompOpEx3}
 3 != 4
 ```
 
-```{r CompOpEx4, echo=TRUE}
+```{r CompOpEx4}
 3 <= 4 & 3 == 3
 ```
 
-```{r CompOpEx5, echo=TRUE}
+```{r CompOpEx5}
 3 <= 4 | 3 == 4
 ```
 
-```{r CompOpEx6, echo=TRUE}
+```{r CompOpEx6}
 (3 <= 4 | 3 == 3) & 3 == 4
 ```
 
 
 ## Variablen - Objekte
 Die Begriffe `Variablen` und `Objekte` werden hier als Synonyme verwendet. Das Rechnen im Taschenrechner-Modus ist sicher sehr nützlich, aber wir wollen auch in der Lage sein, bestimmte Grössen an speziellen Orten im Speicher abzulegen. Dazu verwenden wir Variablen. Damit wir besser verstehen, was bei der Verwendung bei Variablen passiert, schauen wir uns das so genannte `Von Neumann`-Modell eines Computers an.
+
+```{r include=FALSE, echo=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
 
 ```{r vonNeumannComputerArch}
 rmddochelper::insertOdgAsPdf(psOdgFileStem = "vonNeumannComputerArch")
@@ -127,7 +143,7 @@ rmddochelper::insertOdgAsPdf(psOdgFileStem = "Arbeitsspeicher1", pnPaperWidthSca
 
 Wenn wir in der Console von Rstudio als Beispiel der Variablen `n` den Wert $5$ zuweisen, dann wird das mit folgender Anweisung gemacht
 
-```{r VarNAssign, echo=TRUE}
+```{r VarNAssign, echo=TRUE, results='markup'}
 n <- 5
 ```
 
@@ -139,7 +155,7 @@ rmddochelper::insertOdgAsPdf(psOdgFileStem = "Arbeitsspeicher2", pnPaperWidthSca
 
 Berechnung und Zuweisung zu Variablen können kombiniert werden. 
 
-```{r VarNAssign2, echo=TRUE}
+```{r VarNAssign2, echo=TRUE, results='markup'}
 summe <- 15 + 9 + 8 + 34 + 76
 summeq <- 15^2 + 9^2 + 8^2 + 34^2 + 76^2
 ```
@@ -152,7 +168,7 @@ rmddochelper::insertOdgAsPdf(psOdgFileStem = "Arbeitsspeicher3", pnPaperWidthSca
 
 Der Zugriff auf die Werte, welche unter einer Variablen abgelegt sind, erfolgt durch die Eingabe des Variablennamens an der Console.
 
-```{r VariableAccessConsole, echo=TRUE}
+```{r VariableAccessConsole, echo=TRUE, results='markup'}
 n
 ```
 
@@ -165,18 +181,22 @@ Bezüglich der Namengebung von Variablen müssen einige Regeln eingehalten werde
 
 Mit Variablen kann wie mit Zahlen gerechnet werden. Für die Berechnung werden die im Arbeitsspeicher unter dem entsprechenden Variablennamen abgelegten Werte verwendet. Wollen wir als Beispiel aus den Werten, welche wir unter den Variablennamen `summe` und `summeq` abgelegt haben, den Mittelwert und die Standardabweichung berechnen, dann sieht das wie folgt aus.
 
-```{r ComputeMeanSq, echo=TRUE}
+```{r include=FALSE, echo=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = TRUE, results = 'markup')
+```
+
+```{r ComputeMeanSq}
 m <- summe / n
 s <- sqrt((summeq - summe^2/n)/(n-1))
 ```
 
 Bei einer normalen Zuweisung wird kein Output generiert. Für die Anzeige der Resultate muss der Variablenname eingeben oder die Funktion `print()` verwendet werden.
 
-```{r AccessVarMean, echo=TRUE}
+```{r AccessVarMean}
 m
 ```
 
-```{r AccessVarSd, echo=TRUE}
+```{r AccessVarSd}
 print(s)
 ```
 
@@ -184,7 +204,7 @@ print(s)
 ## Datentypen
 Bis anhin hatten wir in R mit Zahlen gerechnet. Abgesehen von Zahlen gibt es noch die folgenden Datentypen in R. 
 
-```{r TableDataType}
+```{r TableDataType, echo=FALSE, results='asis'}
 dfDataType <- data.frame(Datentyp = c("numeric","integer","complex","character","factor"),
                          Beschreibung = c("reelle Zahlen","ganze Zahlen","Quadratwurzel aus negativen Zahlen",
                                           "Buchstaben, Zeichen", "Datentyp für lineare Modelle"),
@@ -201,17 +221,283 @@ Hilfreiche Funktionen im Zusammenhang mit Datentypen sind:
 * `is.<data.type>()` prüft, ob Objekt vom Datentype `<data.type>` ist. Als Beispiel überprüft `is.integer(5)`, ob $5$ eine ganze Zahl ist.
 * `as.<data.type>()` kann für explizite Umwandlungen verwendet werden. Zum Beispiel wandelt `as.character(12)` die Zahl $12$ in den String "12" um.
 
-
 ### Vektoren
+Prinzipiell behandelt R jede Variable oder jedes Objekt als einen Vektor. Das ist für den Gebrauch in dieser Vorlesung nicht von grosser Bedeutung. Vektoren als Sequenzen von Komponenten des gleichen Datentyps sind für uns viel wichtiger. Diese werden mit der Funktion `vector()` erzeugt und mit der Funktion `c()` erweitert.
+
+```{r CreateNumericVector}
+vecNum <- vector(mode = "numeric", length = 2)
+vecNum[1] <- 5
+vecNum[2] <- -4
+print(vecNum)
+```
+
+Analog dazu kann eine Vektor auch direkt ohne den Umweg über die Funktion `vector()` direkt erzeugt werden.
+
+```{r CreateNumericVectorShort}
+vecNum <- c(5,-4)
+print(vecNum)
+```
+
+Vektoren können mit der Funktion `c()` auch erweitert werden. 
+
+```{r ExtendVec}
+vecNum <- c(vecNum, 43,-2)
+print(vecNum)
+vecChar <- c("aa", "ba")
+vecChar <- c(vecChar, vecNum)
+print(vecChar)
+```
+
+Das zweite Beispiel, in welchem wir den Vektor `vecChar` um den Vektor `vecNum` erweiterten, zeigt, dass bei der Erweiterung eines Character-Vektors um einen Zahlen-Vektor, die Zahlen automatisch in Strings umgewandelt werden. Umgekehrt, ist es nicht möglich einen Vektor von Zahlen um einen Character-Vektor zu erweitern, da Character nicht eindeutig in Zahlen verwandelt werden können. 
+
+Eine wichtige Eigenschaft eines Vektors ist seine __Länge__. Hier hat Länge nicht eine geometrische Bedeutung, sondern hier ist Länge die Anzahl Komponenten im Vektor gemeint. Die Funktion `length()` ermittelt die Anzahl Elemente in einem Vektor.
+
+```{r VectorLength}
+length(vecChar)
+```
+
+__Logische Vergleiche__ können direkt auf Vektoren angewendet werden. Als Resultat erhalten wir einen Vektor mit Boolschen Komponenten der gleichen Länge, wie der ursprüngliche Vektor. Als Beispiel können wir für alle Komponenten eines numerischen Vektors testen, ob die Komponenten grösser als ein Bestimmter Wert sind.
+
+```{r BoolComVector}
+vecNum > 5
+```
+
+Die __arithmetischen Operationen__ mit Vektoren werden alle komponenten-weise ausgeführt. 
+
+```{r VecArithDefAdd}
+x <- c(3,5,13,-2)
+y <- c(2,6,-3,19)
+x+y
+```
+
+```{r VecArithMinus}
+x-y
+```
+
+```{r VecArithMult}
+x*y
+```
+
+```{r VecArithDiv}
+x/y
+```
+
+Das Skalarprodukt zweier Vektoren berechnen wir mit der Funktion `crossprod()`
+
+```{r VecCrossProd}
+crossprod(x,y)
+```
+
+Der __Zugriff auf ein bestimmtes Elementes__ $i$ eines Vektors $x$ geschieht mit dem Ausdruck $x[i]$. 
+
+```{r VecAccessElement}
+x[2]
+```
+
+Setzen wir den Index $i$ in $x[i]$ auf einen Wert $i<0$, dann erhalten wir den Vektor, in welchem das Element $i$ fehlt. 
+
+```{r VecExcludeElement}
+x[-3]
+```
+
+Mit einem Bereich von Indices kann ein Teil des Vektors angesprochen werden. 
+
+```{r VecRangeElement}
+x[2:4]
+```
+
 
 ### Matrizen
+Matrizen sind ihrem mathematischen Vorbild nachempfunden und somit in Zeilen und Kolonnen organisiert. Alle Komponenten einer Matrix müssen vom gleichen Datentyp sein. Eine Matrix in R wird mit der Funktion `matrix()` erstellt.
+
+```{r CreateMatrix}
+matA <- matrix(c(5,3,4,-6,3,76), nrow = 2, ncol = 3, byrow = TRUE)
+print(matA)
+```
+
+Falls die Matrix zeilenweise aufgefüllt werden soll, dann ist die Option `byrow = TRUE` wichtig. Andernfalls wird die Matrix kolonnenweise aufgefüllt. 
+
+Eine grundlegende Eigenschaft einer Matrix ist ihre Dimension. Sie entspricht der Anzahl Zeilen und Kolonnen der Matrix und wird mit der Funktion `dim()` bestimmt.
+
+```{r MatrixDim}
+dim(matA)
+```
+
+Der __Zugriff auf Elemente__ einer Matrix erfolgt analog zum Zugriff bei den Vektoren. Aber für die Spezifikation eines einzelenen Elementes braucht es bei den Matrizen zwei Indices.
+
+```{r MatrixElementAccess}
+matA[2,1]
+```
+
+Es ist aber auch möglich eine ganze Zeile oder eine ganze Spalte zu selektieren. Das Resultat ist in beiden Fällen ein Vektor.
+
+```{r MatrixRowAccess}
+matA[1,]
+```
+
+Was etwas verwirrend aussieht ist, dass beim Zugriff auf eine Spalte, scheinbar auch eine Zeile ausgegeben wird, das hängt aber damit zusammen, dass das Resultat ein Vektor ist und Vektoren werden immer auf einer Zeile ausgegeben.
+
+```{r MatrixColAccess}
+matA[,2]
+```
+
+Bestehende Matrizen können auch __erweitert__ werden. Dies kann auf zwei Arten passieren. Entweder stapeln wir Matrizen aufeinander oder wir stellen sie nebeneinander. Die beiden Fälle sind in den nachfolgenden Statements gezeigt.
+
+```{r MatrixRbind}
+matB <- matrix(c(3,-1,90,1,1,4), nrow = 2, ncol = 3, byrow = TRUE)
+rbind(matA, matB)
+```
+
+Alternativ können wir die Matrizen auch in Kolonnenrichtung erweitern.
+
+```{r MatrixCbind}
+cbind(matA, matB)
+```
+
+Die aus der lineare Algebra bekannten __Operationen__ können wir auch hier in R anwenden. Als erstes können wir eine gegebene Matrix __transponieren__.
+
+```{r MatrixTranspose}
+t(matA)
+```
+
+Wir können also einfach überprüfen, dass die Transponierte Matrix der Transponierten wieder der ursprünglichen Matrix entspricht.
+
+```{r TransposeTransposeMat}
+t(t(matA))
+```
+
+Die __arithmetischen__ Rechenoperationen $+$, $-$, $*$ und $/$ werden alle Element-weise ausgeführt. 
+
+```{r MatAdd}
+matA + matB
+```
+
+```{r MatSub}
+matA - matB
+```
+
+```{r MatElemMult}
+matA * matB
+```
+
+```{r MatElemDiv}
+matA / matB
+```
+
+Die __Matrixmultiplikation__, welche wir aus der linearen Algebra kennen, muss entweder mit dem speziellen Operator `%*%` oder mit der Funktion `crossprod()` berechnet werden.
+
+```{r MatMult}
+matA %*% t(matB)
+```
+
+```{r MatCrossprod}
+crossprod(matA, matB)
+```
+
+Wir sehen hier dass die beiden Matrixmultiplikationen `matA %*% t(matB)` und `crossprod(matA, matB)` nicht das gleiche Resultat ergeben. Aus der Linearen Algebra wissen wir auch, dass die Matrizen `matA` und `matB` so nicht kompatibel sind für die Matrixmultiplikation. Die Funktion `crossprod()` transponiert automatisch die erste Matrix und somit wird die folgende Berechnung durchgeführt.
+
+```{r MatMult2}
+t(matA) %*% matB
+```
+
+Die __Inverse__ einer Matrix erhalten wir als Resultat der Funktion `solve()`. 
+
+```{r MatInv}
+matC <- matA %*% t(matB)
+(matCinv <- solve(matC))
+```
+
+Als Kontrolle berechnen wir das Produkt der Inversen und der ursprünglichen Matrix und müssen als Resultat die Einheitsmatrix bekommen.
+
+```{r MatInvCheck}
+matCinv %*% matC
+```
+
 
 ### Listen
+In Listen kann man Sammlungen von Objekten, welche nicht den gleichen Datentyp haben, abspeichern. Die Definition einer Liste erfolgt über die Angabe von Schlüssel-Werte-Paaren. Was das bedeutet, wird im folgend Beispiel gezeigt.
+
+```{r ListDef}
+lstA <- list(nZahlen = c(5,-2,7),
+             sNamen = c("Fred","Mary"),
+             lBool = c(FALSE,TRUE))
+```
+
+Der __Zugriff__ auf die Elemente mit Indices oder die Angabe von Schlüsselnamen gibt als Resultat wieder eine Liste zurück mit dem entsprechenden Schlüssel-Werte-Paar, welches selektiert wurde.
+
+```{r ListAccess}
+lstA[2]
+```
+
+Ein Element kann aber auch mit einem Namen selektiert werden.
+
+```{r ListSelName}
+lstA["nZahlen"]
+```
+
+Die Liste aller Namen erhalten wir mit der Funktion `names()`.
+
+```{r ListNames}
+names(lstA)
+```
+
+Wollen wir die Elemente einer Liste so selektieren, dass ein Vektor als Resultat zurückkommt, dann müssen wir doppelte Klammern oder den `$`-Operator verwenden.
+
+```{r ListVektorResult}
+lstA[[3]]
+```
+
+```{r ListVektorResultNamen}
+lstA[["lBool"]]
+```
+
+```{r ListDollarOp}
+lstA$lBool
+```
+
 
 ### Dataframes
+Dataframes sind spezielle Listen in R. Diese erhalten wir als Resultat, wenn wir Daten von Dateien einlesen (siehe nächster Abschnitt). Technisch gesehen sind Dataframes eine Mischung aus Listen und Matrizen. Dies wird klar, wenn wir uns den möglichen Zugriff auf Elemente eines Dataframes anschauen. Zuerst müssen wir aber ein Dataframe erzeugen. Dies geschieht an dieser Stelle mit der Funktion `data.frame()`. Die Option `stringsAsFactors = FALSE` muss angegeben werden, da sonst alle Strings in Faktoren umgewandelt werden.
+
+```{r GenerateDataframe}
+ dfA <- data.frame(nZahl = c(-2,15), 
+                   sZeichen = c("Alice","Bob"), 
+                   bWahr = c(FALSE,FALSE),
+                   stringsAsFactors = FALSE)
+```
+
+Der Zugriff auf die einzelnen Elemente kann nun wie bei einer Matrix über die Angaben von Zeilen- und Kolonnenindices sein, oder wie bei einer Liste mit der Angabe eines Schlüsselnamens.
+
+```{r DataframeAccessIndices}
+dfA[2,1]
+```
+
+Mit der Angabe eines Schlüsselnamens erhalten wir alle Werte zum entsprechenden Schlüssel.
+
+```{r DataframeAccessName}
+dfA$sZeichen
+```
 
 
 ## Einlesen von Daten
+Eine Verwendungsart von R ist die statistische Analyse von Daten. Zu diesem Zweck müssen wir die Daten zuerst einlesen. Erst dann können wir sie analysieren. Die wichtigste Funktion um Daten in R einzulesen, heisst `read.table()`. Mit dieser Funktion können Daten aus Files, welche Tabellen-artig organisiert sind, eingelesen werden. Haben die einzulesenden Daten ein spezifischers Format, so wie zum Beispiel `r r6ob_abbrtable$add_abbrev(psAbbrev = "CSV", psMeaning = "Comma Separated Values")`, so gibt es spezialisierte Funktionen, wie `read.csv2()`, welche Daten im CSV-Format einlesen können. Ein Beipiel dafür sei nachfolgend gezeigt. Die Option `file = "csv/br_gew.csv"` gibt an, wo im Dateisystem das File mit den Daten zu finden ist.
+
+```{r GenerateData, echo=FALSE, results='hide'}
+sDataFile <- "csv/br_gew.csv"
+if (!file.exists(sDataFile)){
+  dfBrGew <- data.frame(Brustumfang = c(176,177,178,179,179,180,181,182,183,184),
+                        Gewicht = c(471,463,481,470,496,491,518,511,510,541))
+  write.csv2(dfBrGew, file = sDataFile, row.names = FALSE, quote = FALSE)
+}
+```
+
+```{r ReadCSV2Data}
+dfBrGew <- read.csv2(file = "csv/br_gew.csv")
+dim(dfBrGew)
+```
+
+Die Funktion `dim()` gibt die Dimension der eingelesenen Daten. Dies ist eine gute Kontrolle, ob der Einleseprozess auch wirklich funktioniert hat.
+
 
 
 ## Erweiterungen
@@ -223,13 +509,13 @@ Hilfreiche Funktionen im Zusammenhang mit Datentypen sind:
 
 \pagebreak
 
-```{r WriteTableOfAbbreviations, results='hide'}
+```{r WriteTableOfAbbreviations, echo=FALSE, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
 ```
 <!-- END of document                 -- 
   -- Below this must not be anything -->
 
-```{r IncludeTableAbbrev}
+```{r IncludeTableAbbrev, echo=FALSE, results='asis'}
 ### # include table of abbreviations only, if there are any
 #if (!r6ob_abbrtable$is_empty_abbr())
   r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abkürzungen")
