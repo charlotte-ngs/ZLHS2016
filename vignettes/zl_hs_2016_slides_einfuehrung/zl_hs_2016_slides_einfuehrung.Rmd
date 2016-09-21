@@ -1,0 +1,119 @@
+---
+title: "Züchtungslehre - Einführung"
+author: "Peter von Rohr"
+date: "23 September 2016"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Inhalt der heutigen Vorlesung
+
+- Einführung in die Vorlesung
+- Lineare Algebra
+- Einführung in R
+
+
+## Who Is Who
+
+- Studiengang
+- Motivation für diese Vorlesung
+- Erfahrungen in Tierzucht / R / Statistik / ...
+
+
+## Ziele dieser Vorlesung
+
+- Verstehen der Grundlagen
+- Erklärung von Zusammenhängen (siehe nächste Folie)
+- Weiterbildung in Statistik
+- Anwendung von R
+
+
+## Zitate
+
+- "Tiefe Kuhfamilien" (Schweizer Bauer - https://www.schweizerbauer.ch/tiere/milchvieh/eine-komplette-kuh-zuechten-17854.html)
+- "Bei der Auswahl von Kühen für die Zuchtprogramme sollten also auch Eigenleistungen, Leistungen von Vorfahren und die Blutlinien stimmen." (swissherdbookbulletin 5/15)
+- "Ich habe noch niemanden getroffen, der mir diese Zuchtwerte erklären kann. Eine Kuh von mir hat einen Zuchtwert von $-900$ und gibt immer noch Milch." (Leserbrief im Schweizer Bauer)
+
+
+## Informationen
+
+- Webseite: http://charlotte-ngs.github.io/LBGHS2016
+- Kreditpunkte: Schriftliche Prüfung am 23.12.2016
+
+
+## Ablauf einer Vorlesung
+
+- Typ G im Vorlesungsverzeichnis
+- Ab kommender Woche:
+    + U: 9-10
+    + V: 10-12 (Besprechung der Übung, neuer Stoff)
+
+
+## Vorlesungsprogramm
+
+```{r SlidesTable, echo=FALSE, results='asis'}
+# define course start date
+dCourseStart <- as.Date("2016/09/23")
+# set number of weeks in semester
+nNrSemesterWeeks <- 14
+# define columns for weaks, dates, and subjects
+Woche <- 1:nNrSemesterWeeks
+Datum <- format(seq(dCourseStart, by = "week", length.out = nNrSemesterWeeks), "%d.%m")
+Thema <- vector(mode = "character", length = nNrSemesterWeeks)
+# subjects per week
+Thema[which(Datum == format(as.Date("2016/09/23"), "%d.%m"))] <- "Einführung, Lineare Algebra, R"
+Thema[which(Datum == format(as.Date("2016/09/30"), "%d.%m"))] <- "Repetition Quantitative Genetik"
+Thema[which(Datum == format(as.Date("2016/10/07"), "%d.%m"))] <- "Selektionsindex"
+Thema[which(Datum == format(as.Date("2016/10/14"), "%d.%m"))] <- "keine Vorlesung"
+Thema[which(Datum == format(as.Date("2016/10/21"), "%d.%m"))] <- "Inverse Verwandtschaftsmatrix"
+Thema[which(Datum == format(as.Date("2016/10/28"), "%d.%m"))] <- "Varianzanalyse"
+Thema[which(Datum == format(as.Date("2016/11/04"), "%d.%m"))] <- "Varianzkomponentenschätzung "
+Thema[which(Datum == format(as.Date("2016/11/11"), "%d.%m"))] <- "BLUP I"
+Thema[which(Datum == format(as.Date("2016/11/18"), "%d.%m"))] <- "BLUP II"
+Thema[which(Datum == format(as.Date("2016/11/25"), "%d.%m"))] <- "Linkage disequilibrium"
+Thema[which(Datum == format(as.Date("2016/12/02"), "%d.%m"))] <- "Genomische Selektion "
+Thema[which(Datum == format(as.Date("2016/12/09"), "%d.%m"))] <- "Genom-weite Assoziationsstudien"
+Thema[which(Datum == format(as.Date("2016/12/16"), "%d.%m"))] <- "Reserve, Fragen"
+Thema[which(Datum == format(as.Date("2016/12/23"), "%d.%m"))] <- "Prüfung"
+
+dfSlideTable <- data.frame(Woche, Datum, Thema, stringsAsFactors = FALSE)
+knitr::kable(dfSlideTable)
+```
+
+
+## Voraussetzungen für diese Vorlesung
+
+- Keine
+- Konzepte und Grundbegriffe werden erklärt
+- Hilfreich sind
+    + Kenntnisse in Quantitativer Genetik
+    + Statistik
+    + Lineare Algebra
+    + Erfahrungen mit R
+    
+
+## Übungen
+
+- Zu jedem Vorlesungsblock wird es eine Übung geben
+- Übungsstunde steht zur Bearbeitung der Aufgaben zur Verfügung
+- Lösungsvorschläge eine Woche nach der Übung
+- Stil der Übungsaufgaben: Bearbeitung einer Fragestellung mit R (oder anderer Programmiersprache)
+
+
+## Ihre Erfahrungen
+
+- Kennen Sie eine/mehrere Programmiersprachen, wenn ja welche?
+- Wie erledigen Sie Datenverarbeitungsjobs? (Semesterarbeit, Praktika, Bachelorarbeit)
+- Was hat Sie bis jetzt daran gehindert das Programmieren zu erlernen?
+- In welchen Veranstaltungen (Vorlesungen, Übungen, Praktika) wurden Sie schon mit Programmiersprachen konfrontiert und was sind Ihre Erfahrungen
+
+
+## Lineare Algebra
+
+
+
+
+## Einführung in R
