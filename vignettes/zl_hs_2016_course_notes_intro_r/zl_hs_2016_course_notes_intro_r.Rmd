@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
 ```
 
-```{r DocumentStatus, eval=TRUE}
+```{r DocumentStatus, eval=FALSE}
 r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
 r6obj_docstat$set_current_status(psVersion = "0.0.901",
                                  psStatus  = "Initialisation",

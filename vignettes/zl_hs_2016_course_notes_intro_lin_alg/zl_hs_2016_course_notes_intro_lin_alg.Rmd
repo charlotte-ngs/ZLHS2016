@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
 ```
 
-```{r DocumentStatus, eval=TRUE}
+```{r DocumentStatus, eval=FALSE}
 r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
 r6obj_docstat$set_current_status(psVersion = "0.0.901",
                                  psDate = "2016-09-05",
@@ -101,8 +101,12 @@ $$ u = \lambda * v
      = \left[\begin{array}{c} u_x \\ u_y\end{array}\right]
      = \left[\begin{array}{c} \lambda * v_x \\ \lambda * v_y\end{array}\right]$$
 
-Je nach Wert von $\lambda$ verändert $v$ die Länge und die Richtung. Folgende Tabelle gibt eine Übersicht zu den Änderungen. 
 
+```{r VektorMalSkalar}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "VektorMalSkalar")
+```
+
+Je nach Wert von $\lambda$ verändert $v$ die Länge und die Richtung. Folgende Tabelle gibt eine Übersicht zu den Änderungen. 
 
 
 \begin{tabular}{|c|c|c|}
@@ -129,7 +133,7 @@ $\lambda > 1$       &  gleich           & länger  \\
 ### Skalarprodukt
 Das Skalarprodukt zweier Vektoren entspricht einer Zahl. Diese berechnet sich aus den Produkten der einzelnen Koordinaten, welche dann addiert werden. Konkret bedeutet das
 
-$$v \cdot w = v_x * w_x + v_y + w_y$$
+$$v \cdot w = v_x * w_x + v_y * w_y$$
 
 Wird das Skalarprodukt zweier Vektoren um das Produkt der Längen der beiden Vektoren skaliert, so resultiert der Kosinus des Zwischenwinkels der beiden Vektoren. Somit liefert das Skalarprodukt einen Vergleich bezüglich der Richtungen von zwei Vektoren. 
 
@@ -139,7 +143,7 @@ rmddochelper::insertOdgAsPdf(psOdgFileStem = "VektorenWinkel", pnPaperWidthScale
 
 In einer Formel geschrieben, heisst das
 
-$$ cos(\alpha) = \frac{v \cdot w}{||v||*||w||}$$
+$$cos(\alpha) = \frac{v \cdot w}{||v||*||w||}$$
 
 Aufgrund der Eigenschaften der Winkelfunktion $cos$ können wir sagen, dass Vektoren, deren Skalarprodukt $0$ ist, senkrecht zueinander stehen. Vektoren deren Skalarprodukt gleich $1$ ist, haben einen Zwischenwinkel von $0$ und verlaufen somit parallel zueinander.
 
@@ -232,7 +236,7 @@ $$(A)_{ij} = (A^T)_{ji}$$
 
 Folgende Regeln im Bezug auf transponierte Matrizen gelten:
 
-* die Transponierte von von $A^T$ ist wieder die Matrix $A$: $(A^T)^T = A$
+* die Transponierte von $A^T$ ist wieder die Matrix $A$: $(A^T)^T = A$
 * Summe: $(A + B)^T = A^T + B^T$
 * Produkt: $(A\cdot B)^T = B^T \cdot A^T$
 * Einheitsmatrix: $I^T = I$
@@ -395,6 +399,21 @@ $0$       &  $0$             &  $a_{33}^{(3)}$  &  $b_3^{(3)}$\\
 
 \vspace{5ex}
 
+Aus diesem Schema in Dreiecksgestalt können wir die Lösung für $x_3$ bestimmen, da aufgrund der letzten Zeile gilt, dass 
+
+$$a_{33}^{(3)} * x_3 = b_3^{(3)}$$
+
+Somit ist
+
+$$x_3 = b_3^{(3)} / a_{33}^{(3)}$$
+
+Das ist die Lösung für die unbekannte Variable $x_3$, da der Ausdruck $b_3^{(3)} / a_{33}^{(3)}$ nicht mehr von einer der Unbekannten $x_1$, $x_2$ oder $x_3$ abhängig ist. Setzen wir die Läsung für $x_3$ in die zweite Zeile des Schemas in Dreiecksgestalt ein, dann folgt
+
+$$x_2 = \frac{b_2^{(2)} - a_{23}^{(2)} * b_3^{(3)} / a_{33}^{(3)}}{a_{22}^{(2)}}$$
+
+Wir haben jetzt Lösungen für die Unbekannten $x_2$ und $x_3$. Diese setzen wir in die erste Gleichung des Dreicks-Schemas ein und erhalten
+
+$$x_1 = \frac{b_1 - a_{12}*((b_2^{(2)} - a_{23}^{(2)} * b_3^{(3)} / a_{33}^{(3)})/a_{22}^{(2)}) - a_{13}*(b_3^{(3)} / a_{33}^{(3)})}{a_{11}}$$
 
 
 ## Matrix- und Vektorschreibweise
@@ -456,6 +475,8 @@ r6ob_abbrtable$writeToTsvFile()
 ```
 <!-- END of document                 -- 
   -- Below this must not be anything -->
+
+
 
 
 
