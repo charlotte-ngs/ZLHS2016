@@ -1,0 +1,55 @@
+---
+title:  Züchtungslehre - Übung 1
+author: Peter von Rohr
+date: 2016-09-30
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=TRUE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS_2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Aufgabe 1
+
+Gegeben sind die Vektoren $a$ und $b$. Berechnen Sie 
+
+* die Summe $a+b$, 
+* die Differenz $a-b$ und 
+* das Skalarprodukt $a\cdot b$. 
+
+\begin{center}
+$a = \left[\begin{array}{c}
+  5  \\ 
+  -2 \\ 
+  6  \\ 
+  9  
+  \end{array}\right]$, \hspace{2ex} 
+$b = \left[\begin{array}{c}
+  13  \\ 
+  1 \\ 
+  -7  \\ 
+  22  
+  \end{array}\right]$
+  
+\end{center}
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->

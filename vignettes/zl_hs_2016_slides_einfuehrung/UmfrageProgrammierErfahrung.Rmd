@@ -1,0 +1,82 @@
+---
+title: "Umfrage betreffend Erfahrungen im Programmieren"
+author: "Peter von Rohr"
+date: "23 Sep 2016"
+output: pdf_document
+documentclass: article
+classoption: a4paper
+---
+
+Diese Umfrage hilft uns die verschiedenen Erfahrungen der Studierenden besser einzuschätzen. Bitte beantworten Sie die folgenden Fragen mit ein paar Stichworten oder in kurzen Sätzen. 
+
+Vielen Dank im Voraus für Ihre Mithilfe.
+
+# Frage 1
+Kennen Sie eine oder mehrere Programmiersprachen und wenn ja welche? Bitte notieren Sie zu den jeweiligen Programmiersprachen auch noch das Niveau Ihrer Kenntnisse mit den Stufen \emph{Profi}, \emph{Mittelklasse} oder \emph{Anfänger}.
+
+# Antwort
+```
+
+
+
+
+
+
+
+
+
+
+```
+
+# Frage 2
+In welchen Veranstaltungen (Vorlesungen, Übungen oder Praktika) mussten Sie auch schon Programmiersprachen, wie zum Beispiel R verwenden und was waren Ihre Erfahrungen damit?
+
+# Antwort
+```
+
+
+
+
+
+
+
+
+
+
+```
+
+------------------------------------------
+
+# Frage 3
+Mit welchen Tools und Hilfsmitteln erledigen Sie Ihre Datenverarbeitungsjobs, d.h. wie erledigen Sie Datenaufbereitung, statistische Analysen und Erstellen von Diagrammen bei Semsterarbeiten, Praktika, der Bachelor- oder Masterarbeit
+
+# Antwort
+```
+
+
+
+
+
+
+
+
+
+
+```
+
+# Frage 4
+Wie gross ist Ihr Interesse und ihre Motivation mehr zum Thema Programmieren zu erfahren oder sogar eine Programmiersprache zu erlernen?
+
+# Antwort
+```
+
+
+
+
+
+
+
+
+
+
+```
