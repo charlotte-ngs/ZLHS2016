@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
 ```
 
-```{r DocumentStatus, eval=TRUE}
+```{r DocumentStatus, eval=FALSE}
 r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
 r6obj_docstat$set_current_status(psVersion = "0.0.901",
                                  psStatus  = "Initialisation",
@@ -25,7 +25,7 @@ if (!r6ob_abbrtable$is_empty_abbr())
   r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
 ```
 
-## Aufgabe 1
+## Aufgabe 1: Vektoren
 
 Gegeben sind die Vektoren $a$ und $b$. Berechnen Sie 
 
@@ -149,9 +149,13 @@ $$D^{-1} = \left[\begin{array}{ccc}
 
 Falls R und RStudio noch nicht auf ihrem Rechner installiert sind, dann laden sie beide Programme herunter und installieren sie diese. R kann von https://www.r-project.org/ und RStudion von https://www.rstudio.com/ heruntergeladen werden. 
 
+\pagebreak
+
 ## Aufgabe 5: Vektoren in R
 
 Überprüfen Sie die in Aufgabe 1 gerechneten Resultate mit R
+
+__Lösung__
 
 ```{r VectorSumDiffCrossprod}
 a <- c(5, -2, 6, 9)
@@ -165,6 +169,13 @@ crossprod(a,b)
 ## Aufgabe 6: Matrizen in R
 
 Überprüfen Sie das Resultat der Inversen der Diagonalmatrix aus Aufgabe 3.
+
+__Hinweise__
+
+* Eine Diagonalmatrix kann einfach über die Funktion `diag()` erstellt werden.
+* Die Funktion `solve()` berechnet die Inverse einer Matrix
+
+__Lösung__
 
 ```{r InvDiagMat}
 matD <- diag(c(3,-5,1))
