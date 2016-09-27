@@ -152,7 +152,102 @@ $f(G_1) = 1$ &  $f(G_1G_1) = p$   &  $f(G_1G_2) = q$\\
 \end{tabular}}
 \end{center}
 
-Die Frequenzen der Nachkommen ist symmetrisch betreffend der Eltern. In der oben gezeigten Tabelle wird eine Mutter mit Genotyp $G_1G_1$ zufällig an Väter angepaart. Bei der Mutter kommt nur das $G_1$ Allel vor. Somit betragen die Allelefrequenzen $f(G_1) = 1$ und $f(G_2) = 0$, wobei das $G_2$ Allel bei der Mutter in der obigen Frequenz-Tabelle gar nicht vorkommt. Durch die Annahme der zufälligen Anpaarung der Mutter an die Väter entsprechen die Allelfrequenzen bei den Vätern dem Populationsdurchschnitt und somit ist $f(G_1) = p$ und $f(G_2) = q$.  
+Die Frequenzen der Nachkommen ist symmetrisch betreffend der Eltern. In der oben gezeigten Tabelle wird eine Mutter mit Genotyp $G_1G_1$ zufällig an Väter angepaart. Bei der Mutter kommt nur das $G_1$ Allel vor. Somit betragen die Allelefrequenzen $f(G_1) = 1$ und $f(G_2) = 0$, wobei das $G_2$ Allel bei der Mutter in der obigen Frequenz-Tabelle weggelassen wurde. Durch die Annahme der zufälligen Anpaarung der Mutter an die Väter entsprechen die Allelfrequenzen bei den Vätern dem Populationsdurchschnitt und somit ist $f(G_1) = p$ und $f(G_2) = q$. 
+
+Der erwartete Mittelwert der genotypischen Werte der Nachkommen der Mutter mit Genotyp $G_1G_1$ ist somit
+
+$$\mu_{11} = pa + qd$$
+
+Gemäss Definition können wir den Zuchtwert $ZW_{11}$ für die Mutter mit Genotyp $G_1G_1$ berechnen als
+
+\begin{eqnarray}
+ZW_{11} & = & 2*(\mu_{11} - \mu)  \nonumber\\
+          &=& 2\left(pa + qd - \left[(p - q)a + 2pqd \right] \right) \nonumber\\
+          &=& 2\left(pa + qd - (p - q)a - 2pqd \right) \nonumber\\
+          &=& 2\left(qd + qa - 2pqd\right) \nonumber \\
+          &=& 2\left(qa + qd(1 - 2p)\right) \nonumber \\
+          &=& 2q\left(a + d(1 - 2p)\right) \nonumber \\
+          &=& 2q\left(a + (q-p)d\right)
+\label{eq:ZWGen11}
+\end{eqnarray}
+
+Zuchtwerte für die Genotypen $G_2G_2$ und $G_1G_2$ können analog hergeleitet werden. 
+
+
+### Herleitung des Zuchtwertes $ZW_{22}$ für den Genotyp $G_2G_2$
+Als erstes bestimmen wir wieder die Frequenzen der Nachkommen einer Mutter mit Genotyp $G_2G_2$
+
+\vspace{5ex}
+\begin{center}
+   {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|c|c|c|}
+\hline
+& \multicolumn{2}{|c|}{Vater} \\
+\hline
+& $f(G_1) = p$       &  $f(G_2) = q$   \\
+\hline
+Mutter       &                    &                 \\
+\hline
+$f(G_2) = 1$ &  $f(G_1G_2) = p$   &  $f(G_2G_2) = q$\\
+\hline
+\end{tabular}}
+\end{center}
+
+Der erwartete Mittelwert der genotypischen Werte der Nachkommen der Mutter mit Genotyp $G_2G_2$ ist somit
+
+$$\mu_{22} = pd - qa$$
+
+Der Zuchtwert $ZW_{22}$ ist somit
+
+\begin{eqnarray}
+ZW_{22} & = & 2*(\mu_{22} - \mu)  \nonumber\\
+          &=& 2\left(pd - qa - \left[(p - q)a + 2pqd \right] \right) \nonumber\\
+          &=& 2\left(pd - qa - (p - q)a - 2pqd \right) \nonumber\\
+          &=& 2\left(pd - pa - 2pqd\right) \nonumber \\
+          &=& 2\left(-pa + p(1-2q)d\right) \nonumber \\
+          &=& -2p\left(a + (q - p)d\right)
+\label{eq:ZWGen22}
+\end{eqnarray}
+
+
+### Herleitung des Zuchtwertes $ZW_{12}$ für den Genotyp $G_1G_2$
+Als erstes bestimmen wir wieder die Frequenzen der Nachkommen einer Mutter mit Genotyp $G_1G_2$
+
+\vspace{5ex}
+\begin{center}
+   {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|c|c|c|}
+\hline
+& \multicolumn{2}{|c|}{Vater} \\
+\hline
+& $f(G_1) = p$       &  $f(G_2) = q$   \\
+\hline
+Mutter       &                    &                 \\
+\hline
+$f(G_1) = 0.5$ &  $f(G_1G_1) = 0.5p$   &  $f(G_1G_2) = 0.5q$\\
+\hline
+$f(G_2) = 0.5$ &  $f(G_1G_2) = 0.5p$   &  $f(G_2G_2) = 0.5q$\\
+\hline
+\end{tabular}}
+\end{center}
+
+Der erwartete Mittelwert der genotypischen Werte der Nachkommen der Mutter mit Genotyp $G_1G_2$ ist somit
+
+$$\mu_{12} = 0.5pa + 0.5d - 0.5qa = 0.5\left[(p-q)a + d \right]$$
+
+Der Zuchtwert $ZW_{22}$ ist somit
+
+\begin{eqnarray}
+ZW_{12} & = & 2*(\mu_{12} - \mu)  \nonumber\\
+          &=& 2\left(0.5(p-q)a + 0.5d - \left[(p - q)a + 2pqd \right] \right) \nonumber\\
+          &=& 2\left(pd - qa - (p - q)a - 2pqd \right) \nonumber\\
+          &=& (q-p)a + (1-4pq)d \nonumber \\
+          &=& (q-p)\left[a + (q-p)d \right]
+\label{eq:ZWGen12}
+\end{eqnarray}
+
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
