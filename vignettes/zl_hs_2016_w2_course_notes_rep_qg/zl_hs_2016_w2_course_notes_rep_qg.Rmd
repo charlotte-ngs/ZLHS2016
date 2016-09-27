@@ -1,0 +1,104 @@
+---
+title:  Züchtungslehre - Repetition Quantitative Genetik
+author: Peter von Rohr
+date: 2016-09-30
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=TRUE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS-2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Einleitung
+Hier soll das Konzept des __Zuchtwertes__ wie er in der quantitativen Genetik für einen Genort eingeführt wurde, kurz repetiert werden. Der Sinn dieser Repetition ist, dass wir diesen Begriff des Zuchtwertes von einem Genort auf sehr viele (theoretisch gesehen unendlich viele) Genorte erweitern wollen. Diese Erweiterung wird uns dann zur heute immer noch verwendeten BLUP-Zuchtwerschätzung führen.
+
+
+## Zuchtwert
+Das fundamentale Problem in der Tierzucht besteht in der Auswahl der Elterntiere für eine kommende Generation. Diese Auswahl geschieht immer mit einer Idealvorstellung eines optimalen Tieres im Hintergrund. Diese Idealvorstellung wird auch als __Zuchtziel__ bezeichnet. Konkret sollen die Elterntiere der kommenden Generation so ausgewählt werden, dass die zukünftigen Nachkommen näher am Zuchtziel sind im Vergleich zur aktuellen Population, aus der wir die Eltern auswählen.
+
+### Vererbung
+Eltern vererben ihren Nachkommen keine Phänotypen und keine Genotypen sondern eine zufällige Auswahl jeweilen einer Variante jedes Genorts. 
+
+### Informationsquellen
+Heute ist es zwar möglich ganze Genome zu sequenzieren und somit die komplette Information der gesamten Erbmasse eines Individuums zu bekommen. Leider ist die Entschlüsselung des Genoms, das heisst die Zuordnung der Genorte zu wichtigen Merkmalsausprägungen noch nicht sehr fortgeschritten. Somit können wir unsere Zuchtentscheide noch nicht auf das ganze Genom abstützen. 
+
+In der __genomischen Selektion__ wird eine für die wichtigsten Merkmale repräsentative Stichprobe von Genorten bestimmt. Die Varianten an diesen Genorten werden mit erwünschten Merkmalsausprägungen in Verbindung gebracht. Diese Assoziation zwischen Genort und Merkmalsausprägung liefern wertvolle Hinweise bei der Auswahl der Elterntiere.
+
+Bei den traditionellen Zuchtverfahren ohne Berücksichtigung der genomischen Information stehen phänotypische Leistungen und Verwandtschaftsbeziehungen zwischen Tieren zur Verfügung. Dabei werden phänotypische Beobachtungen und das genetische Potential über das folgende einfache Modell miteinander verknüpft.
+
+\begin{eqnarray}
+y & = & g + e
+\label{eq:ModPhaenGen}
+\end{eqnarray}
+
+\noindent wobei: $y$ für die phänotypische Beobachtung steht, $g$ für den genetischen Anteil und $e$ für den nicht-erklärbaren Restanteil.
+
+Das Modell (\ref{eq:ModPhaenGen}) ist so parametrisiert, dass die nicht-erklärbaren Resteffekte $e$ sich im Mittel aufheben und somit ist der Erwartungswert $E(e) = 0$. Daraus folgt, dass im Mittel die genetischen Effekte $g$ den mittleren phänotypischen Leistungen $y$ entsprechen, d.h. $E(y) = E(g)$. Bei fehlender Genotyp-Umweltinteraktion sind die Varianzen additiv und somit folgt, dass 
+
+$$Var(y) = Var(g) + Var(e)$$
+
+### Genotypischer Wert
+Der genotypische Wert $V_{ij}$ für einen bestimmten Genotypen $G_iG_j$ ist der mittlere Wert aller Individuen mit dem gleichen Genotyp $G_iG_j$ in der gleichen Umwelt. Zunächst nehmen wir an, dass wir nur einen Genort ($1$ Gen) mit $2$ Allelen (Genvarianten) betrachten. Die Population befinde sich im Hardy-Weinberg Gleichgewicht, welches besagt, dass sich bei zufälliger Paarung und unendlicher Populationsgrösse die Frequenz $f(G_iG_j)$ der Genotypen $G_iG_j$ von einer Generation zur nächsten konstant bleibt.
+
+Die Skala, auf welcher wir die genotypischen Werte $V_{ij}$ messen wird der Einfachheit halber so gelegt, dass der Nullpunkt zwischen den beiden homozygoten Genotypen $G_2G_2$ und $G_1G_1$ liegt. Das nachfolgende Diagramm zeigt die genotypischen Werte der drei Genotypen.  
+
+```{r GenotypischerWert}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "GenotypischerWert")
+```
+
+Aus dem oben gezeigten Diagram erkennen wir, dass $G_1$ das vorteilhafte Allel ist. Das heisst mit jedem $G_1$ steigt der genotypische Wert. Die folgende Tabelle fasst die genotypischen Werte für die drei Genotypen zusammen.
+
+\begin{center}
+   {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|l|c|}
+  \hline
+  Genotyp  &  genotypischer Wert\\
+  \hline
+  $G_1G_1$  &  $V_{11} = a$\\
+  \hline
+  $G_1G_2$  &  $V_{12} = d$\\
+  \hline
+  $G_2G_2$  &  $V_{22} = -a$\\
+  \hline
+  \end{tabular}}
+  \end{center}
+
+### Populationsmittel
+Eine Kenngrösse der gezeigten genotypischen Werte, welche wir später brauchen werden ist das Populationsmittel $\mu$. Dies entspricht dem Erwartungswert $E(V)$ der genotypischen Werte. Allgemein ist der Erwartungswert $E(X)$ für eine diskrete Zufallsvariable $X$ definiert als
+
+$$E\left[X\right] = \sum_{x_i\in \mathcal{X}} x_i* f(x_i)$$
+
+  \vspace*{1ex}
+  \begin{tabular}{p{1cm}p{1cm}p{6cm}}
+  wobei & $\mathcal{X}$: &  Menge aller m\"oglichen $x$-Werte\\
+        & $f(x_i)$         &  Wahrscheinlichkeit dass $x$ den Wert $x_i$ annimmt
+  \end{tabular}
+
+Wenden wir diese Definition auf die genotypischen Werte an, dann beträgt die Menge aller möglichen Genotypen $\mathcal{X}=\{V_{11}, V_{12}, V_{22} \}$ und somit beträgt das Populationsmittel.
+
+$$\mu = E\left[V\right] = f(G_1G_1)*V_{11} + f(G_1G_2) * V_{12} + f(G_2G_2) * V_{22}$$
+
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->
