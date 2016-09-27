@@ -49,7 +49,7 @@ y & = & g + e
 
 \noindent wobei: $y$ für die phänotypische Beobachtung steht, $g$ für den genetischen Anteil und $e$ für den nicht-erklärbaren Restanteil.
 
-Das Modell (\ref{eq:ModPhaenGen}) ist so parametrisiert, dass die nicht-erklärbaren Resteffekte $e$ sich im Mittel aufheben und somit ist der Erwartungswert $E(e) = 0$. Daraus folgt, dass im Mittel die genetischen Effekte $g$ den mittleren phänotypischen Leistungen $y$ entsprechen, d.h. $E(y) = E(g)$. Bei fehlender Genotyp-Umweltinteraktion sind die Varianzen additiv und somit folgt, dass 
+Das Modell (\ref{eq:ModPhaenGen}) ist so parametrisiert, dass die nicht-erklärbaren Resteffekte $e$ sich im Mittel aufheben und somit ist der Erwartungswert $E\left[e\right] = 0$. Daraus folgt, dass im Mittel die genetischen Effekte $g$ den mittleren phänotypischen Leistungen $y$ entsprechen, d.h. $E\left[y\right] = E\left[g\right]$. Bei fehlender Genotyp-Umweltinteraktion sind die Varianzen additiv und somit folgt, dass 
 
 $$Var(y) = Var(g) + Var(e)$$
 
@@ -81,7 +81,7 @@ Aus dem oben gezeigten Diagram erkennen wir, dass $G_1$ das vorteilhafte Allel i
   \end{center}
 
 ### Populationsmittel
-Eine Kenngrösse der gezeigten genotypischen Werte, welche wir später brauchen werden ist das Populationsmittel $\mu$. Dies entspricht dem Erwartungswert $E(V)$ der genotypischen Werte. Allgemein ist der Erwartungswert $E(X)$ für eine diskrete Zufallsvariable $X$ definiert als
+Eine Kenngrösse der gezeigten genotypischen Werte, welche wir später brauchen werden ist das Populationsmittel $\mu$. Dies entspricht dem Erwartungswert $E\left[V\right]$ der genotypischen Werte. Allgemein ist der Erwartungswert $E\left[X\right]$ für eine diskrete Zufallsvariable $X$ definiert als
 
 $$E\left[X\right] = \sum_{x_i\in \mathcal{X}} x_i* f(x_i)$$
 
@@ -93,8 +93,66 @@ $$E\left[X\right] = \sum_{x_i\in \mathcal{X}} x_i* f(x_i)$$
 
 Wenden wir diese Definition auf die genotypischen Werte an, dann beträgt die Menge aller möglichen Genotypen $\mathcal{X}=\{V_{11}, V_{12}, V_{22} \}$ und somit beträgt das Populationsmittel.
 
-$$\mu = E\left[V\right] = f(G_1G_1)*V_{11} + f(G_1G_2) * V_{12} + f(G_2G_2) * V_{22}$$
+\begin{equation}
+\mu = E\left[V\right] = f(G_1G_1)*V_{11} + f(G_1G_2) * V_{12} + f(G_2G_2) * V_{22}
+\label{eq:PopMean}
+\end{equation}
 
+Die Frequenzen $f(G_1)$ und $f(G_2)$ der Allele $G_1$ und $G_2$ werden häufig mit den Variablen $p=f(G_1)$ und $q=f(G_2) = 1-p$ bezeichnet. Aufgrund des Hardy-Weinberg Gleichgewichts resultieren die folgenden Genotypfrequenzen.
+
+\begin{center}
+   {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|l|c|}
+  \hline
+  Genotyp  &  Frequenzen\\
+  \hline
+  $G_1G_1$  &  $p*p = p^2$\\
+  \hline
+  $G_1G_2$  &  $p*q+q*p = 2pq$\\
+  \hline
+  $G_2G_2$  &  $q*q = q^2$\\
+  \hline
+  \end{tabular}}
+\end{center}
+
+Setzen wir die Frequenzen aus obiger Tabelle in die Gleichung (\ref{eq:PopMean}) für das Populationsmittel ein, dann erhalten wir 
+
+  \begin{eqnarray}
+    \mu &=& p^2 * a + 2pq*d - q^2*a \nonumber \\
+        &=& (p^2 - q^2)a + 2pqd \nonumber \\
+        &=& (p+q)(p - q)a + 2pqd \nonumber \\
+        &=& (p - q)a + 2pqd
+  \end{eqnarray}
+
+Das Populationsmittel ist von den Allelfrequenzen ($p$ und $q$) und somit von der Selektion abhängig.
+
+### Definition des Zuchtwertes
+Für die Zucht interessieren uns die genetischen Anlagen und deren Wert, welche potentielle Elterntiere an ihre Nachkommen weitergeben. Bei der Vererbung geben Eltern keine Genotypen, sondern eine zufällige Stichprobe der Allele an ihre Nachkommen weiter. Für die Auswahl von potentiellen Elterntieren aus einer Population geht es darum die erwartete Leistung von Nachkommen eines bestimmten Elterngenotyps zu bestimmen.
+
+Der __Zuchtwert__ eines bestimmten Tieres $i$ ist definiert als die doppelte Abweichung des erwarteten Mittelwertes der Nachkommen von Tier $i$ vom Populationsmittel.
+
+### Herleitung des Zuchtwertes $ZW_{11}$ für den Genotyp $G_1G_1$
+Zur Herleitung des Zuchtwertes $ZW_{11}$ müssen wir die erwartete mittlere Leisung der Nachkommen eines Tieres mit Genotyp $G_1G_1$ bestimmen. Die mittlere Leistung der Nachkommen eines Tieres mit Genotyp $G_1G_1$ ist als Erwartungswert definiert. Zur Berechnung des Erwatungswertes brauchen wir die Genotypfrequenzen der Nachkommen des Tieres mit Genotyp $G_1G_1$. Diese Frequenzen werden in der folgenden Tabelle bestimmt.
+
+\vspace{5ex}
+\begin{center}
+   {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|c|c|c|}
+\hline
+& \multicolumn{2}{|c|}{Vater} \\
+\hline
+& $f(G_1) = p$       &  $f(G_2) = q$   \\
+\hline
+Mutter       &                    &                 \\
+\hline
+$f(G_1) = 1$ &  $f(G_1G_1) = p$   &  $f(G_1G_2) = q$\\
+\hline
+\end{tabular}}
+\end{center}
+
+Die Frequenzen der Nachkommen ist symmetrisch betreffend der Eltern. In der oben gezeigten Tabelle wird eine Mutter mit Genotyp $G_1G_1$ zufällig an Väter angepaart. Bei der Mutter kommt nur das $G_1$ Allel vor. Somit betragen die Allelefrequenzen $f(G_1) = 1$ und $f(G_2) = 0$, wobei das $G_2$ Allel bei der Mutter in der obigen Frequenz-Tabelle gar nicht vorkommt. Durch die Annahme der zufälligen Anpaarung der Mutter an die Väter entsprechen die Allelfrequenzen bei den Vätern dem Populationsdurchschnitt und somit ist $f(G_1) = p$ und $f(G_2) = q$.  
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
