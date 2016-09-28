@@ -277,6 +277,7 @@ Vergleicht man die beiden Genotypen $G_2G_2$ und $G_1G_2$, dann kann der erste G
                       & = & (q-p+2p)\alpha \nonumber \\
                       & = & (q+p)\alpha \nonumber \\
                       & = & \alpha
+  \label{eq:AdditiveBv1}
   \end{eqnarray}
 
 Ersetzt man im Genotyp $G_1G_2$ das verbleibende $G_2$-Allel durch ein $G_1$-Allel so resultiert der Genotyp $G_1G_1$. Die Differenz der zugehörigen Zuchtwerte $ZW_{11}$ und $ZW_{12}$ beträgt somit
@@ -285,6 +286,7 @@ Ersetzt man im Genotyp $G_1G_2$ das verbleibende $G_2$-Allel durch ein $G_1$-All
     ZW_{11} - ZW_{12} & = & 2q\alpha - (q-p)\alpha \nonumber \\
                       & = & \left(2q - (q-p)\right)\alpha \nonumber\\
                       & = & \alpha 
+  \label{eq:AdditiveBv2}
   \end{eqnarray}
 
 Die Zuchtwerte sind abhängig von den Allelfrequenzen. Die Differenzen der Zuchtwerte sind additiv, d.h. die Abhängigkeit der Differenzen zur Anzahl der $G_1$-Allele ist linear.
@@ -377,12 +379,15 @@ Gemäss dem Modell aus Gleichung (\ref{eq:ZerlegungGenoWert}) können wir die Ab
               & & +\  (ZW_{22} + D_{22})^2 * q^2
   \end{eqnarray}
 
-Für die Zuchtwerte $ZW_{ij}$ und die Dominanzabweichungen $D_{ij}$ können wir nun die bekannten Definitionen einsetzen. Danach lässt sich der Ausdruck für die genetische Varianz vereinfachen. Diese Vereinfachung ist im Anhang gezeigt. Das Resultat für die genetische Varianz lautet
+Für die Zuchtwerte $ZW_{ij}$ und die Dominanzabweichungen $D_{ij}$ können wir nun die bekannten Definitionen einsetzen. Danach lässt sich der Ausdruck für die genetische Varianz vereinfachen. Diese Vereinfachung ist im Anhang (siehe Gleichung (\ref{eq:GenVarZWD})) gezeigt. Das Resultat für die genetische Varianz lautet
 
  \begin{eqnarray}
   \sigma_G^2 &=& 2pq\alpha^2 + \left(2pqd \right)^2
   \end{eqnarray}
   
+Wie im Anhang in den Gleichungen (\ref{eq:AdditiveGeneticVariance}) und (\ref{eq:DominanceVariance}) gezeigt wurde, entspricht der Term $2pq\alpha^2$ der mit den Genotypfrequenz gewichteten Summe der quadrierten Zuchtwerte. Der Term $\left(2pqd \right)^2$ kann aus der mit den Genotypfrequenzen gewichteten Summe der quadrierten Dominanzabweichungen berechnet werden.
+
+Aufgrund der Beziehungen zwischen Zuchtwerten, welche wir in den Gleichungen (\ref{eq:AdditiveBv1}) und (\ref{eq:AdditiveBv2}) gezeigt haben, werden Zuchtwerte als __additiv__ bezeichnet. Da der Term $2pq\alpha^2$ von den Zuchtwerten abhängt wird dieser auch als __genetisch additive__ Varianz $\sigma_A^2$ bezeichnet. Analog dazu bezeichnen wir den Term $\left(2pqd \right)$ als Dominanzvarianz $\sigma_D^2$. 
   
 \pagebreak
 
@@ -414,6 +419,31 @@ Hier wird die Vereinfachung der genetischen Varianz gezeigt.
                                &=&     2pq\alpha^2 + \left(2pqd \right)^2
 \label{eq:GenVarZWD}
 \end{eqnarray}
+
+Der Term $2pq\alpha^2$ entspricht der Summe der mit den Genotypfrequenzen gewichteten quadrierten Zuchtwerte. Konkret heisst das 
+
+\begin{eqnarray}
+2pq\alpha^2 & = & p^2 ZW_{11}^2 + 2pq ZW_{12}^2 + q^2 ZW_{22}^2 \nonumber \\
+            & = & p^2 (2q\alpha)^2 + 2pq ((q-p)\alpha)^2 + q^2 (-2p\alpha)^2 \nonumber \\
+            & = & 4p^2q^2\alpha^2 + 2pq (q^2\alpha^2 -2pq\alpha^2 + p^2\alpha^2) + 4p^2q^2\alpha^2 \nonumber \\
+            & = & 4p^2q^2\alpha^2 + 2pq^3\alpha^2 - 4p^2q^2\alpha^2 + 2p^3q\alpha^2 + 4p^2q^2\alpha^2 \nonumber \\
+            & = & (4p^2q^2 + 2pq^3 + 2p^3q)\alpha^2 \nonumber \\
+            & = & 2pq(2pq + q^2 + p^2)\alpha^2 \nonumber \\
+            & = & 2pq\alpha^2
+\label{eq:AdditiveGeneticVariance}
+\end{eqnarray}
+
+Mit dem Term $\left(2pqd \right)^2$ wird analog der Summe der mit den Genotypenfrequenzen gewichteten quadrierten Dominanzabweichungen. Die entsprechende Ableitung ist nachfolgend gezeigt.
+
+\begin{eqnarray}
+\left(2pqd \right)^2 & = & p^2 D_{11}^2 + 2pq D_{12}^2 + q^2 D_{22}^2      \nonumber \\
+                     & = & p^2 (-2q^2d)^2 + 2pq (2pqd)^2 + q^2 (-2p^2d)^2  \nonumber \\
+                     & = & 4p^2q^4d^2 + 8p^3q^3d^2 + 4p^4q^2d^2  \nonumber \\
+                     & = & 4p^2q^2d^2 (q^2 + 2pq + p^2) \nonumber \\
+                     & = & 4p^2q^2d^2
+\label{eq:DominanceVariance}
+\end{eqnarray}
+
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
