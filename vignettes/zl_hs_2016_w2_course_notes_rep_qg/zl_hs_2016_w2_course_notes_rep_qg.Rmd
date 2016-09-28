@@ -387,8 +387,28 @@ Für die Zuchtwerte $ZW_{ij}$ und die Dominanzabweichungen $D_{ij}$ können wir 
   
 Wie im Anhang in den Gleichungen (\ref{eq:AdditiveGeneticVariance}) und (\ref{eq:DominanceVariance}) gezeigt wurde, entspricht der Term $2pq\alpha^2$ der mit den Genotypfrequenz gewichteten Summe der quadrierten Zuchtwerte. Der Term $\left(2pqd \right)^2$ kann aus der mit den Genotypfrequenzen gewichteten Summe der quadrierten Dominanzabweichungen berechnet werden.
 
-Aufgrund der Beziehungen zwischen Zuchtwerten, welche wir in den Gleichungen (\ref{eq:AdditiveBv1}) und (\ref{eq:AdditiveBv2}) gezeigt haben, werden Zuchtwerte als __additiv__ bezeichnet. Da der Term $2pq\alpha^2$ von den Zuchtwerten abhängt wird dieser auch als __genetisch additive__ Varianz $\sigma_A^2$ bezeichnet. Analog dazu bezeichnen wir den Term $\left(2pqd \right)$ als Dominanzvarianz $\sigma_D^2$. 
-  
+Aufgrund der Beziehungen zwischen Zuchtwerten, welche wir in den Gleichungen (\ref{eq:AdditiveBv1}) und (\ref{eq:AdditiveBv2}) gezeigt haben, werden Zuchtwerte als __additiv__ bezeichnet. Da der Term $2pq\alpha^2$ von den Zuchtwerten abhängt wird dieser auch als __genetisch additive__ Varianz $\sigma_A^2$ bezeichnet. Analog dazu bezeichnen wir den Term $\left(2pqd \right)$ als Dominanzvarianz $\sigma_D^2$. Somit lässt sich die genetische Varianz in einen additiv genetischen Teil und einen Dominanz-Teil zerlegen. Formell können wir schreiben
+
+ \begin{eqnarray}
+  \sigma_G^2 &=& 2pq\alpha^2 + \left(2pqd \right)^2 \nonumber\\
+             &=& \sigma_A^2 + \sigma_D^2
+  \end{eqnarray}
+
+
+## Erweiterung auf mehrere Genorte
+Bis hierher haben wir uns mit der Modellierung des Einflusses eines Genortes auf ein bestimmtes kontinuierliches Merkmal. Viele wirtschaftlich interessante Merkmale sind aber von sehr vielen verschiedenen Genorten beeinflusst. Falls verschiedene Genorte auf dem gleichen Chromosom zu finden sind, dann ist deren Vererbung und deren Wirkung nicht mehr unabhängig voneinander. Mit Unabhängigkeit meinen wir hier, dass die Frequenz der Genotypen an zwei Loci nicht dem Produkt der Frequenzen der Genotypen an einem Locus entspricht. Für zwei Loci $A$ und $B$ mit je zwei Allelen sieht das beispielsweise so aus, dass die Frequenz $f(A_1A_1B_1B_1)$ nicht dem Produkt aus $f(A_1A_1)$ mal $f(B_1B_1)$ entsprechen. 
+
+\begin{eqnarray}
+ f(A_1A_1B_1B_1) \ne f(A_1A_1) * f(B_1B_1)
+\end{eqnarray}
+
+Falls die Wirkung mehrerer Genorte auf ein Merkmal nicht der Summe der Wirkungen der einzelnen Genen entspricht, so spricht man von Interaktionen. Aufgrund der Interaktionen lässt sich die genetische Varianz $\sigma_G^2$ nicht mehr in additiv genetische Varianz und Dominanzvarianz zerlegen. Bei der Zerlegung kommt ein dritter Teil dazu, welcher als epistatische Varianz $\sigma_{I}^2$ bezeichnet wird.
+
+ \begin{eqnarray}
+  \sigma_G^2 &=& \sigma_A^2 + \sigma_D^2 + \sigma_{I}^2
+  \end{eqnarray}
+
+
 \pagebreak
 
 # Anhang
