@@ -248,7 +248,172 @@ ZW_{12} & = & 2*(\mu_{12} - \mu)  \nonumber\\
 \label{eq:ZWGen12}
 \end{eqnarray}
 
+### Zusammenfassung der Zuchtwerte
+In den Resultaten der Zuchtwerte kommt der Term $a + (q-p)d$ vor. Wir bezeichnen diesen Term mit $\alpha$ und fassen die Zuchtwerte in folgender Tabelle zusammen.
 
+ \begin{center}
+   {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+  \begin{tabular}{|c|c|}
+  \hline
+  Genotyp  &  Zuchtwert\\
+  \hline
+  $G_1G_1$  &  $2q\alpha$\\
+  \hline
+  $G_1G_2$  &  $(q-p)\alpha$\\
+  \hline
+  $G_2G_2$  &  $-2p\alpha$\\
+  \hline
+  \end{tabular}}
+  \end{center}
+
+
+## Allelsubstitution
+Vergleicht man die beiden Genotypen $G_2G_2$ und $G_1G_2$, dann kann der erste Genotyp in den zweiten verwandelt werden, indem eines der $G_2$ Allele vom ersten Genotypen durch ein $G_1$-Allel ersetzt wird. Dies wird als __Allelsubstitution__ bezeichnet. Der Unterschied der Zuchtwerte $ZW_{12}$ und $ZW_{22}$ beträgt
+
+  \begin{eqnarray}
+    ZW_{12} - ZW_{22} & = & (q-p)\alpha - \left( -2p\alpha \right)  \nonumber \\
+                      & = & (q-p)\alpha + 2p\alpha \nonumber \\
+                      & = & (q-p+2p)\alpha \nonumber \\
+                      & = & (q+p)\alpha \nonumber \\
+                      & = & \alpha
+  \end{eqnarray}
+
+Ersetzt man im Genotyp $G_1G_2$ das verbleibende $G_2$-Allel durch ein $G_1$-Allel so resultiert der Genotyp $G_1G_1$. Die Differenz der zugehörigen Zuchtwerte $ZW_{11}$ und $ZW_{12}$ beträgt somit
+
+  \begin{eqnarray}
+    ZW_{11} - ZW_{12} & = & 2q\alpha - (q-p)\alpha \nonumber \\
+                      & = & \left(2q - (q-p)\right)\alpha \nonumber\\
+                      & = & \alpha 
+  \end{eqnarray}
+
+Die Zuchtwerte sind abhängig von den Allelfrequenzen. Die Differenzen der Zuchtwerte sind additiv, d.h. die Abhängigkeit der Differenzen zur Anzahl der $G_1$-Allele ist linear.
+
+
+## Dominanzabweichung
+Aufgrund der Definition des Zuchtwerts sind Abweichungen zwischen dem genotypischen Wert $V_{ij}$ und dem Zuchtwert $ZW_{ij}$ eines Tieres zu erwarten. Betrachtet man diese Abweichungen zwischen genotypischem Wert und Zuchtwert für die drei Genotype $G_1G_1$, $G_1G_2$ und $G_2G_2$ allgemein so erhalten wir folgende Resultate
+
+  \begin{eqnarray}
+  V_{11} - ZW_{11} & = & a - 2q \alpha \nonumber \\
+                   & = & a - 2q \left[ a + (q-p)d \right] \nonumber \\
+                   & = & a - 2qa -2q(q-p)d \nonumber \\
+                   & = & a(1-2q) - 2q^2d + 2pqd \nonumber \\
+                   & = & \left[(p - q)a + 2pqd\right] - 2q^2d \nonumber \\
+                   & = & \mu + D_{11} 
+  \end{eqnarray}
+
+  \begin{eqnarray}
+  V_{12} - ZW_{12} & = & d - (q-p)\alpha \nonumber \\
+                   & = & d - (q-p)\left[ a + (q-p)d \right] \nonumber \\
+                   & = & \left[(p-q)a + 2pqd\right] + 2pqd \nonumber \\
+                   & = & \mu + D_{12}
+  \end{eqnarray}
+
+  \begin{eqnarray}
+  V_{22} - ZW_{22} & = & -a - (-2p\alpha) \\
+                   & = & -a + 2p\left[ a + (q-p)d \right] \nonumber \\
+                   & = & \left[(p-q)a + 2pqd\right] - 2p^2d \nonumber \\
+                   & = & \mu + D_{22} \nonumber
+  \end{eqnarray}
+
+
+## Zusammenfassung: Genotypische Werte, Zuchtwerte und Dominanzabweichungen
+Die folgende Tabelle gibt eine Übersicht über Genotypische Werte, Zuchtwerte und Dominanzabweichungen
+
+\begin{center}
+  {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|c|c|c|c|}
+   \hline
+   Genotyp  &  genotypischer Wert  &  Zuchtwert     &  Dominanzabweichung\\
+   $G_iG_j$ &  $V_{ij}$            &  $ZW_{ij}$     &  $D_{ij}$           \\
+   \hline
+   $G_1G_1$ &  $a$                 &  $2q\alpha$    &  $-2q^2d$          \\
+   \hline
+   $G_1G_2$ &  $d$                 &  $(q-p)\alpha$ & $2pqd$             \\
+   \hline
+   $G_2G_2$ &  $-a$                &  $-2p\alpha$   & $-2p^2d$           \\
+   \hline
+   \end{tabular}}
+\end{center}
+
+Aufgrund der Definition der Dominanzabweichung als Differenz vom um das Populationsmittel korrigierte genotypische Wert minus der Zuchtwert folgt die in Gleichung (\ref{eq:ZerlegungGenoWert}) gezeigte Zerlegung des genotypischen Wertes.
+
+\begin{eqnarray}
+V_{ij} & = & \mu + ZW_{ij} + D_{ij}
+\label{eq:ZerlegungGenoWert}
+\end{eqnarray}
+
+
+## Varianzen
+Genotypische Werte, Populationsmittel und Zuchtwerte wurden als Erwartungswerte definiert. Diese sind Lageparameter und geben Informationen für quantitative Vergleiche zwischen Tieren. Da die hier beschriebenen Prozesse der Vererbung nicht deterministisch sind, sondern immer auch eine stochastische oder zufällige Komponente haben, spielt die Streuung der verwendeten Modellparameter immer auch eine wichtige Rolle. 
+
+Für eine diskrete Zufallsvariable $X$ ist die Varianz $Var\left[X\right]$ definiert als
+
+$$Var\left[X\right] = \sum_{x_i \in \mathcal{X}} (x_i - \mu_X)^2 * f(x_i)$$
+
+  \vspace*{1ex}
+  \begin{tabular}{p{1cm}p{1cm}p{6cm}}
+  wobei & $\mathcal{X}$: &  Menge aller m\"oglichen $x$-Werte\\
+        & $f(x_i)$       &  Wahrscheinlichkeit dass $x$ den Wert $x_i$ annimmt \\
+        & $\mu_X $       &  Erwartungswert $E\left[X\right]$ von $X$
+  \end{tabular}
+
+Wenden wir diese Definition auf die genotypischen Werte $V_{ij}$ an, dann erhalten wir den folgenden Ausdruck für die genetische Varianz. 
+
+  \begin{eqnarray}
+  \sigma_G^2 = Var\left[V\right] &=&   (V_{11} - \mu)^2 * f(G_1G_1) \nonumber \\
+                                 & & +\  (V_{12} - \mu)^2 * f(G_1G_2) \nonumber \\
+                                 & & +\  (V_{22} - \mu)^2 * f(G_2G_2)
+  \end{eqnarray}
+
+  wobei $\mu = (p - q)a + 2pqd$ dem Populationsmittel entspricht.
+
+Gemäss dem Modell aus Gleichung (\ref{eq:ZerlegungGenoWert}) können wir die Abweichungen der genotypischen Werte vom Populationsmittel ersetzen durch $V_{ij} - \mu = ZW_{ij} + D_{ij}$. Die Genotypfrequenzen ersetzen wir durch die aus dem Hardy-Weinberg bekannten Terme. Somit können wir die genetische Varianz schreiben als
+
+ \begin{eqnarray}
+  \sigma_G^2  &=&   (ZW_{11} + D_{11})^2 * p^2      \nonumber \\
+              & & +\  (ZW_{12} + D_{12})^2 * 2pq      \nonumber \\
+              & & +\  (ZW_{22} + D_{22})^2 * q^2
+  \end{eqnarray}
+
+Für die Zuchtwerte $ZW_{ij}$ und die Dominanzabweichungen $D_{ij}$ können wir nun die bekannten Definitionen einsetzen. Danach lässt sich der Ausdruck für die genetische Varianz vereinfachen. Diese Vereinfachung ist im Anhang gezeigt. Das Resultat für die genetische Varianz lautet
+
+ \begin{eqnarray}
+  \sigma_G^2 &=& 2pq\alpha^2 + \left(2pqd \right)^2
+  \end{eqnarray}
+  
+  
+\pagebreak
+
+# Anhang
+
+Hier wird die Vereinfachung der genetischen Varianz gezeigt.
+
+\begin{eqnarray}
+\sigma_G^2  &=&   (ZW_{11} + D_{11})^2 * p^2                                      \nonumber \\
+                               & & +\  (ZW_{12} + D_{12})^2 * 2pq                                    \nonumber \\
+                               & & +\  (ZW_{22} + D_{22})^2 * q^2                                    \nonumber \\
+                               &=&     \left(2q\alpha - 2q^2d   \right)^2 * p^2                      \nonumber \\
+                               & & +\  \left((q-p)\alpha + 2pqd \right)^2 * 2pq                      \nonumber \\
+                               & & +\  \left(-2p\alpha - 2p^2d  \right)^2 * q^2                      \nonumber \\
+                               &=&     \left(4q^2\alpha^2 - 8q^3d\alpha + 4q^4d^2  \right) * p^2     \nonumber \\
+                               & & +\  \left(q^2\alpha^2 - 2pq\alpha^2 + p^2\alpha^2
+                                              - 4(q-p)pqd\alpha + 4p^2q^2d^2\right) * 2pq            \nonumber \\
+                               & & +\  \left(4p^2\alpha^2 + 8p^3d\alpha + 4p^4\alpha^2 \right) * q^2 \nonumber \\
+                               &=&     4p^2q^2\alpha^2 - 8p^2q^3d\alpha + 4p^2q^4d^2                 \nonumber \\
+                               & & +\  2pq^3\alpha^2 - 4p^2q^2\alpha^2+ 2p^3q\alpha^2                \nonumber \\
+                               & & -\  8p^3q^2d\alpha + 8p^2q^3d\alpha + 8p^3q^3d^2                  \nonumber \\
+                               & & +\  4p^2q^2\alpha^2 + 8p^3q^2d\alpha + 4p^4q^2d^2                 \nonumber \\
+                               &=&     4p^2q^2\alpha^2 + 4p^2q^4d^2                                  \nonumber \\
+                               & & +\  2pq^3\alpha^2 + 2p^3q\alpha^2                                 \nonumber \\
+                               & & +\  8p^3q^3d^2                                                    \nonumber \\
+                               & & +\  4p^4q^2d^2                                                    \nonumber \\
+                               &=&     2pq\alpha^2 \left(p^2 + 2pq + q^2 \right)                     \nonumber \\
+                               & & +\  \left(2pqd \right)^2 \left(p^2 + 2pq + q^2 \right)            \nonumber \\
+                               &=&     2pq\alpha^2 + \left(2pqd \right)^2
+\label{eq:GenVarZWD}
+\end{eqnarray}
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
