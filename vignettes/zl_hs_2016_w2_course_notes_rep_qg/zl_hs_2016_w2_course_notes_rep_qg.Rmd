@@ -465,7 +465,7 @@ Bei polygene Merkmalen gehen wir von sehr vielen Genorten, wobei jeder Genort nu
 
 Der zentrale Grenzwertsatz sagt, dass die Verteilung der Summe aus sehr vielen Zufallsvariablen mit sehr geringer Wirkung sich einer Normalverteilung nähert. Das Argument des zentralen Grenzwertsatzes und die Annahme, dass sich der additiv genetische Effekt aus Beiträgen von vielen Genorten zusammensetzt, rechtfertigen die Wahl der __Gausschen Normalverteilung__ als Dichteverteilung für die Zuchtwerte.
 
-### Phänotypisch Beobachtung
+### Phänotypische Beobachtung
 Am Anfang dieses Dokuments hatten wir schon gesehen, dass wir bei den traditionellen Zuchtverfahren die genetischen Werte und somit die Zuchtwerte nicht beobachten können. Als Informationsquellen stehen uns phänotypische Beobachtungen und die Verwandtschaftsbeziehungen zwischen den Tieren in der Population zur Verfügung. Wir brauchen also ein Modell, welches uns die phänotypischen Informationen mit genotypischen Werten verknüpft. Dieses Modell hatten wir schon in der Gleichung (\ref{eq:ModPhaenGen}) gesehen. Da wir alle genetischen Effekte als Abweichungen vom Populationsmittel definiert haben, müssen wir das Modell (\ref{eq:ModPhaenGen}) noch leicht modifizieren, indem wir das Populationsmittel $\mu$ aus dem $g$-Effekt herausziehen und es explizit als Faktor hinschreiben. Somit haben wir für die phänotypische Beobachtung $y$ folgendes Modell
 
 \begin{eqnarray}

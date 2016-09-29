@@ -236,7 +236,86 @@ V_{ij} & = & \mu + ZW_{ij} + D_{ij} \nonumber
 \end{center}
 
 
-## Varianzen
+## Varianz
+* Allgemeine Definition der Varianz
 
+  \begin{eqnarray}
+  \sigma_G^2 = Var\left[V\right] &=&   (V_{11} - \mu)^2 * f(G_1G_1) \nonumber \\
+                                 & & +\  (V_{12} - \mu)^2 * f(G_1G_2) \nonumber \\
+                                 & & +\  (V_{22} - \mu)^2 * f(G_2G_2)\nonumber
+  \end{eqnarray}
+  
+* Frequenzen eingesetzt und $V_{ij} \mu = ZW_{ij} + D_{ij}$  
+
+ \begin{eqnarray}
+  \sigma_G^2  &=&   (ZW_{11} + D_{11})^2 * p^2      \nonumber \\
+              & & +\  (ZW_{12} + D_{12})^2 * 2pq      \nonumber \\
+              & & +\  (ZW_{22} + D_{22})^2 * q^2 \nonumber
+  \end{eqnarray}
+
+
+## Varianz - Resultat
+
+* Herleitung in Anhang
+
+ \begin{eqnarray}
+  \sigma_G^2 &=& 2pq\alpha^2 + \left(2pqd \right)^2 \nonumber\\
+             &=& \sigma_A^2 + \sigma_D^2  \nonumber
+  \end{eqnarray}
+  
+wobei:
+
+* $\sigma_A^2$: genetisch additive Varianz
+* $\sigma_D^2$: Dominanzvarianz
+  
 
 ## Erweiterung auf mehrere Genorte
+
+* Abhängigkeit zwischen Genorten: $f(A_1A_1B_1B_1) \ne f(A_1A_1) * f(B_1B_1)$
+* Interaktionen
+
+\begin{eqnarray}
+g + \mu & = & V_{ij}^{(A)} + V_{kl}^{(B)} + I_{ijkl}^{(A) \cdot (B)} \nonumber\\
+        & = & \mu^{(A)} ZW_{ij}^{(A)} + D_{ij}^{(A)} + \mu^{(B)} + ZW_{kl}^{(B)} + D_{kl}^{(B)} + I_{ijkl}^{(A) \cdot (B)}  \nonumber
+\label{eq:ZerlegungGenMitInteraktion}  
+\end{eqnarray}
+
+
+## Polygenes Modell
+
+* unendlich viele Genorte
+* Modellierung des genotypischen Wertes als
+
+\begin{eqnarray}
+g & = & a + d + i \nonumber
+\label{eq:ZerlegungInfinitModel}  
+\end{eqnarray}
+
+* Zuchtwert als additiv genetischer Teil $a$: als normalverteilte Zufallsvariable
+* Dominanzabweichung $d$: häufig ignoriert
+* Epistasis $i$: häufig ignoriert
+
+
+## Phänotypische Beobachtung
+
+* Genotypische Werte nicht beobachtbar $\rightarrow$ Verwendung von phänotypischen Messungen
+* Modell
+
+\begin{eqnarray}
+y &=& \mu + g + e \nonumber
+\label{eq:ModPhenModel}
+\end{eqnarray}
+
+* Varianz
+
+\begin{eqnarray}
+Var\left[y \right] &=& \sigma_p^2\ =\ \sigma_g^2 + \sigma_e^2 + 2Cov\left[g,e \right] \nonumber
+\label{eq:VarPhen}
+\end{eqnarray}
+
+* Ohne Genotyp-Umwelt Interaktion
+
+\begin{eqnarray}
+Var\left[y \right] &=& \sigma_p^2\ =\ \sigma_g^2 + \sigma_e^2 \nonumber
+\label{eq:VarPhen}
+\end{eqnarray}
