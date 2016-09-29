@@ -1,0 +1,27 @@
+---
+title: "Züchtungslehre - Quantitative Genetik"
+author: "Peter von Rohr"
+date: "30 September 2016"
+output: 
+  beamer_presentation:
+    fig_caption: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+## Gene und Genotypen
+
+```{r PhenotypeGenotypSchema}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "PhenotypeGenotypSchema", psOdgDir = "../zl_hs_2016_w2_course_notes_rep_qg/odg")
+```
+
+
+## Frequenzen
+
+
+## Begriffe
+ 
+
+
