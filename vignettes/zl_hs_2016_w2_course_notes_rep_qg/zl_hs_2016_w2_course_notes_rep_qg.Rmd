@@ -86,7 +86,7 @@ Die Skala, auf welcher wir die genotypischen Werte $V_{ij}$ messen wird der Einf
 rmddochelper::insertOdgAsPdf(psOdgFileStem = "GenotypischerWert")
 ```
 
-Aus dem oben gezeigten Diagram erkennen wir, dass $G_1$ das vorteilhafte Allel ist. Das heisst mit jedem $G_1$ steigt der genotypische Wert. Die folgende Tabelle fasst die genotypischen Werte für die drei Genotypen zusammen.
+Aus dem oben gezeigten Diagramm erkennen wir, dass $G_1$ das vorteilhafte Allel ist. Das heisst mit jedem $G_1$ steigt der genotypische Wert. Die folgende Tabelle fasst die genotypischen Werte für die drei Genotypen zusammen.
 
 \begin{center}
    {\renewcommand{\arraystretch}{1.7}
@@ -157,7 +157,7 @@ Für die Zucht interessieren uns die genetischen Anlagen und deren Wert, welche 
 Der __Zuchtwert__ eines bestimmten Tieres $i$ ist definiert als die doppelte Abweichung des erwarteten Mittelwertes der Nachkommen von Tier $i$ vom Populationsmittel.
 
 ### Herleitung des Zuchtwertes $ZW_{11}$ für den Genotyp $G_1G_1$
-Zur Herleitung des Zuchtwertes $ZW_{11}$ müssen wir die erwartete mittlere Leisung der Nachkommen eines Tieres mit Genotyp $G_1G_1$ bestimmen. Die mittlere Leistung der Nachkommen eines Tieres mit Genotyp $G_1G_1$ ist als Erwartungswert definiert. Zur Berechnung des Erwatungswertes brauchen wir die Genotypfrequenzen der Nachkommen des Tieres mit Genotyp $G_1G_1$. Diese Frequenzen werden in der folgenden Tabelle bestimmt.
+Zur Herleitung des Zuchtwertes $ZW_{11}$ müssen wir die erwartete mittlere Leistung der Nachkommen eines Tieres mit Genotyp $G_1G_1$ bestimmen. Die mittlere Leistung der Nachkommen eines Tieres mit Genotyp $G_1G_1$ ist als Erwartungswert definiert. Zur Berechnung des Erwartungswertes brauchen wir die Genotypfrequenzen der Nachkommen des Tieres mit Genotyp $G_1G_1$. Diese Frequenzen werden in der folgenden Tabelle bestimmt.
 
 \vspace{5ex}
 \begin{center}
@@ -317,7 +317,7 @@ Die Zuchtwerte sind abhängig von den Allelfrequenzen. Die Differenzen der Zucht
 
 
 ## Dominanzabweichung
-Aufgrund der Definition des Zuchtwerts sind Abweichungen zwischen dem genotypischen Wert $V_{ij}$ und dem Zuchtwert $ZW_{ij}$ eines Tieres zu erwarten. Betrachtet man diese Abweichungen zwischen genotypischem Wert und Zuchtwert für die drei Genotype $G_1G_1$, $G_1G_2$ und $G_2G_2$ allgemein so erhalten wir folgende Resultate
+Aufgrund der Definition des Zuchtwerts sind Abweichungen zwischen dem genotypischen Wert $V_{ij}$ und dem Zuchtwert $ZW_{ij}$ eines Tieres zu erwarten. Betrachtet man diese Abweichungen zwischen genotypischem Wert und Zuchtwert für die drei Genotypen $G_1G_1$, $G_1G_2$ und $G_2G_2$ allgemein so erhalten wir folgende Resultate
 
   \begin{eqnarray}
   V_{11} - ZW_{11} & = & a - 2q \alpha \nonumber \\
@@ -464,7 +464,7 @@ Bei polygene Merkmalen gehen wir von sehr vielen Genorten, wobei jeder Genort nu
 Der zentrale Grenzwertsatz sagt, dass die Verteilung der Summe aus sehr vielen Zufallsvariablen mit sehr geringer Wirkung sich einer Normalverteilung nähert. Das Argument des zentralen Grenzwertsatzes und die Annahme, dass sich der additiv genetische Effekt aus Beiträgen von vielen Genorten zusammensetzt, rechtfertigen die Wahl der __Gausschen Normalverteilung__ als Dichteverteilung für die Zuchtwerte.
 
 ### Phänotypisch Beobachtung
-Am Anfang dieses Dokuments hatten wir schon gesehen, dass wir bei den traditionellen Zuchtverfahren die genetichen Werte und somit die Zuchtwerte nicht beobachten können. Als Informationsquellen stehen uns phänotypische Beobachtungen und die Verwandtschaftsbeziehungen zwischen den Tieren in der Population zur Verfügung. Wir brauchen also ein Modell, welches uns die phänotypischen Informationen mit genotypischen Werten verknüpft. Dieses Modell hatten wir schon in der Gleichung (\ref{eq:ModPhaenGen}) gesehen. Da wir alle genetischen Effekte als Abweichungen vom Populationsmittel definiert haben, müssen wir das Modell (\ref{eq:ModPhaenGen}) noch leicht modifizieren, indem wir das Populationsmittel $\mu$ aus dem $g$-Effekt herausziehen und es explizit als Faktor hinschreiben. Somit haben wir für die phänotypische Beobachtung $y$ folgendes Modell
+Am Anfang dieses Dokuments hatten wir schon gesehen, dass wir bei den traditionellen Zuchtverfahren die genetischen Werte und somit die Zuchtwerte nicht beobachten können. Als Informationsquellen stehen uns phänotypische Beobachtungen und die Verwandtschaftsbeziehungen zwischen den Tieren in der Population zur Verfügung. Wir brauchen also ein Modell, welches uns die phänotypischen Informationen mit genotypischen Werten verknüpft. Dieses Modell hatten wir schon in der Gleichung (\ref{eq:ModPhaenGen}) gesehen. Da wir alle genetischen Effekte als Abweichungen vom Populationsmittel definiert haben, müssen wir das Modell (\ref{eq:ModPhaenGen}) noch leicht modifizieren, indem wir das Populationsmittel $\mu$ aus dem $g$-Effekt herausziehen und es explizit als Faktor hinschreiben. Somit haben wir für die phänotypische Beobachtung $y$ folgendes Modell
 
 \begin{eqnarray}
 y &=& \mu + g + e
