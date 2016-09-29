@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
 ```
 
-```{r DocumentStatus, eval=TRUE}
+```{r DocumentStatus, eval=FALSE}
 r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
 r6obj_docstat$set_current_status(psVersion = "0.0.901",
                                  psStatus  = "Initialisation",
@@ -26,8 +26,10 @@ if (!r6ob_abbrtable$is_empty_abbr())
 ```
 
 ## Einleitung
-Hier soll das Konzept des __Zuchtwertes__ wie er in der quantitativen Genetik für einen Genort eingeführt wurde, kurz repetiert werden. Der Sinn dieser Repetition ist, dass wir diesen Begriff des Zuchtwertes von einem Genort auf sehr viele (theoretisch gesehen unendlich viele) Genorte erweitern wollen. Diese Erweiterung wird uns dann zur heute immer noch verwendeten BLUP-Zuchtwerschätzung führen.
+Hier soll das Konzept des __Zuchtwertes__ wie er in der quantitativen Genetik für einen Genort eingeführt wurde, kurz repetiert werden. Der Sinn dieser Repetition ist, dass wir diesen Begriff des Zuchtwertes von einem Genort auf sehr viele (theoretisch gesehen unendlich viele) Genorte erweitern wollen. Diese Erweiterung wird uns dann in einem späteren Kapitel zur heute immer noch verwendeten BLUP-Zuchtwerschätzung führen.
 
+### Begriffe
+Der __Phänotyp__ oder die phänotypische Beobachtung ist eine messbare oder beobachtbare Eigenschaft oder Leistung eines Tieres. Beispiele dafür sind Milchleistung, Zuwachs, Körpergrösse, usw. Das __Genom__ bezeichnet die totale genetische Information eines Individuums. Ein __Genort__ oder __Locus__ steht für eine definierte Position auf dem Genom.  Der __Genotyp__ steht für eine bestimmte Kombination von Genvarianten an einem Locus. Ein __Allel__ bezeichnet eine mögliche Genvariante an einem Locus. Sind an einem bestimmten Genort die beiden Allele gleich, so spricht man von einem __homozygoten__ Locus. Sind die beiden Allele verschieden wird der Locus als __heterozygot__ bezeichnet.
 
 ## Zuchtwert
 Das fundamentale Problem in der Tierzucht besteht in der Auswahl der Elterntiere für eine kommende Generation. Diese Auswahl geschieht immer mit einer Idealvorstellung eines optimalen Tieres im Hintergrund. Diese Idealvorstellung wird auch als __Zuchtziel__ bezeichnet. Konkret sollen die Elterntiere der kommenden Generation so ausgewählt werden, dass die zukünftigen Nachkommen näher am Zuchtziel sind im Vergleich zur aktuellen Population, aus der wir die Eltern auswählen.
@@ -52,6 +54,28 @@ y & = & g + e
 Das Modell (\ref{eq:ModPhaenGen}) ist so parametrisiert, dass die nicht-erklärbaren Resteffekte $e$ sich im Mittel aufheben und somit ist der Erwartungswert $E\left[e\right] = 0$. Daraus folgt, dass im Mittel die genetischen Effekte $g$ den mittleren phänotypischen Leistungen $y$ entsprechen, d.h. $E\left[y\right] = E\left[g\right]$. Bei fehlender Genotyp-Umweltinteraktion sind die Varianzen additiv und somit folgt, dass 
 
 $$Var(y) = Var(g) + Var(e)$$
+
+Das Konzept der Modellierung der phänotypischen Leistung mittels genetischem Anteil und umweltbedingtem Restanteil kann mit folgendem Schema veranschaulicht werden.
+
+```{r PhenotypeGenotypSchema}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "PhenotypeGenotypSchema")
+```
+
+Aus diesem einfachen Schema lassen sich sehr einfach die Frequenzen $f(G_1G_1)$, $f(G_1G_2)$ und $f(G_2G_2)$ der Genotypen $G_1G_1$, $G_1G_2$ und $G_2G_2$ ableiten. In der gezeigten Population befinden sich vier Individuen mit dem Genotyp $G_1G_1$, und je drei Individuen mit den Genotypen $G_1G_2$ und $G_2G_2$. Somit sind die Frequenzen
+
+\begin{eqnarray}
+f(G_1G_1) &=& \frac{4}{10} = 0.4 \nonumber\\
+f(G_1G_2) &=& \frac{3}{10} = 0.3 \nonumber\\
+f(G_2G_2) &=& \frac{3}{10} = 0.3 \nonumber
+\end{eqnarray}
+
+Die Allelefrequenzen $f(G_1)$ und $f(G_2)$ lassen sich aufgrund der Genotypfrequenzen berechnen.
+
+\begin{eqnarray}
+f(G_1) &=& f(G_1G_1) + 1/2 f(G_1G_2) = 0.4 + 0.15 = 0.55 \nonumber\\
+f(G_2) &=& f(G_2G_2) + 1/2 f(G_1G_2) = 0.3 + 0.15 = 0.45 \nonumber
+\end{eqnarray}
+
 
 ### Genotypischer Wert
 Der genotypische Wert $V_{ij}$ für einen bestimmten Genotypen $G_iG_j$ ist der mittlere Wert aller Individuen mit dem gleichen Genotyp $G_iG_j$ in der gleichen Umwelt. Zunächst nehmen wir an, dass wir nur einen Genort ($1$ Gen) mit $2$ Allelen (Genvarianten) betrachten. Die Population befinde sich im Hardy-Weinberg Gleichgewicht, welches besagt, dass sich bei zufälliger Paarung und unendlicher Populationsgrösse die Frequenz $f(G_iG_j)$ der Genotypen $G_iG_j$ von einer Generation zur nächsten konstant bleibt.
@@ -450,10 +474,16 @@ y &=& \mu + g + e
 Da auch der umweltbedingte Resteffekt $e$ des Modells als Abweichung von $\mu$ definiert wurde, ist der Erwartungswert der phänotypischen Beobachtung $E\left[y \right] = \mu$. Die Varianz der phänotypischen Beobachtung kann aus dem Modell (\ref{eq:ModPhenModel}) abgeleitet werden.
 
 \begin{eqnarray}
-Var\left[y \right] &=& \sigma_p^2 =  \sigma_g^2 + \sigma_e^2 + 2Cov\left[g,e \right]
+Var\left[y \right] &=& \sigma_p^2\ =\ \sigma_g^2 + \sigma_e^2 + 2Cov\left[g,e \right]
 \label{eq:VarPhen}
 \end{eqnarray}
 
+Der Ausdruck $Cov\left[g,e \right]$ im Modell (\ref{eq:VarPhen}) tritt nur dann auf, falls Genotyp-Umweltinteraktionen bestehen. Falls solche Interaktionen zwischen Genotypen und der Umwelt fehlen, dann können wir  $Cov\left[g,e \right] = 0$ setzen und somit vereinfacht sich das Modell (\ref{eq:VarPhen}) zu
+
+\begin{eqnarray}
+\sigma_p^2  &=&  \sigma_g^2 + \sigma_e^2
+\label{eq:VarPhenSimple}
+\end{eqnarray}
 
 
 
@@ -501,7 +531,9 @@ Der Term $2pq\alpha^2$ entspricht der Summe der mit den Genotypfrequenzen gewich
 \label{eq:AdditiveGeneticVariance}
 \end{eqnarray}
 
-Mit dem Term $\left(2pqd \right)^2$ wird analog der Summe der mit den Genotypenfrequenzen gewichteten quadrierten Dominanzabweichungen. Die entsprechende Ableitung ist nachfolgend gezeigt.
+\pagebreak
+
+Den Term $\left(2pqd \right)^2$ setzen wir der Summe der mit den Genotypenfrequenzen gewichteten quadrierten Dominanzabweichungen gleich. Die entsprechende Ableitung ist nachfolgend gezeigt.
 
 \begin{eqnarray}
 \left(2pqd \right)^2 & = & p^2 D_{11}^2 + 2pq D_{12}^2 + q^2 D_{22}^2      \nonumber \\
@@ -518,3 +550,5 @@ r6ob_abbrtable$writeToTsvFile()
 ```
 <!-- END of document                 -- 
   -- Below this must not be anything -->
+
+
