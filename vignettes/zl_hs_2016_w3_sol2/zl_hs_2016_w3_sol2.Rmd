@@ -1,0 +1,191 @@
+---
+title:  Züchtungslehre - Lösung 2
+author: Peter von Rohr
+date: 2016-10-07
+output: 
+  pdf_document:
+    includes:
+      in_header: header.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "[REPLACE_WITH_PROJECT]")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Aufgabe 1: Matrixdefinitionen in R
+In R werden Matrizen mit der Funktion `matrix` erstellt. In der Vorlesung hatten wir gesehen, dass die Funktion `matrix()` verschiedene Optionen aktzeptiert. Wir wollen uns hier anschauen, wie sich die Parameter auswirken.  
+
+__Ihre Aufgabe__ wird es sein die Matrizen mit den verschiedenen Optionen zu erstellen und so besser zu verstehen, was die Optionen für eine Bedeutung haben.
+
+### Parameter `data`
+* `data`: Angabe der Matrix-Elemente
+```{r echo=TRUE, results='markup', eval=TRUE}
+(matA <- matrix(data = c(1:9), nrow = 3, ncol = 3))
+```
+
+* `data`: Ohne Angabe der Matrix-Elemente
+```{r echo=TRUE, results='markup', eval=TRUE}
+(matB <- matrix(nrow = 3, ncol = 3))
+```
+
+* `data`: Spezifikation nicht aller Elemente
+```{r echo=TRUE, results='markup', eval=TRUE}
+(matC <- matrix(data = c(1,2,3), nrow = 3, ncol = 3))
+```
+
+```{r echo=TRUE, results='markup', eval=TRUE}
+(matC2 <- matrix(data = c(1,2,3,4), nrow = 3, ncol = 3))
+```
+
+### Parameter `nrow` und `ncol`
+* Weglassen einer der beiden Parameter
+
+```{r echo=TRUE, results='markup', eval=TRUE}
+(matD <- matrix(data = c(1:9), nrow = 3))
+```
+
+```{r echo=TRUE, results='markup', eval=TRUE}
+(matE <- matrix(data = c(1:9), ncol = 3))
+```
+
+### Parameter `byrow`
+```{r echo=TRUE, results='markup', eval=TRUE}
+(matF <- matrix(data = c(1:9), nrow = 3, ncol = 3, byrow = TRUE))
+```
+
+```{r echo=TRUE, results='markup', eval=TRUE}
+(matG <- matrix(data = c(1:9), nrow = 3, ncol = 3, byrow = FALSE))
+```
+
+
+## Aufgabe 2: Matrixmultiplikation in R
+Matrixmultiplikationen können in R mit dem Operator `%*%` oder mit den Funktionen `crossprod()` oder `tcrossprod()` ausgeführt werden. Gegeben sind die folgenden Matrizen
+
+```{r MatMultMatDef, echo=TRUE, results='markup'}
+matA <- matrix(data = c(1:9),ncol = 3)
+
+```
+
+
+
+## Aufgabe 3: Gleichungssysteme
+
+Gegeben ist das folgende Gleichungssystem.
+
+\begin{IEEEeqnarray}{rCl}
+       2x_2 + 2x_3 &=& 1 \nonumber\\
+2x_1 + 4x_2 + 5x_3 &=& 9 \nonumber\\
+ x_1 -  x_2 + 2x_3 &=& 3
+\label{eq:GlsA1} 
+\end{IEEEeqnarray}
+
+a) Bestimmen Sie die Lösungsmenge des Gleichungssystems (\ref{eq:GlsA1}) mit dem Gaussverfahren
+
+### Lösung
+* Vertauschen der ersten und der zweiten Gleichung
+
+\begin{IEEEeqnarray*}{rCl}
+2x_1 + 4x_2 + 5x_3 &=& 9\\
+       2x_2 + 2x_3 &=& 1\\
+ x_1 -  x_2 + 2x_3 &=& 3
+\end{IEEEeqnarray*}
+
+* $1/2$-fache der ersten Gleichung von dritter abziehen
+
+\begin{IEEEeqnarray*}{rCl}
+2x_1 + 4x_2 + 5x_3   &=& 9\\
+       2x_2 + 2x_3   &=& 1\\
+     - 3x_2 - \frac{1}{2}x_3 &=& -\frac{3}{2}
+\end{IEEEeqnarray*}
+
+* Addition des $3/2$-fache der zweiten zur dritten Gleichung
+
+\begin{IEEEeqnarray*}{rCl}
+2x_1 + 4x_2 + 5x_3   &=& 9\\
+       2x_2 + 2x_3   &=& 1\\
+      \frac{5}{2}x_3 &=& 0
+\end{IEEEeqnarray*}
+
+Somit ist $x_3 = 0$.
+
+* Rückwärtseinsetzen in der zweiten Gleichung führt zu $x_2 = 1/2$. Aufgrund der ersten Gleichung folgt $x_1 = 7/2$.
+
+
+b) Verwandeln Sie das Gleichungssystem (\ref{eq:GlsA1}) in Matrix-Vektor-Schreibweise
+
+### Lösung
+\begin{IEEEeqnarray*}{rCl}
+A \cdot x &=& b
+\end{IEEEeqnarray*}
+
+wobei die sogenannte Koeffizientenmatrix $A$, der Vektor $x$ und die rechte Handseite $b$ wie folgt definiert sind
+
+$$A = \left[
+\begin{array}{ccc}
+0  &  2  &  2\\
+2  &  4  &  5\\
+1  & -1  &  2
+\end{array}
+\right]$$,
+
+$$x\left[
+\begin{array}{c}
+x_1 \\
+x_2 \\
+x_3
+\end{array}
+\right]$$
+
+und
+
+$$b=\left[
+\begin{array}{c}
+1 \\
+9 \\
+3
+\end{array}
+\right]$$
+
+
+c) Wie lautet die Lösung des Gleichungssystem (\ref{eq:GlsA1}) in Matrix-Vektor-Schreibweise
+
+$$x = A^{-1} \cdot b$$
+
+d) Berechnen Sie die Lösung aus c) mit R
+
+__Hinweis__
+* Für die Multiplikation der Matrix $A^{-1}$ mit dem Vektor $b$ muss der Vektor $b$ in eine Matrix verwandelt werden. Dies kann mit der Funktion `as.matrix()` gemacht werden.
+
+
+### Lösung
+```{r SolEqn, echo=TRUE, results='markup'}
+matA <- matrix(data = c(0,2,2,2,4,5,1,-1,2),nrow = 3,ncol = 3, byrow = TRUE)
+matAInv <- solve(matA)
+vecB <- c(1,9,3)
+sol <- matAInv %*% as.matrix(vecB)
+print(sol)
+```
+
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->
