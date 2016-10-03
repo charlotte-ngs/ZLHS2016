@@ -75,13 +75,62 @@ __Ihre Aufgabe__ wird es sein die Matrizen mit den verschiedenen Optionen zu ers
 
 
 ## Aufgabe 2: Matrixmultiplikation in R
-Matrixmultiplikationen können in R mit dem Operator `%*%` oder mit den Funktionen `crossprod()` oder `tcrossprod()` ausgeführt werden. Gegeben sind die folgenden Matrizen
+Matrixmultiplikationen können in R mit dem Operator `%*%` oder mit den Funktionen `crossprod()` oder `tcrossprod()` ausgeführt werden. Der Vorteil von `crossprod()` und `tcrossprod()` gegenüber von `%*%` ist, dass wir mit `crossprod()` und `tcrossprod()` direkt Matrizen und Vektoren multiplizieren können. Das funktioniert mit `%*%` nicht. Bei der Matrix-Vektor-Multiplikation mit `%*%` muss der Vektor zuerst in eine Matrix verwandelt werden. 
+
+In einem ersten Teil der Aufgabe geht es um einen Vergleich zwischen `crossprod()`, `tcrossprod()` und `%*%` für die Matrix-Matrix-Multiplikation. 
+
+a) Gegeben sind die folgenden Matrizen
 
 ```{r MatMultMatDef, echo=TRUE, results='markup'}
-matA <- matrix(data = c(1:9),ncol = 3)
-
+matA <- matrix(data = c(1:9), ncol = 3)
+matB <- matrix(data = c(2:10), ncol = 3)
 ```
 
+Finden Sie heraus welcher Multiplikationen mit `%*%` entspricht die folgende Anweisung?
+
+```{r, echo=TRUE, results='markup', eval=TRUE}
+crossprod(matA,matB)
+```
+
+### Lösung
+Die Anweisung `crossprod(matA,matB)` entspricht der Matrixmultiplikation
+
+```{r, echo=TRUE, results='markup'}
+t(matA) %*% matB
+```
+
+Alternativ dazu gibt es die Funktion `tcrossprod()`. Finden Sie, welche Matrixmultiplikation mit `%*%`
+
+```{r, echo=TRUE, results='markup', eval=TRUE}
+tcrossprod(matA, matB)
+```
+
+ausführt.
+
+### Lösung
+```{r, echo=TRUE, results='markup'}
+matA %*% t(matB)
+```
+
+
+b) Gegeben ist zusätzlich der Vektor `vecB` als
+
+```{r, echo=TRUE}
+vecB <- c(-3,16,1)
+```
+
+Multiplizieren Sie die Matrix `matA` mit dem Vektor `vecB` einmal mit `%*%` und einmal mit `crossprod()`.
+
+__Hinweise__: Ein Vektor kann mit der Funktion `as.matrix()` in eine Matrix verwandelt werden.
+
+### Lösung
+```{r echo=TRUE, results='markup'}
+matA %*% as.matrix(vecB)
+```
+
+```{r echo=TRUE, results='markup'}
+crossprod(t(matA), vecB)
+```
 
 
 ## Aufgabe 3: Gleichungssysteme
@@ -181,6 +230,9 @@ vecB <- c(1,9,3)
 sol <- matAInv %*% as.matrix(vecB)
 print(sol)
 ```
+
+
+## Aufgabe 4: Quantitative Genetik
 
 
 
