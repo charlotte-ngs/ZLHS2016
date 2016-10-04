@@ -2,7 +2,9 @@
 title:  Züchtungslehre - Tierzucht und Selektionsindex
 author: Peter von Rohr
 date: 2016-10-07
-output: pdf_document
+output: 
+  pdf_document:
+    fig_caption: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -77,7 +79,42 @@ Bei der Auswahl der Elterntiere stehen uns zwei Werkzeuge zur Verfügung.
 2. Gezielte Anpaarung
 
 
+### Selektion
+Selektion wird verwendet um langfristige genetische Änderungen in einer Population zu bewirken. Der Unterschied zwischen gerichteter Selektion und Vermehrung sind in den nachfolgenden beiden Diagrammen gezeigt. 
 
+```{r ZuechtungElternNachkommen}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "ZuechtungElternNachkommen", pnPaperWidthScale = 0.6)
+```
+
+Im Gegensatz zur gerichteten Selektion steht die reine Vermehrung, welche im folgenden Schema gezeigt ist. Bei der Vermehrung wird keine Verbesserung der Nachkommen im Vergleich zu den Elterntieren angestrebt.
+
+```{r VermehrungElternNachkommen}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "VermehrungElternNachkommen", pnPaperWidthScale = 0.6)
+```
+
+
+Als Selektion versteht man den Prozess, welcher bestimmt welche Tiere aus einer Population Eltern werden, wie viele Nachkommen sie produzieren sollen und wie lange sie in der Zuchtpopulation verbleiben. Wir sind vertraut mit der __natürlichen Selektion__, welche auch oft mit dem Schlagwort "survival of the fittest" zusammengefasst wird. Damit ist gemeint, dass Tiere, welche optimal an eine Umwelt angepasst sind haben eine höhere Wahrscheinlichkeit zu überlegen und sich somit fortzupflanzen. 
+
+In der Tierzucht ist aber vor allem die __künstliche Selektion__ von Interesse. Die Idee hinter der künstlichen Selektion ist, die Individuen mit dem besten Set von Genen auszuwählen und diese sich vermehren zu lassen. Die Tiere mit dem besten Set von Genen haben den besten Wert als Zuchttiere. Dieser Wert wird anhand unseres vorher definierten Begriffs des __Zuchtwertes__ gemessen.
+
+Die einfachste Form der Selektion ist die phänotypische Selektion. Dabei werden die Tiere alleine aufgrund der phänotypischen Leistung selektiert. Diese Art der Selektion wird kaum mehr verwendet, ist aber sehr einfach und illustrativ für Erklärungen. Aktuell sollten Tiere aufgrund ihrer __Zuchtwerte__ selektiert werden. Unter der Annahme, dass Zuchtwerte normal verteilt sind, sind die Vorgänge von der phänotypischen Selektion auf die Selektion nach Zuchtwerten übertragbar.
+
+Das nachfolgende Bild zeigt die Verteilung eines phänotypischen Merkmals in einer Population. Dabei stehen ED für Elterndurchschnitt, SG für Selektionsgrenze und RD für Remontendurchschnitt.
+
+```{r GerichteteSelektionElternNk}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "GerichteteSelektionElternNk")
+```
+
+### Gezielte Paarung
+Die gezielte Paarung ist der Prozess, in welchem bestimmt wird, welche Tiere miteinander gepaart werden sollen. Dies ist verschieden von der Selektion. In der Selektion werden nur die zukünftigen Eltern aus der Population ausgewählt. Bei der gezielten Paarung geschieht die Zuordnung der Paarungspartner. Die Zuordnung der Paarungspartner kann auf sehr verschiedene Arten passieren. Die Art der Zuordnung bestimmt dann das Paarungssystem. Dabei können verschiedene Ziele verfolgt werden, wie zum Beispiel
+
+a) Maximierung des Zuchtwertes
+b) Ausnützung gegensätzlicher Eigenschaften
+c) Erzielung von Heterosis-Effekten
+
+Paarungen können innerhalt der gleichen Rasse geplant werden, dann spricht man von __Reinzucht__. Werden Partner aus verschiedenen Rassen gepaart, bezeichnen wir das als __Kreuzungszucht__. 
+
+Der Mittelwert der Zuchtwerte der Elterntiere liefert uns eine erste Information über den zu erwartenden Zuchtwert des Nachkommens. Dieser wird als __Abstammungszuchtwert__ bezeichnet. Dieser erste geschätzte Zuchtwert liegt schon vor bevor der Nachkomme geboren wurde. Abstammungszuchtwerte sind aber nicht die einzige Art von Zuchtwerten, welche in der Tierzucht verwendet werden. In den nachfolgenden Abschnitten werden wir uns noch etwas genauer damit beschäftigen, welche verschiedenen Arten von Zuchtwerten es gibt und wie diese geschätzt werden.
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
