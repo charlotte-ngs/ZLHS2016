@@ -1,0 +1,46 @@
+---
+title:  Züchtungslehre - Tierzucht und Selektionsindex
+author: Peter von Rohr
+date: 2016-10-07
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "[REPLACE_WITH_PROJECT]")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Tierzucht
+In der Tierzucht gibt es zwei __fundamentale Fragen__, welche alle Züchterinnen und Züchter beschäftigt. 
+
+1. Welches Tier ist das beste?
+2. Wie sollen Tiere ausgewählt werden, dass ihre Nachkommen besser sind als die aktuelle Population
+
+### Das beste Tier
+Da wir im allgemeinen nicht nur an einer Eigenschaft bei den Nutztieren interessiert sind, stellt sich die Frage nach der optimalen Kombination an Eigenschaften. Ist zum Beispiel die Milchkuh die beste, welche eine möglichst hohe Milchleistung hat oder spielen Eutergesundheit, ein gutes Fundament oder Krankheitsresistenz auch eine Rolle? Müssen Schweine möglichst schnell wachsen oder sind ein gutes Geburtsverhalten und überdurchschnittliche Fleischqualität auch wichtig?
+
+Die Bezeichnung "das beste Tier" ist ein relativer Begriff. Absolut gesehen gibt es kein bestes Tier. Die Klassierung von Tieren ist immer relativ zu einer Umwelt, in welcher sich die Tiere befinden. Eine Hochleistungsmilchkuh hätte sehr viel Mühe in einem Wüstengebiet in Afrika zu überleben. Bei den kommenden Ausführungen gehen wir davon aus, dass die Umwelt für die Tiere optimal ist.
+
+
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->
