@@ -36,6 +36,47 @@ Da wir im allgemeinen nicht nur an einer Eigenschaft bei den Nutztieren interess
 
 Die Bezeichnung "das beste Tier" ist ein relativer Begriff. Absolut gesehen gibt es kein bestes Tier. Die Klassierung von Tieren ist immer relativ zu einer Umwelt, in welcher sich die Tiere befinden. Eine Hochleistungsmilchkuh hätte sehr viel Mühe in einem Wüstengebiet in Afrika zu überleben. Bei den kommenden Ausführungen gehen wir davon aus, dass die Umwelt für die Tiere optimal ist.
 
+Die Beschreibung von Tieren basiert entweder auf deren äusserem Erscheinungsbild oder aufgrund von Leistungen oder einer Kombination von beidem. In jedem Fall sprechen wir von __Merkmalen__. Ein Merkmal ist definiert als beobachtbare oder messbare Eigenschaft eines Tieres. 
+
+Als Beispiele für beobachtete Merkmale sind 
+
+* Fellfarbe
+* Grösse
+* Bemuskelung
+* Fundament
+* Euter
+
+Beispiele für messbare Merkmale sind
+
+* Körpergewicht
+* Milchproduktion
+* Wachstum
+* Futteraufnahme
+
+Wichtig ist, dass es bei den Merkmalen nicht um die Beschreibung eines einzelnen Tieres geht. Ein Tier kann rote Fellfarbe und ein Körpergewicht von $343 kg$ aufweisen. Aber `rot` und $343 kg$ sind nicht die Merkmale, sondern die Merkmalsausprägungen oder der __Phänotyp__. Die Merkmale sind nur __Körpergewicht__ und __Fellfarbe__. 
+
+In der Tierzucht beschäftigen wir uns vor allem mit der genetischen Veränderung von Populationen. Das genetische Potential wird von einem Tier an die nächste Generation weitergegeben. Das genetische Potential eines Tieres wird durch den __Genotypen__ repräsentiert. Den Zusammenhang zwischen phänotypischem Merkmal und Genotyp eines Individuums wird durch das folgende uns schon bekannte Modell hergestellt.
+
+$$ y = \mu + g + \epsilon$$
+
+wobei $y$ der phänotypische Wert eines Merkmals ist, $\mu$ dem Populationsmittel entspricht, $g$ für den genotypischen Wert steht und $\epsilon$ der umweltbedingte Rest darstellt.
+
+Schon im Kapitel "Quantitative Genetik" hatten wir gesehen, dass aufgrund der Vererbung, nicht der Genotyp eines Tieres an die nächste Generation weitergegeben wird sondern nur eine zufällige Auswahl der Allele. Somit ist nicht der genotypische Wert sondern der genetisch additive Anteil des genotypischen Wertes von zentraler Bedeutung. Den genetsch additiven Anteil hatten wir als __Zuchtwert__ bezeichnet und wir sehen hier, dass der Zuchtwert eines Tieres in der Beurteilung der Tiere hinsichtlich ihrer Eignung als Elterntiere eine zentrale Rolle spielt. Formell hatten wir im Kapitel "Quantitative Genetik" den genotypischen Wert $g$ in Zuchtwert $a$, Dominanzabweichung $d$ und Epistasie $i$ aufgeteilt. Somit setzt sich der phänotypische Wert eines Merkmals wie folgt zusammen.
+
+$$ y = \mu + a + d + i + \epsilon$$
+
+Bei der Dominanzabweichung $d$ und der Epistasie $i$ handelt es sich um Interaktionen an einem Lokus oder zwischen Loci. Diese sind somit abhängig vom Paarungsparter und nur schwer zu quantifizieren. Deshalb werden diese beiden Effekte auch häufig zusammen mit den Umweltfaktoren $e$ in einen neuen Restterm $e$ zusammengefasst.
+
+$$ y = \mu + a + e$$
+
+
+### Auswahl der Elterntiere
+Bei der Auswahl der Elterntiere stehen uns zwei Werkzeuge zur Verfügung. 
+
+1. Selektion
+2. Gezielte Anpaarung
+
+
 
 
 
