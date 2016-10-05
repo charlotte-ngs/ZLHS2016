@@ -147,7 +147,7 @@ $$var(y) = var(a) + var(e)$$
 
 
 ## Schätzung des Zuchtwertes aufgrund von Eigenleistungen
-### Einzelne Leistung
+### Eine einzelne Eigenleistung
 Falls nur eine Leistung pro Tier zur Verfügung steht, dann lassen sich die Zuchtwerte aus der Regression der phänotypischen Leistungen auf die additiv genetischen Werte schätzen. Da die additiv genetischen Werte unbekannt sind, ist auch die Regression unbekannt. Aber es ist trotzdem hilfreich sich vorzustellen, wie diese Regression aussehen würde. 
 
 ```{r RegPhenAddGen}
@@ -158,15 +158,67 @@ Die rote Gerade im obigen Diagramm zeigt die Regressionsgerade der additiv genet
 
 \begin{IEEEeqnarray}{rCl}
 \hat{a}_i &=& b(y_i - \mu)
-\end{IEEEeqnarray}{rCl}
+\label{eq:HatA}
+\end{IEEEeqnarray}
 
 wobei $b$ der Regressionskoeffizient der additiv genetischen Werte auf die phänotypischen Beobachtungen darstellt. Den Regressionskoeffizienten $b$ berechnen wir aus den Covarianzen der Zufallsvariablen als
 
 \begin{IEEEeqnarray}{rCl}
-b &=& \frac{cov(a,y)}{var(y)}
-\end{IEEEeqnarray}{rCl}
+b & = & \frac{cov(a,y)}{var(y)}
+\label{eq:RegCoefB}
+\end{IEEEeqnarray}
 
-wobei $cov(a,y) = cov(a,\mu + a + e) = cov(a,\mu) + cov(a,a) + cov(a,e)$. Aus den Annahmen zum Modell (\ref{eq:BasicModel}) wissen wir, dass $cov(a,\mu) = cov(a,e) = 0$. Die Covarianz der Zufallsvariablen mit sich selber entspricht der Varianz der Zufallsvariablen und somit ist $cov(a,a) = var(a)$. 
+wobei $$cov(a,y) = cov(a,\mu + a + e) = cov(a,\mu) + cov(a,a) + cov(a,e)$$ Aus den Annahmen zum Modell (\ref{eq:BasicModel}) wissen wir, dass $cov(a,\mu) = cov(a,e) = 0$. Die Covarianz der Zufallsvariablen mit sich selber entspricht der Varianz der Zufallsvariablen und somit ist $cov(a,a) = var(a)$. Somit haben wir als Resultat für den Regressionskoeffizienten 
+
+\begin{equation}
+b = \frac{cov(a,y)}{var(y)}  =  \frac{var(a)}{var(y)} = h^2
+\label{eq:RegCoefBResult}
+\end{equation}
+
+Der Term $h^2$ steht für die Heritabilität. Somit entspricht der geschätzte Zuchtwert aufgrund einer Eigenleistung das Produkt aus Heritabilität mal die um den Mittelwert $\mu$ korrigierten Phänotypen $y$
+
+\begin{equation}
+\hat{a}_i  =  b(y_i - \mu) = h^2(y_i - \mu)
+\label{eq:HatAResult}
+\end{equation}
+
+Die Korrelation zwischen dem wahren Zuchtwert und dem Selektionskriterium, hier die phänotypische Beobachtung, entspricht der Genauigkeit des geschätzten Zuchtwertes. Diese Korrelation bietet eine Möglichkeit die verschiedenen Selektionskriterien auf ihre Genauigkeit hin zu vergleichen. Je höher die Korrelation, desto besser die Genauigkeit und desto geeigneter das Selektionskriterium. Die Schätzgenauigkeit wird sehr oft auch als Bestimmtheitsmass ($r^2$) ausgewiesen. Für unser Beispiel einer einzelnen Eigenleistung ist die Genauigkeit
+
+\begin{IEEEeqnarray}{rCl}
+r_{a,y} & = & \frac{cov(a,y)}{\sigma_a \sigma_y} \nonumber\\
+        & = & \frac{\sigma_a^2}{\sigma_a \sigma_y} = h
+\end{IEEEeqnarray}
+
+und das Bestimmtheitsmass $r^2 = h^2$.
+
+Der __erwartete Selektionserfolg__ ($R$) auf der Basis einer einzelnen Eigenleistung beträgt
+
+\begin{equation}
+R = i r_{a,y}^2 \sigma_y = i h^2 \sigma_y
+\end{equation}
+
+wobei $i$ der Selektionsintensität also der Überlegenheit der selektierten Individuen ausgedrückt in Einheiten der phänotypischen Standardabweichung.
+
+Die Varianz der geschätzten Zuchtwerte ist
+
+\begin{equation}
+var(\hat{a}) = var(by) = var(h^2y) = h^4 \sigma_y^2 = r_{a,y}^2 h^2 \sigma_y^2 = r_{a,y}^2 \sigma_a^2
+\end{equation}
+
+### Wiederholte Messungen
+Falls bei einem Tiere mehrere wiederholte Messungen des gleichen Merkmals vorliegen, kann der Zuchtwert aus dem Mittelwert der wiederholten Messungen geschätzt werden. Mit den wiederholten Messungen wird angenommen, dass sich die Messungen eines Tieres aufgrund der Umweltfaktoren ähnlicher sind. Es gibt also eine zusätzliche Covarianz bei Messungen eines Tieres. Die Varianz ($var(y)$) der phänotypischen Beobachtung kann somit aufgeteilt werden in 
+
+$$var(y) = var(a) + var(pe) + var(te)$$
+
+wobei $var(pe)$ die Varianz aufgrund der permanenten Umwelt darstellt und $var(te)$ der zufälligen Umweltvarianz entspricht.
+
+### Zuchtwertschätzung aufgrund von Nachkommen
+
+### Zuchtwertschätzung aufgrund von Pedigreeinformation
+
+### Andere Merkmale
+
+### Selektionsindex
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
