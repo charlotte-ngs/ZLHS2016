@@ -5,6 +5,8 @@ date: 2016-10-07
 output: 
   pdf_document:
     fig_caption: FALSE
+    includes:
+      in_header: header.tex
 ---
 
 ```{r setup, include=FALSE}
@@ -69,7 +71,10 @@ $$ y = \mu + a + d + i + \epsilon$$
 
 Bei der Dominanzabweichung $d$ und der Epistasie $i$ handelt es sich um Interaktionen an einem Lokus oder zwischen Loci. Diese sind somit abhängig vom Paarungsparter und nur schwer zu quantifizieren. Deshalb werden diese beiden Effekte auch häufig zusammen mit den Umweltfaktoren $e$ in einen neuen Restterm $e$ zusammengefasst.
 
-$$ y = \mu + a + e$$
+\begin{IEEEeqnarray}{rCl}
+y &=& \mu + a + e
+\label{eq:PhenAddGen}
+\end{IEEEeqnarray}
 
 
 ### Auswahl der Elterntiere
@@ -117,8 +122,57 @@ Paarungen können innerhalt der gleichen Rasse geplant werden, dann spricht man 
 Der Mittelwert der Zuchtwerte der Elterntiere liefert uns eine erste Information über den zu erwartenden Zuchtwert des Nachkommens. Dieser wird als __Abstammungszuchtwert__ bezeichnet. Dieser erste geschätzte Zuchtwert liegt schon vor bevor der Nachkomme geboren wurde. Abstammungszuchtwerte sind aber nicht die einzige Art von Zuchtwerten, welche in der Tierzucht verwendet werden. In den nachfolgenden Abschnitten werden wir uns noch etwas genauer damit beschäftigen, welche verschiedenen Arten von Zuchtwerten es gibt und wie diese geschätzt werden.
 
 
+## Zuchtwertschätzung unter Verwendung verschiedener Informationsquellen
+In jedem Zuchtprogramm ist die Schätzung von Zuchtwerten eine zentraler Bestandteil. Die Genauigkeit der geschätzten Zuchtwerte hängt sehr stark von den verfügbaren Daten ab. Bei den Daten handelt es sich meist um phänotypische Beobachtungswerte und um Verwandtschaftsbeziehungen. Die verfügbaren SNP-Informationen für die genomische Selektion wird hier noch nicht betrachtet. 
+
+Zu Beginn der züchterischen Arbeit sind meist nur phänotypische Informationen von einzelnen Tieren verfügbar. In späteren Stadien kommen Messungen von verwandten Tieren und von Nachkommen hinzu. Zuchtwerte müssen also zuerst auf der Basis von phänotypischen Informationen des Tieres alleine geschätzt werden. Nach und nach können für die Zuchtwertschätzung auch Informationsquellen von verwandten Tieren berücksichtigt werden. 
+
+Meist werden in Zuchtprogrammen nicht nur einzelne Merkmale bearbeitet. Häufig sind ganze Gruppen von Merkmalen von Interesse. Verschiedene Merkmale können gleichzeitig über die Definition eines sogenannten __Selektionsindexes__ berücksichtigt werden.
+
+### Das Modell
+Eine phänotypische Beobachtung $y_{ij}$ eines Tieres $i$ in einem Merkmal $j$ ist beeinflusst durch allgemeine identifizierbare Umweltfaktoren $\mu_i$, durch die additiv genetischen Effekte $a_i$ und durch einen Restterm $e_{ij}$. 
+
+\begin{IEEEeqnarray}{rCl}
+y_{ij} &=& \mu_i + a_i + e_{ij}
+\label{eq:BasicModel}
+\end{IEEEeqnarray}
+
+Die Aufteilung des totalen genotypischen Wertes $g_i$ in additiven Effekt $a_i$, Dominanzabweichung $d_i$ und Epistasis $i_i$ und die Verschiebung der Dominanzabweichung und der Epistasie in den Restterm wurde schon bei der Herleitung des Modells (\ref{eq:PhenAddGen}) besprochen und deshalb hier nicht weiter ausgeführt.
+
+Das Modell in (\ref{eq:BasicModel}) ist ein lineares Modell, welches in der Tierzucht sehr weit verbreitet ist. Meist wird angenommen, dass der Vektor $y$ aller Beobachtungen in  einer Population einer multivariaten Normalverteilung folgt. Diese Annahme wird durch den zentralen Grenzwertsatz begründet, welcher besagt, dass eine Zufallsvariable, welche aus einer Summe mit sehr vielen Summanden mit sehr kleinem Effekt zusammengesetzt ist, sich einer Normalverteilung nähert. Das Argument des zentralen Grenzwertsatzes wird zuerst einmal auf den additiv genetischen Effekt $a$ angewendet. Auch für den Resteffekt $e$ wird angenommen, dass sich diese zufälligen Resteffekte aus sehr vielen kleinen Effekten zusammensetzen. Somit folgen $a$ und $e$ einer Normalverteilung. Die systematischen mittleren Umwelteffekte $\mu$ werden als fix angenommen und zeigen somit nicht den Charakter einer Zufallsvariablen mit einer Verteilung. Da $a$ und $e$ normal verteilt sind und $\mu$ als fixer Effekt angenommen wird, folgt auch $y$ einer Normalverteilung. Dieses hier beschriebene Modell trägt den Namen __infinitesimal model__.
+
+Zu den Annahmen der Verteilungen der Zufallsvariablen im Modell (\ref{eq:BasicModel}) gehören auch die __Erwartungswerte__ und die __Varianzen__. Da die Effekte $a$ und $e$ als Abweichungen von einem Mittel definiert sind, ist deren Erwartungswert $E(a) = E(e) = 0$. Somit gilt für den Erwartungswert $E(y)$ von $y$: $E(y) = \mu$. Die Varianzen von $a$ und $e$ werden als bekannt angenommen. Zwischen $a$ und $e$ sollen keine Covarianzen auftreten, d.h. $cov(a,e) = 0$. Auch zwischen den Resteffekten verschiedener Tiere $i$ ud $k$ sollen keine Covarianzen bestehen, d.h. $cov(e_i, e_k) = 0$. Aus diesen Annahmen lässt sich für die Varianz von $y$ ableiten, dass
+
+$$var(y) = var(a) + var(e)$$
+
+
+## Schätzung des Zuchtwertes aufgrund von Eigenleistungen
+### Einzelne Leistung
+Falls nur eine Leistung pro Tier zur Verfügung steht, dann lassen sich die Zuchtwerte aus der Regression der phänotypischen Leistungen auf die additiv genetischen Werte schätzen. Da die additiv genetischen Werte unbekannt sind, ist auch die Regression unbekannt. Aber es ist trotzdem hilfreich sich vorzustellen, wie diese Regression aussehen würde. 
+
+```{r RegPhenAddGen}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "RegPhenAddGen")
+```
+
+Die rote Gerade im obigen Diagramm zeigt die Regressionsgerade der additiv genetischen Werte auf die phänotypischen Beobachtungen. Da wir den additiv genetischen Wert $a_i$ nicht kennen schätzen wir ihn und bezeichnen den Schätzwert als $\hat{a}_i$. Den Schätzwert berechnen wir als
+
+\begin{IEEEeqnarray}{rCl}
+\hat{a}_i &=& b(y_i - \mu)
+\end{IEEEeqnarray}{rCl}
+
+wobei $b$ der Regressionskoeffizient der additiv genetischen Werte auf die phänotypischen Beobachtungen darstellt. Den Regressionskoeffizienten $b$ berechnen wir aus den Covarianzen der Zufallsvariablen als
+
+\begin{IEEEeqnarray}{rCl}
+b &=& \frac{cov(a,y)}{var(y)}
+\end{IEEEeqnarray}{rCl}
+
+wobei $cov(a,y) = cov(a,\mu + a + e) = cov(a,\mu) + cov(a,a) + cov(a,e)$. Aus den Annahmen zum Modell (\ref{eq:BasicModel}) wissen wir, dass $cov(a,\mu) = cov(a,e) = 0$. Die Covarianz der Zufallsvariablen mit sich selber entspricht der Varianz der Zufallsvariablen und somit ist $cov(a,a) = var(a)$. 
+
+
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
 ```
 <!-- END of document                 -- 
   -- Below this must not be anything -->
+
+
