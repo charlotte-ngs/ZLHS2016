@@ -204,6 +204,7 @@ Die Varianz der geschätzten Zuchtwerte ist
 
 \begin{equation}
 var(\hat{a}) = var(by) = var(h^2y) = h^4 \sigma_y^2 = r_{a,y}^2 h^2 \sigma_y^2 = r_{a,y}^2 \sigma_a^2
+\label{eq:VarHatA}
 \end{equation}
 
 ### Wiederholte Messungen
@@ -346,16 +347,71 @@ Somit ist der geschätzte Zuchtwert $\hat{a}_s$ aufgrund eines Durchschnitts von
 Die Genauigkeit des geschätzten Zuchtwertes $\hat{a}_s$ berechnet sich als
 
 \begin{IEEEeqnarray}{rCl}
-r_{a,\tilde{y}} & = & \frac{cov(a,\tilde{y})}{\sqrt{var(a)\ var(\tilde{y})}}
+r_{a,\tilde{y}} & = & \frac{cov(a,\tilde{y})}{\sqrt{var(a)\ var(\tilde{y})}}\nonumber\\
+  & = & \frac{{1\over 2}var(a)}{\sqrt{var(a)\ \left[ {1\over 4}h^2 + (1-{1\over 4}h^2)/n \right]\sigma_y^2}}\nonumber\\
+  & = & \frac{{1\over 2}h^2\sigma_y^2}{\sqrt{h^2\sigma_y^2\ \left[ {1\over 4}h^2 + (1-{1\over 4}h^2)/n \right]\sigma_y^2}}\nonumber\\
+  & = & \sqrt{\frac{nh^2}{nh^2 + (4-h^2)}}\nonumber\\
+  & = & \sqrt{\frac{n}{n+k}}
 \label{eq:AccBreedValOffspring}
 \end{IEEEeqnarray}
 
 
 ### Zuchtwertschätzung aufgrund von Pedigreeinformation
+Falls für ein Tier keine phänotypischen Beobachtungen existieren, dann kann sein Zuchtwert aufgrund der geschätzten Elternzuchtwerte geschätzt werden. Dies entspricht dann einem Abstammungszuchtwert. Der geschätzte Zuchtwert $\hat{a}_o$ für Tier $o$ aufgrund der geschätzten Zuchtwerte $\hat{a}_s$ und $\hat{a}_d$ der Eltern $s$ und $d$ ist somit 
 
-### Andere Merkmale
+$$\hat{a}_o = {1\over 2}(\hat{a}_s + \hat{a}_d)$$
+
+Setzen wir $f = {1\over 2}(\hat{a}_s + \hat{a}_d)$, dann ist die Genauigkeit
+
+$$r_{a,f} = \frac{cov(a_o, f)}{\sqrt{\sigma_a^2\ var(1/2\hat{a}_s + 1/2\hat{a}_d)}}$$
+
+Unter der Annahme, dass die Eltern $s$ und $d$ nicht verwandt sind, folgt
+
+$$cov(a_o, f) = {1\over 4} cov(a_s,\hat{a}_s) + {1\over 4} cov(a_d,\hat{a}_d) = {1\over 4} var(\hat{a}_s) + {1\over 4}  var(\hat{a}_d)$$
+
+Verwenden wir für die Varianzen der geschätzten Zuchtwerte die Beziehung in (\ref{eq:VarHatA}) dann folgt
+
+$$cov(a_o, f) = {1\over 4} (r_s^2 + r_d^2) \sigma_a^2$$
+
+Aufgrund der hier gezeigten Berechnungen folgt auch, dass
+
+$$var(1/2\hat{a}_s + 1/2\hat{a}_d) = {1\over 4} (r_s^2 + r_d^2) \sigma_a^2$$. Somit folgt für die Genauigkeit
+
+$$r_{a,f} = \frac{{1\over 4} (r_s^2 + r_d^2) \sigma_a^2}{\sqrt{\sigma_a^2 {1\over 4} (r_s^2 + r_d^2) \sigma_a^2}}
+  = {1\over 2}\sqrt{(r_s^2 + r_d^2)}$$
+
 
 ### Selektionsindex
+Traditionellerweise bezeichnete man die Methode um Zuchtwerte eines Merkmals aufgrund verschiedener phänotypischer Informationsquellen zu schätzen als __Selektionsindex__. Bei dieser Methode wurden die verschiedenen Beobachtungen zu einem sogenannten Index $I$ zusammengefasst. Diese Zusammenfassung entsprach einem gewichteten Mittel der Abweichungen der phänotypischen Beobachtung von deren Mittelwert. Für ein bestimmtes Tier $i$ war der Index definiert als
+
+$$I_i = \hat{a}_i = b_1(y_1 - \mu_1) + b_2(y_2 - \mu_2) + b_3(y_3 - \mu_3) + ... $$
+
+Die Gewichtungsfaktoren $b$ werden so bestimmt, dass die mittleren quadrierten Fehler der geschätzten Zuchtwerte minimal sind. Diese Art der Schätzung von Zuchtwerten wurde bis etwa in die 1990er-Jahre bei den Schweinen auf der Stationprüfung verwendet. Seit dann findet diese Methode aber keine Anwendung mehr.
+
+### Schätzung des Gesamtzuchtwertes
+Die Indextheorie wird aber in einem anderen Gebiet immer noch verwendet und zwar zur Schätzung des Gesamtzuchtwertes. In jedem Zuchtprogramm muss ja ein Zuchtziel vorliegen. Dies ist meist eine Vorstellung der Eigenschaften eines optimalen Tieres. Damit wir mit züchterischen Methoden unser Ziel erreichen können müssen wir eine mathematische Formulierung des Zuchtziels definieren. Diese mathematische Version des Zuchtziels bezeichnen wir als __Gesamtzuchtwert__ $H$. Da wir in unserem Gesamtzuchtwert mehrere Merkmale berücksichtigen ist auch $H$ als gewichtetes Mittel der wahren Zuchtwerte der Merkmale im Gesamtzuchtwert definiert. Die Gewichtungsfaktoren entsprechen den wirtschaftlichen Gewichten der Merkmale im Zuchtziel.
+
+Das wirtschaftliche Gewicht $w$ eines Merkmals entspricht dem zusätzlichen Gewinn, welcher erzielt wird, wenn sich das Populationsmittel eines Merkmals um eine kleine Einheit ändert. Als Beispiel wäre das wirtschaftliche Gewicht für Zuwachs bei Fleischrindern, der zusätzliche Gewinn, den wir erzielen, falls unsere Population eine um $1$ Gramm erhöhte Tageszunahme hat.
+
+Somit ist der Gesamtzuchtwert $H$ definiert als
+
+$$H = w_1 * a_1 + w_2 * a_2 + w_3 * a_3 + ...$$
+
+Den Gesamtzuchtwert $H$ können wir nur schätzen, da die wahren Zuchtwerte unbekannt sind. Für die Schätzung von $H$ stellen wir einen Index auf, welcher jetzt nicht nur einen Zuchtwert sondern den Gesamtzuchtwert $H$ schätzen soll. Wir definieren also einen neuen Index
+
+$$I = \hat{H} = b_1 * x_1 + b_2 * x_2 + ...$$
+
+Hier stehen die $x_i$ für die verfügbaren Informationen. Meist sind dies mit BLUP geschätzte Zuchtwerte (siehe später). Die Merkmale im Gesamtzuchtwert und im Index müssen nicht die gleichen sein. Die Gewichtungsfaktoren $b_i$ werden so abgeleitet, dass die Varianz $var(H-I)$ des Fehlers minimal ist. Daraus folgt in Matrix-Vektor-Schreibweise die sogenannte __Indexgleichung__
+
+$$Pb = Gw$$
+
+wobei $P$ die Co-Varianzmatrix der Merkmale im Index ist und $G$ die genetische Co-Varianzmatrix zwischen den Merkmalen im Index und den Merkmalen im Gesamtzuchtwert darstellt.
+
+Aufgrund der Indexgleichung können die Gewichtungsfaktoren $b$ berechnet werden als
+
+$$b = P^{-1}Gw$$
+
+
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
