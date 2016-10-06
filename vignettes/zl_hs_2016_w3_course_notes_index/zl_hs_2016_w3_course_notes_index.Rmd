@@ -244,7 +244,10 @@ $$var(\bar{y}) = var(a) + var(pe) + {1\over n} var(te)$$
 
 Kombinieren wir das mit der Definition in (\ref{eq:DefRepeatability}) dann führt das zu
 
-$$var(\bar{y}) = \left[ t + (1-t)/n \right]\sigma_y^2$$
+\begin{equation}
+var(\bar{y}) = \left[ t + (1-t)/n \right]\sigma_y^2
+\label{eq:VarBarY}
+\end{equation}
 
 Setzen wir diese Beziehungen für $cov(a,\bar{y})$ und für $var(\bar{y})$ in Gleichung (\ref{eq:RegCoeffRepMeasure}) ein dann erhalten wir als Resultat für $b$
 
@@ -297,13 +300,56 @@ Die genetisch additiven Werte $a_i$ lassen sich zerlegen in
 
 $$a_i = {1\over 2}(a_s + a_d) + m_i$$
 
-wobei $m_i$ als __Mendelian Sampling__ bezeichnet wird und die Abweichung eines Zuchtwertes vom Elterndurchschnitt darstellen. Diese $m_i$-Effekte sind unkorreliert zu den Zuchtwerten.
+wobei $m_i$ als __Mendelian Sampling__ bezeichnet wird und die Abweichung eines Zuchtwertes vom Elterndurchschnitt darstellen. Diese $m_i$-Effekte sind unkorreliert zu den Zuchtwerten und heben sich aufgrund ihrer Definition als Abweichungen über alle Halbgeschwister auf, d.h. $\sum_i m_i = 0$.
 
-$$\tilde{y}_s = \mu + {1\over 2}a_s + {1\over n}\sum_i (a_{d(i)}/2 + m_i) + {1\over n}\sum_i e_i$$
+\begin{equation}
+\tilde{y}_s = \mu + {1\over 2}a_s + {1\over n}\sum_i a_{d(i)}/2 + {1\over n}\sum_i e_i
+\label{eq:EffectYtilde}
+\end{equation}
 
-Dies setzen wir in die Formel für die Covarianz ein
+Dies setzen wir in die Formel für die Covarianz ein. Dabei vereinfacht sich der Ausdruck für die Covarianz dadurch, dass $a$ jeweilen unkorreliert zu $\mu$, $m_i$ und $e$ ist. Da nur die Verwandtschaft über den Vater berücksichtigt wird, ist auch $a$ und $a_d$ unkorreliert. 
 
-$$cov(a,\tilde{y}) = cov(a,\mu + {1\over 2}a_s + {1\over n}\sum_i (a_{d(i)}/2 + m_i) + {1\over n}\sum_i e_i) = cov(a, {1\over 2}a_s) = {1\over 2}cov(a,a_s) = {1\over 2}var(a)$$
+$$cov(a,\tilde{y}) = cov(a,\mu + {1\over 2}a_s + {1\over n}\sum_i a_{d(i)}/2 + {1\over n}\sum_i e_i) = cov(a, {1\over 2}a_s) = {1\over 2}cov(a,a_s) = {1\over 2}var(a)$$
+
+Für die Varianz $var(\tilde{y})$ gehen wir analog vor wie bei den wiederholten Messungen und verwenden die Formel  (\ref{eq:VarBarY}). 
+
+\begin{equation}
+var(\tilde{y}) = \left[ t + (1-t)/n \right]\sigma_y^2
+\label{eq:VarTildeY}
+\end{equation}
+
+Die Intra-Klassen-Korrelation $t$ zwischen den Messungen der Halbschwestern ist hier 
+
+$$t = \frac{0.25 \sigma_a^2}{\sigma_y^2} = {1\over 4}h^2$$ 
+
+Aus den bisherigen Zwischenresultaten können wir nun den Regressionskoeffizienten berechnen.
+
+\begin{IEEEeqnarray}{rCl}
+b & = & \frac{{1\over 2}\sigma_a^2}{\left[ t + (1-t)/n \right]\sigma_y^2} \nonumber\\
+  & = & \frac{{1\over 2}h^2\sigma_y^2}{\left[ {1\over 4}h^2 + (1-{1\over 4}h^2)/n \right]\sigma_y^2}  \nonumber\\
+  & = & \frac{{1\over 2}nh^2}{ {1\over 4}nh^2 + (1-{1\over 4}h^2) }\nonumber\\
+  & = & \frac{2nh^2}{nh^2 + 4 - h^2}\nonumber\\
+  & = & \frac{2n}{n + {(4 - h^2)\over h^2}}\nonumber\\
+  & = & \frac{2n}{n + k}
+\label{eq:RegKoeffOffspring}
+\end{IEEEeqnarray}
+
+wobei $k = {(4 - h^2)\over h^2}$. 
+
+Somit ist der geschätzte Zuchtwert $\hat{a}_s$ aufgrund eines Durchschnitts von Nachkommenleistungen
+
+\begin{equation}
+\hat{a}_s =  \frac{2n}{n + k}\ (\tilde{y}_s - \mu)
+\label{eq:BreedValOffspringResult}
+\end{equation}
+
+Die Genauigkeit des geschätzten Zuchtwertes $\hat{a}_s$ berechnet sich als
+
+\begin{IEEEeqnarray}{rCl}
+r_{a,\tilde{y}} & = & \frac{cov(a,\tilde{y})}{\sqrt{var(a)\ var(\tilde{y})}}
+\label{eq:AccBreedValOffspring}
+\end{IEEEeqnarray}
+
 
 ### Zuchtwertschätzung aufgrund von Pedigreeinformation
 
