@@ -198,7 +198,7 @@ Der __erwartete Selektionserfolg__ ($R$) auf der Basis einer einzelnen Eigenleis
 R = i r_{a,y}^2 \sigma_y = i h^2 \sigma_y
 \end{equation}
 
-wobei $i$ der Selektionsintensität also der Überlegenheit der selektierten Individuen ausgedrückt in Einheiten der phänotypischen Standardabweichung.
+wobei $i$ die Selektionsintensität ist. Diese entspricht  der Überlegenheit der selektierten Individuen ausgedrückt in Einheiten einer phänotypischen Standardabweichung.
 
 Die Varianz der geschätzten Zuchtwerte ist
 

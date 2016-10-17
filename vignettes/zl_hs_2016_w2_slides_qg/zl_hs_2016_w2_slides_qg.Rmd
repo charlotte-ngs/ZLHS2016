@@ -276,7 +276,7 @@ wobei:
 
 \begin{eqnarray}
 g + \mu & = & V_{ij}^{(A)} + V_{kl}^{(B)} + I_{ijkl}^{(A) \cdot (B)} \nonumber\\
-        & = & \mu^{(A)} ZW_{ij}^{(A)} + D_{ij}^{(A)} + \mu^{(B)} + ZW_{kl}^{(B)} + D_{kl}^{(B)} + I_{ijkl}^{(A) \cdot (B)}  \nonumber
+        & = & \mu^{(A)} + ZW_{ij}^{(A)} + D_{ij}^{(A)} + \mu^{(B)} + ZW_{kl}^{(B)} + D_{kl}^{(B)} + I_{ijkl}^{(A) \cdot (B)}  \nonumber
 \label{eq:ZerlegungGenMitInteraktion}  
 \end{eqnarray}
 
