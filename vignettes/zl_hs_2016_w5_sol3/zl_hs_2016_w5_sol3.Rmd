@@ -1,0 +1,73 @@
+---
+title: Züchtungslehre - Lösung 3
+author: Peter von Rohr
+date: 2016-10-21
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "[REPLACE_WITH_PROJECT]")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+```{r ParameterAssignment, echo=FALSE}
+nHomDiff <- 15
+p <- 0.2
+q <- 1-p
+a <- nHomDiff/2
+d <- -1.5
+```
+
+## Aufgabe 1: Zuchtwert
+Wir betrachten ein Merkmal, welches von einem Locus $G$ mit zwei Allelen beeinflusst wird. Die Frequenz des positiven Allels beträgt $`r p`$. Wir nehmen an, dass für die Genotypfrequenzen das Hardy-Weinberg-Gleichgewicht gilt. Der Unterschied zwischen den homozygoten Genotypen beträgt $`r nHomDiff`$. Der heterozygote Genotyp hat einen genotypischen Wert von $`r d`$. 
+
+a) Berechnen Sie die Zuchtwerte und die Dominanzabweichungen für die drei Genotypen.
+b) Aufgrund der Selektion auf das positive Allele hat sich nach einer gewissen Zeit die Frequenz des positiven Allels auf $0.35$ erhöht, wie verändert diese Erhöhung die Zuchtwerte der drei Genotypen?
+
+__Hinweis__: Schauen Sie sich die Tabelle auf Seite 8 unten in den Unterlagen an.
+
+__Lösung__
+
+Gemäss Tabelle 8 in den Unterlagen hängen die Zuchtwerte alle vom Term $\alpha$ ab. Deshalb berechnen wir diesen als Vorbereitung. Es gilt
+
+$$\alpha = a + (q-p)d$$
+
+Aus der Aufgabenstellung geht hervor, dass $a = `r a`$, $p = `r p`$, $q = 1-p = `r q`$ und $d = `r d`$. Somit ist 
+
+$$
+
+
+a)
+
+b)
+
+## Aufgabe 2: Allelsubstitution
+
+
+## Aufgabe 3: Interaktion zwischen Loci
+
+
+## Aufgabe 4: Einlesen von Daten in R
+
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->

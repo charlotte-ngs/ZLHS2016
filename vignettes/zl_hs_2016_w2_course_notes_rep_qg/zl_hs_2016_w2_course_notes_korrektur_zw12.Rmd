@@ -1,0 +1,80 @@
+---
+title:  Züchtungslehre - Korrektur Herleitung $ZW_{12}$
+author: Peter von Rohr
+date: 2016-10-21
+output: 
+  pdf_document:
+    fig_caption: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS-2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+
+### Herleitung des Zuchtwertes $ZW_{12}$ für den Genotyp $G_1G_2$
+Als erstes bestimmen wir wieder die Frequenzen der Nachkommen einer Mutter mit Genotyp $G_1G_2$
+
+\vspace{5ex}
+\begin{center}
+   {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|c|c|c|}
+\hline
+& \multicolumn{2}{|c|}{Vater} \\
+\hline
+& $f(G_1) = p$       &  $f(G_2) = q$   \\
+\hline
+Mutter       &                    &                 \\
+\hline
+$f(G_1) = 0.5$ &  $f(G_1G_1) = 0.5p$   &  $f(G_1G_2) = 0.5q$\\
+\hline
+$f(G_2) = 0.5$ &  $f(G_1G_2) = 0.5p$   &  $f(G_2G_2) = 0.5q$\\
+\hline
+\end{tabular}}
+\end{center}
+
+Der erwartete Mittelwert der genotypischen Werte der Nachkommen der Mutter mit Genotyp $G_1G_2$ ist somit
+
+$$\mu_{12} = 0.5pa + 0.5d - 0.5qa = 0.5\left[(p-q)a + d \right]$$
+
+Der Zuchtwert $ZW_{22}$ ist somit
+
+\begin{eqnarray}
+ZW_{12} & = & 2*(\mu_{12} - \mu) \\
+          &=& 2\left(0.5(p-q)a + 0.5d - \left[(p - q)a + 2pqd \right] \right) \\
+          &=& 2\left(0.5pa - 0.5qa + 0.5d - pa + qa - 2pqd \right) \\
+          &=& 2\left(0.5(q-p)a + (0.5 - 2pq)d \right) \\
+          &=& (q-p)a + (1-4pq)d  \\
+          &=& (q-p)a + (p^2 + 2pq + q^2 -4pq)d  \\
+          &=& (q-p)a + (p^2 - 2pq + q^2)d  \\
+          &=& (q-p)a + (q - p)^2d   \\
+          &=& (q-p)\left[a + (q-p)d \right]
+\label{eq:ZWGen12}
+\end{eqnarray}
+
+wobei das Populationsmittel $\mu = (p - q)a + 2pqd$. Im Schritt von Gleichung (5) zu Gleichung (6) wurde verwendet, dass $1 = (p+q)^2 = p^2 + 2pq + q^2$
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->
+
+

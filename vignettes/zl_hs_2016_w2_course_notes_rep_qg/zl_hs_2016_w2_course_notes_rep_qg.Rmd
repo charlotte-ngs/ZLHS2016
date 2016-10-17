@@ -11,12 +11,17 @@ output:
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
 ```
 
-```{r DocumentStatus, eval=FALSE}
+```{r DocumentStatus, eval=TRUE}
 r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
 r6obj_docstat$set_current_status(psVersion = "0.0.901",
-                                 psStatus  = "Initialisation",
-                                 psProject = "ZL_HS-2016")
-r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+                                 psStatus  = "Erstellung",
+                                 psProject = "ZL_HS-2016",
+                                 psDate    = "2016-09-30")
+r6obj_docstat$set_current_status(psVersion = "0.0.902",
+                                 psStatus  = "Korrektur Herleitung ZW12",
+                                 psProject = "ZL_HS-2016",
+                                 psDate    = "2016-10-21")
+r6obj_docstat$include_doc_stat(psTitle = "## Dokumentenstatus")
 ```
 
 
@@ -266,10 +271,14 @@ $$\mu_{12} = 0.5pa + 0.5d - 0.5qa = 0.5\left[(p-q)a + d \right]$$
 Der Zuchtwert $ZW_{22}$ ist somit
 
 \begin{eqnarray}
-ZW_{12} & = & 2*(\mu_{12} - \mu)  \nonumber\\
+ZW_{12} & = & 2*(\mu_{12} - \mu) \nonumber\\
           &=& 2\left(0.5(p-q)a + 0.5d - \left[(p - q)a + 2pqd \right] \right) \nonumber\\
-          &=& 2\left(pd - qa - (p - q)a - 2pqd \right) \nonumber\\
-          &=& (q-p)a + (1-4pq)d \nonumber \\
+          &=& 2\left(0.5pa - 0.5qa + 0.5d - pa + qa - 2pqd \right) \nonumber\\
+          &=& 2\left(0.5(q-p)a + (0.5 - 2pq)d \right) \nonumber\\
+          &=& (q-p)a + (1-4pq)d  \nonumber\\
+          &=& (q-p)a + (p^2 + 2pq + q^2 -4pq)d  \nonumber\\
+          &=& (q-p)a + (p^2 - 2pq + q^2)d  \nonumber\\
+          &=& (q-p)a + (q - p)^2d   \nonumber\\
           &=& (q-p)\left[a + (q-p)d \right]
 \label{eq:ZWGen12}
 \end{eqnarray}
