@@ -1,0 +1,157 @@
+---
+title:  Verteilung des geschätzten Zuchtwertes
+author: Peter von Rohr
+date: 2016-10-17
+output: 
+  pdf_document:
+    fig_caption: FALSE
+    includes:
+      in_header: header.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "[REPLACE_WITH_PROJECT]")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+
+## Zuchtwertschätzung aufgrund von Nachkommen
+Wir nehmen an, dass $\tilde{y}_s$ der Mittelwert von $n$ Messungen der $n$ Nachkommen von Stier $s$ darstellen. Jede der $n$ Töchter von Stier $s$ hat also genau eine Messung. Die $n$ Töchter von Stier $s$ sind also Halbgeschwister und wir nehmen an, dass sie nur über den Vater verwandt sind. Der geschätzte Zuchtwert von Stier $s$ ist somit
+
+\begin{equation}
+\hat{a}_s = b(\tilde{y}_s - \mu)
+\label{eq:BreedValOffspring}
+\end{equation}
+
+wobei 
+
+\begin{equation}
+b = \frac{cov(a,\tilde{y})}{var(\tilde{y})}
+\label{eq:RegCoeffOffspring}
+\end{equation}
+
+Damit wir das 95% Vertrauensintervall bestimmen können, nehmen wir an, dass die geschätzten Zuchtwerte einer Normalverteilung $\mathcal{N}(\hat{a}_s, var(\hat{a}_s))$ mit Mittelwert $\hat{a}_s$ und Varianz $var(\hat{a}_s)$ folgen. 
+
+Wir berechnen nun Zähler und Nenner von (\ref{eq:RegCoeffOffspring}) separat und fügen diese dann wieder zusammen. Als Vorbereitung schauen wir uns noch die Zerlegung der phänotypischen Beobachtung an. 
+
+$$\tilde{y}_s = \mu + {1\over n}\sum_i a_i + {1\over n}\sum_i e_i$$
+
+Die genetisch additiven Werte $a_i$ lassen sich zerlegen in 
+
+$$a_i = {1\over 2}(a_s + a_d) + m_i$$
+
+wobei $m_i$ als __Mendelian Sampling__ bezeichnet wird und die Abweichung eines Zuchtwertes vom Elterndurchschnitt darstellen. Diese $m_i$-Effekte sind unkorreliert zu den Zuchtwerten und heben sich aufgrund ihrer Definition als Abweichungen über alle Halbgeschwister auf, d.h. $\sum_i m_i = 0$.
+
+\begin{equation}
+\tilde{y}_s = \mu + {1\over 2}a_s + {1\over n}\sum_i a_{d(i)}/2 + {1\over n}\sum_i e_i
+\label{eq:EffectYtilde}
+\end{equation}
+
+Dies setzen wir in die Formel für die Covarianz ein. Dabei vereinfacht sich der Ausdruck für die Covarianz dadurch, dass $a$ jeweilen unkorreliert zu $\mu$, $m_i$ und $e$ ist. Da nur die Verwandtschaft über den Vater berücksichtigt wird, ist auch $a$ und $a_d$ unkorreliert. 
+
+$$cov(a,\tilde{y}) = cov(a,\mu + {1\over 2}a_s + {1\over n}\sum_i a_{d(i)}/2 + {1\over n}\sum_i e_i) = cov(a, {1\over 2}a_s) = {1\over 2}cov(a,a_s) = {1\over 2}var(a)$$
+
+Für die Varianz $var(\tilde{y})$ gehen wir analog vor wie bei den wiederholten Messungen und verwenden die Formel  (\ref{eq:VarBarY}). 
+
+\begin{equation}
+var(\tilde{y}) = \left[ t + (1-t)/n \right]\sigma_y^2
+\label{eq:VarTildeY}
+\end{equation}
+
+Die Intra-Klassen-Korrelation $t$ zwischen den Messungen der Halbschwestern ist hier 
+
+$$t = \frac{0.25 \sigma_a^2}{\sigma_y^2} = {1\over 4}h^2$$ 
+
+Aus den bisherigen Zwischenresultaten können wir nun den Regressionskoeffizienten berechnen.
+
+\begin{IEEEeqnarray}{rCl}
+b & = & \frac{{1\over 2}\sigma_a^2}{\left[ t + (1-t)/n \right]\sigma_y^2} \nonumber\\
+  & = & \frac{{1\over 2}h^2\sigma_y^2}{\left[ {1\over 4}h^2 + (1-{1\over 4}h^2)/n \right]\sigma_y^2}  \nonumber\\
+  & = & \frac{{1\over 2}nh^2}{ {1\over 4}nh^2 + (1-{1\over 4}h^2) }\nonumber\\
+  & = & \frac{2nh^2}{nh^2 + 4 - h^2}\nonumber\\
+  & = & \frac{2n}{n + {(4 - h^2)\over h^2}}\nonumber\\
+  & = & \frac{2n}{n + k}
+\label{eq:RegKoeffOffspring}
+\end{IEEEeqnarray}
+
+wobei $k = {(4 - h^2)\over h^2}$. 
+
+Somit ist der geschätzte Zuchtwert $\hat{a}_s$ aufgrund eines Durchschnitts von Nachkommenleistungen
+
+\begin{equation}
+\hat{a}_s =  \frac{2n}{n + k}\ (\tilde{y}_s - \mu)
+\label{eq:BreedValOffspringResult}
+\end{equation}
+
+Die Genauigkeit des geschätzten Zuchtwertes $\hat{a}_s$ berechnet sich als
+
+\begin{IEEEeqnarray}{rCl}
+r_{a,\tilde{y}} & = & \frac{cov(a,\tilde{y})}{\sqrt{var(a)\ var(\tilde{y})}}\nonumber\\
+  & = & \frac{{1\over 2}var(a)}{\sqrt{var(a)\ \left[ {1\over 4}h^2 + (1-{1\over 4}h^2)/n \right]\sigma_y^2}}\nonumber\\
+  & = & \frac{{1\over 2}h^2\sigma_y^2}{\sqrt{h^2\sigma_y^2\ \left[ {1\over 4}h^2 + (1-{1\over 4}h^2)/n \right]\sigma_y^2}}\nonumber\\
+  & = & \sqrt{\frac{nh^2}{nh^2 + (4-h^2)}}\nonumber\\
+  & = & \sqrt{\frac{n}{n+k}}
+\label{eq:AccBreedValOffspring}
+\end{IEEEeqnarray}
+
+\pagebreak
+
+### Zahlenbeispiel
+Für unser Beispiel ist das Bestimmtheitsmass $B = r_{a,\tilde{y}}^2$. Bei $n=50$ folgt
+
+$$B = \frac{n}{n+k}$$
+
+Somit ist $k$ bestimmt als
+
+$$k = \frac{n}{B} - n = \frac{50}{0.65} - 50 \approx 26.92$$
+
+Da $k = {(4 - h^2)\over h^2}$ lässt sich $h^2$ berechnen als
+
+$$h^2 = {4\over (k+1)} \approx 0.14$$
+
+### Verteilung der geschätzten Zuchtwerte
+Wie schon erwähnt nehmen wir an, dass der geschätzte Zuchtwert folgt einer Normalverteilung mit Mittelwert $\hat{a}_s = 120$ und Varianz $var(\hat{a}_s)$ folgt.
+
+Die Varianz des geschätzten Zuchtwertes berechnen wir als
+
+\begin{eqnarray}
+var(\hat{a}_s) & = & var(b(\tilde{y}_s - \mu)) \nonumber\\
+               & = & b^2 var(\tilde{y}_s) \nonumber\\
+               & = & \frac{4n^2}{(n + k)^2} var(\tilde{y}_s) \nonumber\\
+               & = & \frac{4n^2}{(n + k)^2} \left[ {1\over 4}h^2 + (1-{1\over 4}h^2)/n \right]\sigma_y^2
+               \approx 0.093 * \sigma_y^2
+\label{eq:VarBreedValOffspring}
+\end{eqnarray}
+
+wobei $\sigma_y^2$ der phänotypischen Varianz entspricht. Alle anderen Grössen in Gleichung (\ref{eq:VarBreedValOffspring}) wurden vorher berechnet.
+
+Das 95%-Vertrauensintervall ist durch die untere Grenze $ug$ und die obere Grenze $og$ bestimmt. Diese Berechnen sich als
+
+$$ug = \hat{a}_s - 2*\sqrt{var(\hat{a}_s)} \approx 120 - 0.61 \sigma_y$$
+
+und analog
+
+$$og = \hat{a}_s + 2*\sqrt{var(\hat{a}_s)} \approx 120 + 0.61 \sigma_y$$
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->
+
+
