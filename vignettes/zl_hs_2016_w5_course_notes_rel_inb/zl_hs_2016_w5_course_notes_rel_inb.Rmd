@@ -2,7 +2,9 @@
 title: Züchtungslehre - Verwandtschaft und Inzucht
 author: Peter von Rohr
 date: 2016-10-21
-output: pdf_document
+output: 
+  pdf_document:
+    fig_caption: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -26,6 +28,33 @@ if (!r6ob_abbrtable$is_empty_abbr())
 ```
 
 ## Einleitung
+Bei der Selektion von Eltern der kommenden Generation werden Tiere mit positiven Allelen gemäss unserem Zuchtziel ausgewählt. Dadurch sind diese Tiere genetisch untereinander ähnlicher als eine zufällige Stichprobe aus der gesamten Population. Genetische Ähnlichkeit bedeutet hier, dass die Anzahl positiver Allele in den selektierten Inidividuen grösser ist im Vergleich zur zufälligen Stichprobe aus der gesamten Population.
+
+
+## Ähnlichkeit
+Wir unterscheiden zwei Arten der Ähnlichkeit. 
+
+1. Ähnlichkeit aufgrund gemeinsamer Abstammung: __identical by descent__ (IBD)
+2. Zustandsähnlichkeit: __identical by state__ (IBS)
+
+Das folgende Diagramm soll den Unterschied zwischen den beiden Ähnlichkeitsarten veranschaulichen.
+
+```{r ibd_ibs}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "ibd_ibs")
+```
+
+Die oben gezeigte Abbildung entspricht einer graphischen Darstellung eines Stammbaums (Pedigree). Die ovalen Symbole stellen die weiblichen Tiere dar und die Rechtecke stehen für die männlichen Tiere. Die horizontalen grauen Linien verbinden ein weibliches und ein männliches Tier zu einem Elternpaar. Die zu den horizontalen Linien senkrecht stehenden Linien führen zum jeweiligen Nachkommen der entsprechenden Elternpaarung. 
+
+Die Bezeichnungen in den Knoten stehen für die Genotypen der Tiere an einem bestimmten Locus. Die roten Pfeile zeigen den Pfad für zwei $A_1$-Allele, welche Kopien des gleichen Allels eines gemeinsamen Ahnen sind. Diese Allele werden somit als __identical by descent__ (IBD) bezeichnet. Die grünen Pfeile zeigen den Pfad von zwei zustandsgleichen Allelen (IBS) diese Allele sind nicht Kopien eines Allels aus einem gemeinsamen Vorfahren.
+
+
+## Verwandtschaft
+__Definition__: Zwei Tiere $x$ und $y$ sind miteinander verwandt, falls die Wahrscheinlichkeit, dass sie an einem beliebigen Locus herkunftsgleiche Allele (IBD) haben, grösser $0$ ist. 
+
+Als Mass für die Verwandtschaft wird der sogenannte __Verwandtschaftsgrad__ $a_{xy}$ verwendet. Der Verwandtschaftsgrad entspricht der mittleren Wahrscheinlichkeit über alle Loci, dass diese IBD sind. Für ein gegebenes Pedigree und zwei Tiere $x$ und $y$ wird der Verwandtschaftsgrad $a_{xy}$ berechnet als
+
+$$a_{xy} = \sum_{Pfade}\left({1\over 2}\right)^{t_1+t_2}(1+F_Z)$$
+
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
