@@ -31,6 +31,7 @@ p <- 0.2
 q <- 1-p
 a <- nHomDiff/2
 d <- -1.5
+alpha <- a + (q-p)*d
 ```
 
 ## Aufgabe 1: Zuchtwert
@@ -49,22 +50,116 @@ $$\alpha = a + (q-p)d$$
 
 Aus der Aufgabenstellung geht hervor, dass $a = `r a`$, $p = `r p`$, $q = 1-p = `r q`$ und $d = `r d`$. Somit ist 
 
-$$
+$$\alpha = `r a` + (`r q` - `r p`)*(`r d`) = `r alpha`$$
 
 
-a)
+a) Tabelle 8 aus den Unterlagen
 
-b)
+\begin{center}
+  {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|c|c|c|c|}
+   \hline
+   Genotyp  &  genotypischer Wert  &  Zuchtwert     &  Dominanzabweichung\\
+   $G_iG_j$ &  $V_{ij}$            &  $ZW_{ij}$     &  $D_{ij}$           \\
+   \hline
+   $G_1G_1$ &  $a = `r a`$         &  $2q\alpha = `r 2*q*alpha`$        &  $-2q^2d = `r -2*q^2*d`$   \\
+   \hline
+   $G_1G_2$ &  $d = `r d`$         &  $(q-p)\alpha = `r (q-p) * alpha`$ & $2pqd = `r 2*p*q*d`$   \\
+   \hline
+   $G_2G_2$ &  $-a = `r -a`$       &  $-2p\alpha = `r -2*p*alpha`$       & $-2p^2d = `r -2*p^2*d`$    \\
+   \hline
+   \end{tabular}}
+\end{center}
+
+
+```{r ChangedAllelFreq, echo=FALSE}
+p <- 0.35
+q <- 1-p
+alpha <- a + (q-p)*d
+```
+
+b) Aufgrund der Selektion ändern sich die Allelfrequenzen zu $p = `r p`$ und $q = `r q`$. Auch $\alpha$ ändert sich zu $\alpha = `r alpha`$. Dies hat folgende Auswirkungen auf die Werte in Tabelle 8 aus den Unterlagen.
+
+\begin{center}
+  {\renewcommand{\arraystretch}{1.7}
+   \renewcommand{\tabcolsep}{0.2cm}
+   \begin{tabular}{|c|c|c|c|}
+   \hline
+   Genotyp  &  genotypischer Wert  &  Zuchtwert     &  Dominanzabweichung\\
+   $G_iG_j$ &  $V_{ij}$            &  $ZW_{ij}$     &  $D_{ij}$           \\
+   \hline
+   $G_1G_1$ &  $a = `r a`$         &  $2q\alpha = `r 2*q*alpha`$        &  $-2q^2d = `r -2*q^2*d`$   \\
+   \hline
+   $G_1G_2$ &  $d = `r d`$         &  $(q-p)\alpha = `r (q-p) * alpha`$ & $2pqd = `r 2*p*q*d`$   \\
+   \hline
+   $G_2G_2$ &  $-a = `r -a`$       &  $-2p\alpha = `r -2*p*alpha`$       & $-2p^2d = `r -2*p^2*d`$    \\
+   \hline
+   \end{tabular}}
+\end{center}
+
+Da die die Differenz der Allelefrequenzen kleiner ist, sinken die Zuchtwerte für alle drei Genotypen, obwohl sich $\alpha$ in unserem Beispiel vergrössert hat.
+
 
 ## Aufgabe 2: Allelsubstitution
+Was bedeutet Allelsubstitution und wie gross ist sie für die in den Aufgaben 1a und 1b gegebenen Zahlen?
+
+__Lösung__
+
+Allelesubstitution tritt auf, wenn bei einem Gentyp ein negatives Allel durch ein positives ersetzt wird. Dieser Vorgang kommt durch die Selektion auf die positiven Allele zustande. Die Allelsubstitution entspricht der Differenz der Zuchtwerten von zwei Genotypen, welche sich je durch ein positves Allel unterscheiden. Die Allelsubstitution ist konstant und ist immer gleich $\alpha$.
 
 
-## Aufgabe 3: Interaktion zwischen Loci
+## Aufgabe 3: Einlesen von Daten in R
+Auf der Webseite der Vorlesung ist eine Datei im csv-Format unter 
+
+`https://charlotte-ngs.github.io/LBGHS2016/w5/iris.csv` abgelegt. Lesen Sie dieses Datei mit dem Befehl `read.csv2` ein und testen Sie die Auswirkung, ob Sie beim Einlesen die Option `stringsAsFactors=FALSE` angeben oder nicht.
+
+__Hinweis__: Sie können die csv-Datei zuerst herunterladen und auf Ihrem Rechner speichern und dann vom lokalen Dateisystem einlesen. Sie können aber auch den oben angegebenen URL direkt in der Funktion `read.csv2` verwenden. Mehr Informationen dazu gibt es unter `?read.csv2`.
 
 
-## Aufgabe 4: Einlesen von Daten in R
+__Lösung__
+
+```{r SaveIrisData, echo=FALSE}
+bOnline <- TRUE
+sDataFn <- "iris.csv"
+if (!bOnline & !file.exists(sDataFn))
+  write.csv2(iris, file = sDataFn, row.names = FALSE)
+```
+
+* Einlesen direkt mit dem URL:
+
+```{r ReadIrisDataOnline, eval=bOnline, echo=bOnline, results='markup'}
+dfIris1 <- read.csv2(file = "https://charlotte-ngs.github.io/LBGHS2016/w5/iris.csv")
+str(dfIris1)
+dfIris2 <- read.csv2(file = "https://charlotte-ngs.github.io/LBGHS2016/w5/iris.csv", 
+                     stringsAsFactors = FALSE)
+str(dfIris2)
+```
+
+* Einlesen vom lokalen Rechner
+
+```{r ReadIrisDataOffline, echo=TRUE, results='markup'}
+dfIris1 <- read.csv2(file = "iris.csv")
+str(dfIris1)
+dfIris2 <- read.csv2(file = "iris.csv", stringsAsFactors = FALSE)
+str(dfIris2)
+```
 
 
+## Zusatzaufgabe: Plot in R
+Stellen Sie die Werte in den Kolonnen `Sepal.Length` und `Petal.Length` des Datensatzes aus der Datei `iris.csv` in einem Diagramm dar. Der Plot sollte ungefähr wie folgt aussehen:
+
+```{r IrisPlot, echo=FALSE}
+bIsSolution <- TRUE
+if(!bIsSolution)
+  plot(dfIris2$Sepal.Length, dfIris2$Petal.Length)
+```
+
+__Lösung__:
+
+```{r IrisPlotSolution, echo=bIsSolution}
+plot(dfIris2$Sepal.Length, dfIris2$Petal.Length)
+```
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
