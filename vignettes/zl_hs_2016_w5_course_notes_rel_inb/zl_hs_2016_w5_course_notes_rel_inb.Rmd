@@ -53,7 +53,24 @@ __Definition__: Zwei Tiere $x$ und $y$ sind miteinander verwandt, falls die Wahr
 
 Als Mass für die Verwandtschaft wird der sogenannte __Verwandtschaftsgrad__ $a_{xy}$ verwendet. Der Verwandtschaftsgrad entspricht der mittleren Wahrscheinlichkeit über alle Loci, dass diese IBD sind. Für ein gegebenes Pedigree und zwei Tiere $x$ und $y$ wird der Verwandtschaftsgrad $a_{xy}$ berechnet als
 
-$$a_{xy} = \sum_{Pfade}\left({1\over 2}\right)^{t_1+t_2}(1+F_Z)$$
+$$a_{xy} = \sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}}(1+F_{Z_i})$$
+
+wobei $i$ über alle möglichen Verbindungen im Pedigree zwischen den Tieren $x$ und $y$ läuft und $Z_i$ der gemeinsame Ahne von $x$ und $y$ auf der Verbindung $i$ darstellt. Für die Verbindung $i$ wird die Anzahl Generationen zwischen $x$ und dem gemeinsamen Ahnen $Z_i$ werden mit $t_1^{(i)}$ bezeichnet. Analog dazu steht $t_2^{(i)}$ für die Anzahl Generationen zwischen $y$ und $Z_i$
+
+```{r ComputeRelationshipCoeff}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "ComputeRelationshipCoeff", pnPaperWidthScale = 0.6)
+```
+
+Der Term $F_{Z_i}$ steht für den Inzuchtgrad des gemeinsamen Ahnen $Z_i$. Inzucht wird im nächsten Abschnitt besprochen. 
+
+
+## Inzucht
+Ein Tier $x$ ist ingezüchtet, falls seine Eltern $m(x)$ und $v(x)$ miteinander verwandt sind. Inzucht beschreibt somit, ob ein Tier an einem Locus herkunftsgleiche Allele (IBD) hat. Der Inzuchtgrad eines Tieres ist definiert als der halbe Verwandtschaftskoeffizient der Eltern von $x$. 
+
+$$F_x = {1\over 2}a_{m(x),v(x)} = \sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}}(1+F_{Z_i})
+      = \sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}+1}(1+F_{Z_i})$$
+
+
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
@@ -61,3 +78,5 @@ r6ob_abbrtable$writeToTsvFile()
 ```
 <!-- END of document                 -- 
   -- Below this must not be anything -->
+
+
