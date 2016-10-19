@@ -118,11 +118,35 @@ Bei der Sortierung nach Alter ist es wichtig, dass die Eltern vor den Nachkommen
 
 Im Beispiel wurden die Tiere schon nach dem Alter nummeriert, so dass die ältesten Tiere die tiefsten Nummern haben. Somit sieht das Resultat des ersten Schrittes wie folgt aus.
 
-```{r RelMatResultStep1, results='markup'}
-relMat <- matrix(data = "", nrow = nNrAni+1, ncol = nNrAni+1)
-relMat[1,] <- c(NA,as.character(1:nNrAni))
-relMat[,1] <- c(NA,as.character(1:nNrAni))
-sGetTexMatrix(relMat)
+```{r RelMatStep1}
+relMat <- matrix(data = "", nrow = nNrAni+2, ncol = nNrAni+2)
+relMat[1,] <- c(NA,"NA",as.character(1:nNrAni))
+relMat[,1] <- c(NA,"NA",as.character(1:nNrAni))
+
+```
+
+```{r RelMatStep1Result, results='asis'}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = relMat), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+\pagebreak
+
+### Schritt 2: Eintragen der Eltern
+Bekannte Eltern werden eine Zeile über den Tieren eingetragen
+
+```{r RelMatStep2}
+vecParentRow <- sGetParentRow(pPed = pedEx1)
+relMat <- rbind(c(NA,NA,vecParentRow),relMat)
+```
+
+```{r RelMatStep2Result, results='asis'}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = relMat), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
 ```
 
 

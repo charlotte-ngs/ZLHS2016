@@ -11,6 +11,7 @@
 #' @param  pnOutStartLine     line index where output should start, default = 5
 #' @param  pnEndIgnoreLines   number of lines to be ignored at the end of the output, default = 1
 #' @return string containing tex representation of matrix
+#' @export sGetTexMatrix
 sGetTexMatrix <- function(pmatAMatrix, pnOutStartLine = 5, pnEndIgnoreLines = 1) {
   sResultTexMatrix <- capture.output(print(xtable::xtable(pmatAMatrix),
                                            include.rownames = FALSE,
