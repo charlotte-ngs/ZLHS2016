@@ -9,6 +9,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+### # load functions defined in this package
+devtools::load_all()
 ```
 
 ```{r DocumentStatus, eval=FALSE}
@@ -53,7 +55,10 @@ __Definition__: Zwei Tiere $x$ und $y$ sind miteinander verwandt, falls die Wahr
 
 Als Mass für die Verwandtschaft wird der sogenannte __Verwandtschaftsgrad__ $a_{xy}$ verwendet. Der Verwandtschaftsgrad entspricht der mittleren Wahrscheinlichkeit über alle Loci, dass diese IBD sind. Für ein gegebenes Pedigree und zwei Tiere $x$ und $y$ wird der Verwandtschaftsgrad $a_{xy}$ berechnet als
 
-$$a_{xy} = \sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}}(1+F_{Z_i})$$
+\begin{equation}
+a_{x,y} = \sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}}(1+F_{Z_i})
+\label{eq:RelationshipCoefficient}
+\end{equation}
 
 wobei $i$ über alle möglichen Verbindungen im Pedigree zwischen den Tieren $x$ und $y$ läuft und $Z_i$ der gemeinsame Ahne von $x$ und $y$ auf der Verbindung $i$ darstellt. Für die Verbindung $i$ wird die Anzahl Generationen zwischen $x$ und dem gemeinsamen Ahnen $Z_i$ werden mit $t_1^{(i)}$ bezeichnet. Analog dazu steht $t_2^{(i)}$ für die Anzahl Generationen zwischen $y$ und $Z_i$
 
@@ -65,11 +70,60 @@ Der Term $F_{Z_i}$ steht für den Inzuchtgrad des gemeinsamen Ahnen $Z_i$. Inzuc
 
 
 ## Inzucht
-Ein Tier $x$ ist ingezüchtet, falls seine Eltern $m(x)$ und $v(x)$ miteinander verwandt sind. Inzucht beschreibt somit, ob ein Tier an einem Locus herkunftsgleiche Allele (IBD) hat. Der Inzuchtgrad eines Tieres ist definiert als der halbe Verwandtschaftskoeffizient der Eltern von $x$. 
+Ein Tier $x$ ist ingezüchtet, falls seine Eltern $m(x)$ und $v(x)$ miteinander verwandt sind. Inzucht beschreibt somit, ob ein Tier an einem Locus herkunftsgleiche Allele (IBD) hat. Der Inzuchtkoeffizient $F_x$ eines Tieres $x$ ist definiert als der halbe Verwandtschaftskoeffizient der Eltern von $x$. 
 
-$$F_x = {1\over 2}a_{m(x),v(x)} = \sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}}(1+F_{Z_i})
-      = \sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}+1}(1+F_{Z_i})$$
+\begin{equation}
+F_x = {1\over 2}a_{m(x),v(x)} = {1\over 2}\sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}}(1+F_{Z_i})
+      = \sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}+1}(1+F_{Z_i})
+\label{eq:InbreedingCoefficient}
+\end{equation}
 
+
+## Matrixmethode
+Zur Berechnung der Verwandtschaftsgrade und der Inzuchtgrade für eine ganze Population sind die in (\ref{eq:RelationshipCoefficient}) und (\ref{eq:InbreedingCoefficient}) gezeigten Formeln nicht geeignet. Da die Verwandtschaftsgrade und die Inzuchtkoeffizienten für ein bestimmtes Tier in der Population immer von den jeweiligen Werten der Eltern abhängen, ist eine rekursive Berechnung viel einfacher. Dieser rekursive Ansatz heisst __Matrixmethode__. Dabei werden die Verwandtschaftsgrade und die Inzuchtkoeffizienten mit folgendn Schritten bestimmt.
+
+1. Die Tiere werden dem Alter nach von links nach rechts (und von oben nach unten) in einer symmetrischen Matrix angeordnet. Als erstes Tier wird das unbekannte Tier `NA` eingetragen.
+2. Oberhalb jedes Tieres werden seine Eltern eingetragen
+3. Die erste Zeile und die erste Kolonnen werden mit lauter Nullen aufgefüllt.
+4. Als Diagonalelement für Tier $x$ tragen wir $1+F_x$ ein
+5. Die Offdiagonalelemente auf der Zeile für Tier $x$ werden mit den Verwandtschaftsgraden $a_{x,y}$ zwischen Tier $x$ und Tier $y$  aufgefüllt. Dabei gilt, dass 
+
+$$a_{xy} = {1\over 2}(a_{x,m(y)} + a_{x,v(y)})$$
+
+6. Damit die Matrix symmetrisch wird, werden die berechneten Werte aus der Zeile für Tier $x$ in die Kolonnen für Tier $x$ übertragen.
+
+### Beispiel für Matrixmethode
+Gegeben sei das folgende Pedigree.
+
+
+```{r MatMethPedigree}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "MatMethPedigree", pnPaperWidthScale = 0.4)
+```
+
+Alternative zur graphischen Darstellung kann ein Pedigree auch als Liste mit drei Kolonnen gegeben sein. In den drei Kolonnen werden die Tiere, die Väter (sire) und die Mütter (dam) aufgelistet. Für unser Bespielpedigree sieht die Listenform wie folgt aus:
+
+```{r ExamplePedigree, results='markup'}
+nNrAni <- 10
+suppressPackageStartupMessages(library(pedigreemm))
+pedEx1 <- pedigree(sire = as.integer(c(NA,NA,NA,NA,1,3,3,6,6,8)), 
+                   dam  = as.integer(c(NA,NA,NA,NA,2,2,4,5,7,9)), 
+                   label = as.character(1:nNrAni))
+print(pedEx1)
+```
+
+Unbekannte Eltern werden mit `<NA>` gekennzeichnet. Aufgrund des gegebenen Pedigrees können wir nun schrittweise die Verwandtschaftsmatrix aufstellen.
+
+### Schritt 1: Anordnung der Tier sortiert nach Alter
+Bei der Sortierung nach Alter ist es wichtig, dass die Eltern vor den Nachkommen aufgelistet werden. Für unser Beispiel haben wir keine konkreten Altersangaben. Bei der Sortierung geht es auch nicht um die Auflistung nach dem absoluten Alter, sondern es ist einfach wichtig, dass Eltern vor Nachkommen erscheinen, sonst funktioniert die rekursive Berechnung der Verwandtschaftsgrade nicht. Innerhalb einer Generation spielt die Reihenfolge der Tiere keine Rolle.
+
+Im Beispiel wurden die Tiere schon nach dem Alter nummeriert, so dass die ältesten Tiere die tiefsten Nummern haben. Somit sieht das Resultat des ersten Schrittes wie folgt aus.
+
+```{r RelMatResultStep1, results='markup'}
+relMat <- matrix(data = "", nrow = nNrAni+1, ncol = nNrAni+1)
+relMat[1,] <- c(NA,as.character(1:nNrAni))
+relMat[,1] <- c(NA,as.character(1:nNrAni))
+sGetTexMatrix(relMat)
+```
 
 
 
