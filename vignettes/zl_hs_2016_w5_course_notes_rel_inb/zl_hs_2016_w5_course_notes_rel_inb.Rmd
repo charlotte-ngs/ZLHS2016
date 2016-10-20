@@ -60,7 +60,7 @@ a_{x,y} = \sum_{i=1}^P\left({1\over 2}\right)^{t_1^{(i)}+t_2^{(i)}}(1+F_{Z_i})
 \label{eq:RelationshipCoefficient}
 \end{equation}
 
-wobei $i$ über alle möglichen Verbindungen im Pedigree zwischen den Tieren $x$ und $y$ läuft und $Z_i$ der gemeinsame Ahne von $x$ und $y$ auf der Verbindung $i$ darstellt. Für die Verbindung $i$ wird die Anzahl Generationen zwischen $x$ und dem gemeinsamen Ahnen $Z_i$ werden mit $t_1^{(i)}$ bezeichnet. Analog dazu steht $t_2^{(i)}$ für die Anzahl Generationen zwischen $y$ und $Z_i$
+wobei $i$ über alle möglichen Verbindungen im Pedigree zwischen den Tieren $x$ und $y$ läuft und $Z_i$ der gemeinsame Ahne von $x$ und $y$ auf der Verbindung $i$ darstellt. Für die Verbindung $i$ wird die Anzahl Generationen zwischen $x$ und dem gemeinsamen Ahnen $Z_i$ mit $t_1^{(i)}$ bezeichnet. Analog dazu steht $t_2^{(i)}$ für die Anzahl Generationen zwischen $y$ und $Z_i$. Aufgrund der Definition von $a_{x,y}$ erkennen wir eine Symmetrieeigenschaft des Verwandtschaftsgrades. Das bedeutet, dass $a_{x,y} = a_{y,x}$
 
 ```{r ComputeRelationshipCoeff}
 rmddochelper::insertOdgAsPdf(psOdgFileStem = "ComputeRelationshipCoeff", pnPaperWidthScale = 0.6)
@@ -88,16 +88,21 @@ Zur Berechnung der Verwandtschaftsgrade und der Inzuchtgrade für eine ganze Pop
 4. Als Diagonalelement für Tier $x$ tragen wir $1+F_x$ ein
 5. Die Offdiagonalelemente auf der Zeile für Tier $x$ werden mit den Verwandtschaftsgraden $a_{x,y}$ zwischen Tier $x$ und Tier $y$  aufgefüllt. Dabei gilt, dass 
 
-$$a_{xy} = {1\over 2}(a_{x,m(y)} + a_{x,v(y)})$$
+\begin{equation}
+a_{xy} = {1\over 2}(a_{x,m(y)} + a_{x,v(y)})
+\label{eq:RelCoeffRecursive}
+\end{equation}
 
 6. Damit die Matrix symmetrisch wird, werden die berechneten Werte aus der Zeile für Tier $x$ in die Kolonnen für Tier $x$ übertragen.
+
+\pagebreak
 
 ### Beispiel für Matrixmethode
 Gegeben sei das folgende Pedigree.
 
 
 ```{r MatMethPedigree}
-rmddochelper::insertOdgAsPdf(psOdgFileStem = "MatMethPedigree", pnPaperWidthScale = 0.4)
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "MatMethPedigree", pnPaperWidthScale = 0.5)
 ```
 
 Alternative zur graphischen Darstellung kann ein Pedigree auch als Liste mit drei Kolonnen gegeben sein. In den drei Kolonnen werden die Tiere, die Väter (sire) und die Mütter (dam) aufgelistet. Für unser Bespielpedigree sieht die Listenform wie folgt aus:
@@ -108,7 +113,10 @@ suppressPackageStartupMessages(library(pedigreemm))
 pedEx1 <- pedigree(sire = as.integer(c(NA,NA,NA,NA,1,3,3,6,6,8)), 
                    dam  = as.integer(c(NA,NA,NA,NA,2,2,4,5,7,9)), 
                    label = as.character(1:nNrAni))
+### # show the pedigree
 print(pedEx1)
+### # compute relationship matrix
+matApedEx1 <- as.matrix(getA(pedEx1))
 ```
 
 Unbekannte Eltern werden mit `<NA>` gekennzeichnet. Aufgrund des gegebenen Pedigrees können wir nun schrittweise die Verwandtschaftsmatrix aufstellen.
@@ -122,7 +130,7 @@ Im Beispiel wurden die Tiere schon nach dem Alter nummeriert, so dass die ältes
 relMat <- matrix(data = "", nrow = nNrAni+2, ncol = nNrAni+2)
 relMat[1,] <- c(NA,"NA",as.character(1:nNrAni))
 relMat[,1] <- c(NA,"NA",as.character(1:nNrAni))
-
+relMat[2,2] <- "1"
 ```
 
 ```{r RelMatStep1Result, results='asis'}
@@ -132,7 +140,6 @@ cat("\\right]\n")
 cat("$$\n")
 ```
 
-\pagebreak
 
 ### Schritt 2: Eintragen der Eltern
 Bekannte Eltern werden eine Zeile über den Tieren eingetragen
@@ -149,6 +156,79 @@ cat("\\right]\n")
 cat("$$\n")
 ```
 
+
+### Schritt 3: Initialisierung der ersten Zeile und ersten Kolonne
+Die Zeile und die Kolonnen, welche zum unbekannten Tier "NA" gehören, werden mit $0$ initialisiert.
+
+```{r RelMatStep3Init}
+relMat[3,3:(ncol(relMat))] <- 0
+relMat[4:nrow(relMat),2] <- 0
+```
+
+```{r RelMatStep3Result, results='asis'}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = relMat), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+\pagebreak
+
+### Schritt 4: Diagonale für Tier 1
+Auf der Diagonalen für Tier 1 wird $1+F_1$ eingetragen. $F_1$ steht für den Inzuchtkoeffizienten von Tier $1$. Dieser wird berechnet aus dem Verwandtschaftsgrad der Eltern. Da die Eltern von Tier $1$ unbekannt sind, wird $F_1=0$ gesetzt.
+
+```{r RelMatStep4Diag}
+relMat[4,3] <- matApedEx1[1,1]
+```
+
+```{r RelMatStep4Result, results='asis'}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = relMat), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+### Schritt 5: Offdiagonale für Tier 1
+Auf der Offdiagonalen wird auf der Zeile für Tier 1 und in Kolonne $i$ der Verwandtschaftsgrad zwischen den Tieren $1$ und $i$ eingetragen. Dieser berechnen wir mit der rekursiven Formel aus Gleichung (\ref{eq:RelCoeffRecursive}).
+
+```{r RelMatStep5OffDiag}
+relMat[4,4:ncol(relMat)] <- matApedEx1[1,2:ncol(matApedEx1)]
+```
+
+```{r RelMatStep5Result, results='asis'}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = relMat), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+\pagebreak
+
+### Schritt 6: Übertragen der Zeile von Tier 1 in die Kolonne für Tier 1
+Da die Verwandtschaftsmatrix symmetrisch sein muss, können wir die Zeile von Tier 1 in die entsprechende Kolonne übertragen
+
+```{r RelMatStep6OffDiag}
+relMat[5:nrow(relMat),3] <- matApedEx1[2:nrow(matApedEx1),1]
+```
+
+```{r RelMatStep6Result, results='asis'}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = relMat), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Die Schritte 4, 5 und 6 wiederholen wir bis die ganze Matrix aufgefüllt ist. Anschliessend streichen wir die ersten drei Zeilen
+und die ersten zwei Kolonnen. Das Resultat ist dann die Verwandtschaftsmatrix, welche mit $A$ bezeichnet wird.
+
+```{r RelMatFinalResult, results='asis'}
+cat("$$A = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matApedEx1, pnDigits = 4), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Die Diagonalelemente $a_{ii}$ der Matrix $A$ entsprechen den Werten $1 + F_i$, wobei $F_i$ der Inzuchtkoeffizient von Tier $i$ ist. Somit sind alle Tiere, die auf der Dianognalen von $A$ einen Wert $>1$ haben ingezüchtet. Die Offdiagonalelemente $a_{ij}$ für $i \ne j$ entsprechen dem Verwandtschaftsgrad zwischen Tier $i$ und $j$. 
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
