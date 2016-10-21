@@ -268,7 +268,7 @@ Der erwartete Mittelwert der genotypischen Werte der Nachkommen der Mutter mit G
 
 $$\mu_{12} = 0.5pa + 0.5d - 0.5qa = 0.5\left[(p-q)a + d \right]$$
 
-Der Zuchtwert $ZW_{22}$ ist somit
+Der Zuchtwert $ZW_{12}$ ist somit
 
 \begin{eqnarray}
 ZW_{12} & = & 2*(\mu_{12} - \mu) \nonumber\\

@@ -163,6 +163,7 @@ Die Zeile und die Kolonnen, welche zum unbekannten Tier "NA" gehören, werden mi
 ```{r RelMatStep3Init}
 relMat[3,3:(ncol(relMat))] <- 0
 relMat[4:nrow(relMat),2] <- 0
+relMat[3,2] <- "1"
 ```
 
 ```{r RelMatStep3Result, results='asis'}
