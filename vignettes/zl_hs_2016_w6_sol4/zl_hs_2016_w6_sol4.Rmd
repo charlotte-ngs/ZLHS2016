@@ -1,0 +1,112 @@
+---
+title: Züchtungslehre - Lösung 4
+author: Peter von Rohr
+date: 2016-10-28
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "[REPLACE_WITH_PROJECT]")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Aufgabe 1: Zuchtwert und Bestimmtheitsmass
+```{r SetUpEx1}
+y <- 320
+mu <- 250
+h2 <- 0.45
+```
+
+Rind Elsa hat ein Absetzgewicht von $`r y`$ kg. Das Populationsmittel liegt bei $`r mu`$ kg. Die Heritabilität ($h^2$) für das Merkmal Absetzgewicht ist $`r h2`$. 
+
+a) Wie gross ist der Zuchtwert von Elsa für das Merkmal Absetzgewicht? 
+b) Berechnen Sie das Bestimmtheitsmass für den geschätzten Zuchtwert.
+
+
+__Lösung__:
+
+a) Der geschätzte Zuchtwert aufgrund einer Eigenleistung beträgt
+
+\begin{equation}
+\hat{a} = h^2(y - \mu) = `r h2` * (`r y`\ \text{kg} - `r mu`\ \text{kg}) = `r h2*(y-mu)`\ \text{kg}\nonumber
+\end{equation}
+
+b) Das Bestimmtheitsmass entspricht dem Quadrat der Korrelation zwischen dem wahren Zuchtwert und der Eigenleistung.
+
+\begin{equation}
+B = r_{a,y}^2 = h^2 = `r h2`\nonumber
+\end{equation}
+
+
+## Aufgabe 2: Zuchtwert aufgrund wiederholter Beobachtungen
+```{r SetupEx2}
+geb_gew <- 52
+mu2 <- 170
+rep <- 0.65
+```
+Neben dem Absetzgewicht wurde für Rind Elsa auch das Geburtsgewicht ($`r geb_gew`$ kg) und weitere Gewichtsmessungen vorgenommen. Wir nehmen an, die Heritabilität ($h^2 = `r h2`$) sei gleich wie unter Aufgabe 1 und das Populationsmittel für die wiederholten Gewichtsmessungen liege bei $`r mu2`$ kg. Die Wiederholbarkeit der Gewichtsmessungen liege bei $t = `r rep`$. 
+
+Die Liste der erhobenen Gewichte sieht wie folgt aus.
+
+```{r WeightTable}
+nr_measure <- 10
+wean_weight <- y
+slope <- (wean_weight-geb_gew)/(nr_measure-1)
+measure <- c(1:nr_measure)
+weight <- round(slope*(measure-1) + geb_gew, digits = 0)
+mean_weight <- mean(weight)
+dfWeightTable <- data.frame(Messung = measure, Gewicht = weight)
+knitr::kable(dfWeightTable)
+```
+
+a) Schätzen Sie den Zuchtwert für Elsa aufgrund der wiederholten Gewichtsmessungen
+b) Wie gross ist das Bestimmtheitsmass?
+c) Vergleichen Sie das unter b) berechnete Bestimmtheitsmass mit dem Bestimmtheitsmass aus Aufgabe 1.
+
+
+__Lösung__:
+
+a) Der Zuchtwert aufgrund wiederholter Messungen beträgt
+
+$$\hat{a}_i = \frac{nh^2}{1+(n-1)t}(\bar{y}_i - \mu) 
+            = \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}(`r mean_weight` - `r mu2`)
+            = `r round((nr_measure * h2)/(1+(nr_measure - 1)*rep)*(mean_weight - mu2), digits = 2)`$$
+
+b) Das Bestimmtheitsmass für den Zuchtwert aus wiederholten Messungen beträgt
+
+$$B = r_{a,\bar{y}}^2  = b = \frac{nh^2}{1+(n-1)t} 
+                 = \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}
+                 = `r round((nr_measure * h2)/(1+(nr_measure - 1)*rep), digits = 2)`$$
+                 
+c) Das Bestimmtheitsmass des Zuchtwertes aufgrund der wiederholten  Messungen ist grösser. Der Verhältnis der beiden Bestimmtheitsmasse beträgt
+
+$$ \frac{r_{a,\bar{y}}^2}{r_{a,y}^2} = \frac{n}{1+(n-1)t} = \frac{`r nr_measure`}{1+(`r nr_measure-1`*`r rep`)}
+  = `r round(nr_measure/((nr_measure-1)*rep), digits = 2)`$$
+
+
+## Aufgabe 3: Zuchtwert und Vertrauensintervall
+In der Vorlesung hatten wir das Bestimmtheitsmass als Genauigkeitsangabe für den geschätzten Zuchtwert kennen gelernt. Das Bestimmtheitsmass ist das Quadrat der Korrelation zwischen dem wahren Zuchtwert und dem Selektionskriterium. Alternativ zum Bestimmtheitsmass, ist die Standardabweichung $\sqrt{var(\hat{a})}$ des geschätzten Zuchtwerts eine Information zur Schätzgenauigkeit. Mit dieser Standardabweichung des geschätzten Zuchtwertes können Vertrauensintervalle berechnet werden. Diese geben an, mit wieviel Unsicherheit der geschätzte Zuchtwert behaftet ist. Ein enges Vertrauensintervall bedeutet, dass der geschätzte Zuchtwert eine tiefe Unsicherheit aufweist. Die Vertrauensintervalle sind immer mit einer Irrtumswahrscheinlichkeit assoziiert. Ein gängiger Wert für die Irrtumswahrscheinlichkeit ist $\alpha = 0.05$. Die führt dann zum $95\%$-Vertrauensintervall. 
+
+Für einen geschätzten Zuchtwert $\hat{a}$ lässt sich das $95\%$-Vertrauensintervall mit der folgenden Prozedur berechnen. Bis anhin haben wir Zuchtwerte aufgrund einer angenommenen Regression der wahren Zuchtwerte auf phänotypische Beobachtungen geschätzt. Die phänotypischen Beobachtungen sind mit einer gewissen Unsicherheit behaftet und werden als Zuvallsvariable mit einer gewissen Häufigkeitsverteilung betrachtet. Da der geschätzte Zuchtwert $\hat{a}$ eine Funktion der Daten ($y$) ist, ist auch $\hat{a}$ eine Zufallsvariable. 
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->

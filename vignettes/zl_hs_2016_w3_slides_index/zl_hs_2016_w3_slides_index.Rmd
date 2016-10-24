@@ -258,7 +258,39 @@ r_{a,\tilde{y}} & = & \frac{cov(a,\tilde{y})}{\sqrt{var(a)\ var(\tilde{y})}}\non
 \end{eqnarray}
 
 
+## Selektionsindex
 
+- Früher: Zuchtwerte eines Merkmals aufgrund verschiedener phänotypischer Informationsquellen
+
+$$I_i = \hat{a}_i = b_1(y_1 - \mu_1) + b_2(y_2 - \mu_2) + b_3(y_3 - \mu_3) + ... $$
+
+- Heute: Schätzung des Gesamtzuchtwertes
+
+
+## Gesamtzuchtwert
+
+- mathematische Formulierung des Zuchtziels
+
+$$H = w_1 * a_1 + w_2 * a_2 + w_3 * a_3 + ...$$
+
+- Schätzung mit
+
+$$I = \hat{H} = b_1 * x_1 + b_2 * x_2 + ...$$
+
+wobei $x_i$ verfügbare Informationen, meist mit BLUP geschätzte Zuchtwerte.
+
+
+## Indexgleichung
+
+- Aufgrund der Anforderung, dass $I$ den Gesamtzuchtwert $H$ möglichst gut schätzen soll, folgt die __Indexgleichung__
+
+$$Pb = Gw$$
+
+wobei $P$ die Co-Varianzmatrix der Informationen im Index und $G$ die genetische Co-Varianzmatrix zwischen Informationen im Index und den Merkmalen im Gesamtzuchtwert
+
+- Bestimmung der Gewichte $b$ als
+
+$$b = P^{-1}Gw$$
 
 
 
