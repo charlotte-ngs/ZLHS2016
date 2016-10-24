@@ -41,9 +41,12 @@ b) Berechnen Sie das Bestimmtheitsmass für den geschätzten Zuchtwert.
 __Lösung__:
 
 a) Der geschätzte Zuchtwert aufgrund einer Eigenleistung beträgt
+```{r ResultHatAEl}
+hat_a_el <- h2*(y-mu)
+```
 
 \begin{equation}
-\hat{a} = h^2(y - \mu) = `r h2` * (`r y`\ \text{kg} - `r mu`\ \text{kg}) = `r h2*(y-mu)`\ \text{kg}\nonumber
+\hat{a} = h^2(y - \mu) = `r h2` * (`r y`\ \text{kg} - `r mu`\ \text{kg}) = `r hat_a_el`\ \text{kg}\nonumber
 \end{equation}
 
 b) Das Bestimmtheitsmass entspricht dem Quadrat der Korrelation zwischen dem wahren Zuchtwert und der Eigenleistung.
@@ -102,8 +105,40 @@ $$ \frac{r_{a,\bar{y}}^2}{r_{a,y}^2} = \frac{n}{1+(n-1)t} = \frac{`r nr_measure`
 ## Aufgabe 3: Zuchtwert und Vertrauensintervall
 In der Vorlesung hatten wir das Bestimmtheitsmass als Genauigkeitsangabe für den geschätzten Zuchtwert kennen gelernt. Das Bestimmtheitsmass ist das Quadrat der Korrelation zwischen dem wahren Zuchtwert und dem Selektionskriterium. Alternativ zum Bestimmtheitsmass, ist die Standardabweichung $\sqrt{var(\hat{a})}$ des geschätzten Zuchtwerts eine Information zur Schätzgenauigkeit. Mit dieser Standardabweichung des geschätzten Zuchtwertes können Vertrauensintervalle berechnet werden. Diese geben an, mit wieviel Unsicherheit der geschätzte Zuchtwert behaftet ist. Ein enges Vertrauensintervall bedeutet, dass der geschätzte Zuchtwert eine tiefe Unsicherheit aufweist. Die Vertrauensintervalle sind immer mit einer Irrtumswahrscheinlichkeit assoziiert. Ein gängiger Wert für die Irrtumswahrscheinlichkeit ist $\alpha = 0.05$. Die führt dann zum $95\%$-Vertrauensintervall. 
 
-Für einen geschätzten Zuchtwert $\hat{a}$ lässt sich das $95\%$-Vertrauensintervall mit der folgenden Prozedur berechnen. Bis anhin haben wir Zuchtwerte aufgrund einer angenommenen Regression der wahren Zuchtwerte auf phänotypische Beobachtungen geschätzt. Die phänotypischen Beobachtungen sind mit einer gewissen Unsicherheit behaftet und werden als Zuvallsvariable mit einer gewissen Häufigkeitsverteilung betrachtet. Da der geschätzte Zuchtwert $\hat{a}$ eine Funktion der Daten ($y$) ist, ist auch $\hat{a}$ eine Zufallsvariable. 
+Für einen geschätzten Zuchtwert $\hat{a}$ lässt sich das $95\%$-Vertrauensintervall mit der folgenden Prozedur berechnen. Bis anhin haben wir Zuchtwerte aufgrund einer angenommenen Regression der wahren Zuchtwerte auf phänotypische Beobachtungen geschätzt. Die phänotypischen Beobachtungen sind mit einer gewissen Unsicherheit behaftet und werden als Zuvallsvariable mit einer gewissen Häufigkeitsverteilung betrachtet. Da der geschätzte Zuchtwert $\hat{a}$ eine Funktion der Daten ($y$) ist, ist auch $\hat{a}$ eine Zufallsvariable mit einer zugehörigen Häufigkeitsverteilung. Wir nehmen an, dass die Häufigkeitsverteilung der phänotypischen Beobachtungen ($y$) und der geschätzten Zuchtwerte $\hat{a}$ eine Normalverteilung ist. Für die geschätzten Zuchtwerte liegt der Erwartungswert beim entsprechenden Schätzwert $\hat{a}$ und die Varianz ($var(\hat{a})$) kann berechnet werden aufgrund der Schätzgleichung für $a$. 
 
+```{r DefinePhenStd}
+phen_sd <- 20
+```
+
+Beim Beispiel aus Aufgabe 1, wo der Zuchtwert aufrund einer Eigenleistung berechnet wurde, sieht die Berechnung der Standardabweichung $\sqrt{var(\hat{a})}$ des geschätzten Zuchtwertes, wie folgt aus. An dieser Stelle nehmen wir an, dass die phänotypische Standardabweichung für das Absetzgewicht und das Gewicht bei `r phen_sd` kg.
+
+```{r ResultHatAElSd}
+hat_a_el_sd <- h2*phen_sd
+```
+
+\begin{equation}
+\sqrt{var(\hat{a})} = \sqrt{var(b(y-\mu))} = b \sqrt{var(y)} = h^2 \sqrt{var(y)}
+  = `r h2` * `r phen_sd` = `r hat_a_el_sd`\nonumber
+\label{eq:VarHatA}
+\end{equation}
+
+Aufgrund der Eigenschaften der Normalverteilung liegen 95% der Wahrscheinlichkeit $\pm 1.96$ Standardabweichungen um den Erwartungswert. Somit sind die untere ($ug$) und die obere ($og$) Grenze des $95\%$-Vertrauensintervalls definiert als 
+
+$$ug = \hat{a} - 1.96 * \sqrt{var(\hat{a})} 
+     = `r hat_a_el`\ \text{kg} - 1.96 * `r hat_a_el_sd`\ \text{kg}
+     = `r hat_a_el - 1.96 * hat_a_el_sd`\ \text{kg}$$
+
+$$og = \hat{a} + 1.96 * \sqrt{var(\hat{a})} 
+     = `r hat_a_el`\ \text{kg} + 1.96 * `r hat_a_el_sd`\ \text{kg}
+     = `r hat_a_el + 1.96 * hat_a_el_sd`\ \text{kg}$$
+     
+     
+## Ihre Aufgabe
+Berechnen Sie das $95\%$-Vertrauensintervall für den in Aufgabe 2 geschätzten Zuchtwert für das Gewicht.
+
+
+__Lösung__:
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
