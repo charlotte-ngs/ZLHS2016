@@ -1,0 +1,55 @@
+---
+title:  Züchtungslehre - Inverse Verwandtschaftsmatrix
+author: Peter von Rohr
+date: 2016-10-28
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS_2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Einleitung
+Die genetische Verwandtschaft zwischen Tieren ist sehr wichtig bei der Zuchtwertschätzung. Wie wir im Kapitel zur Verwandtschaft schon gesehen hatten, zeigen verwandte Tiere eine erhöhte Wahrscheinlichkeit Kopien des gleichen Ahnen-Allels zu tragen. Im Kapitel BLUP-Zuchtwertschätzung werden wir sehen, dass genetische Covarianzen zwischen Tieren als Informationsquellen verlangt werden. Die genetischen Covarianzen zwischen Tieren sind durch die Verwandtschaftsbeziehungen zwischen den Tieren bestimmt.
+
+
+## Verwandtschaftsmatrix
+Im Kapitel "Verwandtschaft und Inzucht" wurde bereits besprochen, wie die Verwandtschaftsgrade zwischen Tieren und die Inzuchtkoeffizienten von Tieren berechnet werden. Wir haben auch einen rekursiven Algorithmus angeschaut, welcher es uns erlaubt die ganze Verwandtschaftsmatrix aufzustellen. Die Verwandtschaftsmatrix enthält sehr viel Informationen über die Struktur einer Population. Als Nebenprodukt erhalten wir auch die Inzuchtkoeffizienten aller Tiere in unserer Population. Es gibt auch spannende Möglichkeiten die Verwandtschaftsmatrix graphisch darzustellen. Eine Möglichkeit ist die sogenannten Heatmap. Als Beispiel können wir die Verwandtschaftsmatrix aus dem Kapitel "Verwandtschaft und Inzucht", wie folgt in eine Heatmap verwandeln.
+
+```{r ExamplePedigree, results='markup'}
+nNrAni <- 10
+suppressPackageStartupMessages(library(pedigreemm))
+pedEx1 <- pedigree(sire = as.integer(c(NA,NA,NA,NA,1,3,3,6,6,8)), 
+                   dam  = as.integer(c(NA,NA,NA,NA,2,2,4,5,7,9)), 
+                   label = as.character(1:nNrAni))
+### # show the pedigree
+print(pedEx1)
+### # compute relationship matrix
+matApedEx1 <- as.matrix(getA(pedEx1))
+```
+
+
+
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything --> 

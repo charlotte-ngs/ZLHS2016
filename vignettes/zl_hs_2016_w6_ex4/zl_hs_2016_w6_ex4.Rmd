@@ -1,5 +1,5 @@
 ---
-title: Züchtungslehre - Lösung 4
+title: Züchtungslehre - Übung 4
 author: Peter von Rohr
 date: 2016-10-28
 output: pdf_document
@@ -38,22 +38,9 @@ a) Wie gross ist der Zuchtwert von Elsa für das Merkmal Absetzgewicht?
 b) Berechnen Sie das Bestimmtheitsmass für den geschätzten Zuchtwert.
 
 
-__Lösung__:
-
-a) Der geschätzte Zuchtwert aufgrund einer Eigenleistung beträgt
 ```{r ResultHatAEl}
 hat_a_el <- h2*(y-mu)
 ```
-
-\begin{equation}
-\hat{a} = h^2(y - \mu) = `r h2` * (`r y`\ \text{kg} - `r mu`\ \text{kg}) = `r hat_a_el`\ \text{kg}\nonumber
-\end{equation}
-
-b) Das Bestimmtheitsmass entspricht dem Quadrat der Korrelation zwischen dem wahren Zuchtwert und der Eigenleistung.
-
-\begin{equation}
-B = r_{a,y}^2 = h^2 = `r h2`\nonumber
-\end{equation}
 
 
 ## Aufgabe 2: Zuchtwert aufgrund wiederholter Beobachtungen
@@ -82,26 +69,9 @@ b) Wie gross ist das Bestimmtheitsmass?
 c) Vergleichen Sie das unter b) berechnete Bestimmtheitsmass mit dem Bestimmtheitsmass aus Aufgabe 1.
 
 
-__Lösung__:
-
-a) Der Zuchtwert aufgrund wiederholter Messungen beträgt
 ```{r ResultHatARepMeas}
 hat_a_rep_meas <- round((nr_measure * h2)/(1+(nr_measure - 1)*rep)*(mean_weight - mu2), digits = 2)
 ```
-$$\hat{a}_i = \frac{nh^2}{1+(n-1)t}(\bar{y}_i - \mu) 
-            = \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}(`r mean_weight` - `r mu2`)
-            = `r hat_a_rep_meas`$$
-
-b) Das Bestimmtheitsmass für den Zuchtwert aus wiederholten Messungen beträgt
-
-$$B = r_{a,\bar{y}}^2  = b = \frac{nh^2}{1+(n-1)t} 
-                 = \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)}
-                 = `r round((nr_measure * h2)/(1+(nr_measure - 1)*rep), digits = 2)`$$
-                 
-c) Das Bestimmtheitsmass des Zuchtwertes aufgrund der wiederholten  Messungen ist grösser. Der Verhältnis der beiden Bestimmtheitsmasse beträgt
-
-$$ \frac{r_{a,\bar{y}}^2}{r_{a,y}^2} = \frac{n}{1+(n-1)t} = \frac{`r nr_measure`}{1+(`r nr_measure-1`*`r rep`)}
-  = `r round(nr_measure/((nr_measure-1)*rep), digits = 2)`$$
 
 
 ## Aufgabe 3: Zuchtwert und Vertrauensintervall
@@ -147,34 +117,6 @@ Dies bedeutet, dass wenn wir sehr viele (theoretisch unendlich viele) Tiere mit 
 
 ## Ihre Aufgabe
 Berechnen Sie das $95\%$-Vertrauensintervall für den in Aufgabe 2 geschätzten Zuchtwert für das Gewicht.
-
-
-__Lösung__:
-
-Zur Berechnung der Grenzen des Vertrauensintervals benötigen wir zuerst die Standardabweichung des geschätzten Zuchtwertes. Diese beträgt für das Beispiel der wiederholten Messungen
-
-```{r ResultHatARepMeasSd}
-hat_a_rep_meas_sd <- nr_measure * h2/(1+(nr_measure-1)*rep) *  
-    sqrt(rep + (1-rep)/nr_measure) * phen_sd
-hat_a_rep_meas_sd <- round(hat_a_rep_meas_sd, digits = 2)
-```
-
-\begin{eqnarray}
-\sqrt{var(\hat{a})} &=& \sqrt{var(b(\bar{y}-\mu))} = b * \sqrt{var(\bar{y})}\nonumber\\
-  &=& \frac{nh^2}{1+(n-1)t} * \sqrt{\left[ t + (1-t)/n \right]\ var(y)}\nonumber\\
-  &=& \frac{`r nr_measure`*`r h2`}{1+(`r nr_measure-1`*`r rep`)} 
-    * \sqrt{\left[ `r rep` + (1-`r rep`)/`r nr_measure` \right]} * `r phen_sd` \nonumber\\
-  &=& `r hat_a_rep_meas_sd`  
-\end{eqnarray}
-
-Die untere und die obere Grenze des Vertrauensintervalls sind somit
-
-$$ug = \hat{a} - 1.96 * \sqrt{var(\hat{a})} = `r hat_a_rep_meas` - 1.96 * `r hat_a_rep_meas_sd`
-     = `r hat_a_rep_meas - 1.96 * hat_a_rep_meas_sd`$$
-
-$$og = \hat{a} + 1.96 * \sqrt{var(\hat{a})} = `r hat_a_rep_meas` + 1.96 * `r hat_a_rep_meas_sd`
-     = `r hat_a_rep_meas + 1.96 * hat_a_rep_meas_sd`$$
-
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}

@@ -21,6 +21,10 @@ r6obj_docstat$set_current_status(psVersion = "0.0.902",
                                  psStatus  = "Korrektur Herleitung ZW12",
                                  psProject = "ZL_HS-2016",
                                  psDate    = "2016-10-21")
+r6obj_docstat$set_current_status(psVersion = "0.0.903",
+                                 psStatus  = "Annahmen zur Zusammenfassungstabelle",
+                                 psProject = "ZL_HS-2016",
+                                 psDate    = "2016-10-28")
 r6obj_docstat$include_doc_stat(psTitle = "## Dokumentenstatus")
 ```
 
@@ -373,6 +377,8 @@ Die folgende Tabelle gibt eine Übersicht über Genotypische Werte, Zuchtwerte u
    \hline
    \end{tabular}}
 \end{center}
+
+Die in der obigen Tabelle gezeigten Formeln basieren auf der Annahme, dass $G_1$ das Allel mit positiver Wirkung ist und dass die Allelfrequenz $f(G_1)$ von $G_1$ mit $p$ bezeichnet wird. Die Allelfrequenz $f(G_2)$ des Allels $G_2$ wird mit $q$ bezeichnet. Da wir von einem Locus mit zwei Allelen ausgehen, gilt dass $p + q = 1$.
 
 Aufgrund der Definition der Dominanzabweichung als Differenz vom um das Populationsmittel korrigierte genotypische Wert minus der Zuchtwert folgt die in Gleichung (\ref{eq:ZerlegungGenoWert}) gezeigte Zerlegung des genotypischen Wertes.
 
