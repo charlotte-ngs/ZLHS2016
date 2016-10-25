@@ -2,11 +2,14 @@
 title:  Züchtungslehre - Inverse Verwandtschaftsmatrix
 author: Peter von Rohr
 date: 2016-10-28
-output: pdf_document
+output: 
+  pdf_document:
+    fig_caption: FALSE
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+devtools::load_all()
 ```
 
 ```{r DocumentStatus, eval=FALSE}
@@ -30,7 +33,7 @@ Die genetische Verwandtschaft zwischen Tieren ist sehr wichtig bei der Zuchtwert
 
 
 ## Verwandtschaftsmatrix
-Im Kapitel "Verwandtschaft und Inzucht" wurde bereits besprochen, wie die Verwandtschaftsgrade zwischen Tieren und die Inzuchtkoeffizienten von Tieren berechnet werden. Wir haben auch einen rekursiven Algorithmus angeschaut, welcher es uns erlaubt die ganze Verwandtschaftsmatrix aufzustellen. Die Verwandtschaftsmatrix enthält sehr viel Informationen über die Struktur einer Population. Als Nebenprodukt erhalten wir auch die Inzuchtkoeffizienten aller Tiere in unserer Population. Es gibt auch spannende Möglichkeiten die Verwandtschaftsmatrix graphisch darzustellen. Eine Möglichkeit ist die sogenannten Heatmap. Als Beispiel können wir die Verwandtschaftsmatrix aus dem Kapitel "Verwandtschaft und Inzucht", wie folgt in eine Heatmap verwandeln.
+Im Kapitel "Verwandtschaft und Inzucht" wurde bereits besprochen, wie die Verwandtschaftsgrade zwischen Tieren und die Inzuchtkoeffizienten von Tieren berechnet werden. Wir haben auch einen rekursiven Algorithmus angeschaut, welcher es uns erlaubt die ganze Verwandtschaftsmatrix aufzustellen. Die Verwandtschaftsmatrix enthält sehr viel Informationen über die Struktur einer Population. Als Nebenprodukt erhalten wir auch die Inzuchtkoeffizienten aller Tiere in unserer Population. Es gibt auch spannende Möglichkeiten die Verwandtschaftsmatrix graphisch darzustellen. Eine Möglichkeit ist die sogenannten Heatmap. Als Beispiel können wir die Verwandtschaftsmatrix aus dem Kapitel "Verwandtschaft und Inzucht", wie folgt in eine Heatmap verwandeln. Das Pedigree in Listenformat ist nachfolgend gezeigt.
 
 ```{r ExamplePedigree, results='markup'}
 nNrAni <- 10
@@ -44,6 +47,22 @@ print(pedEx1)
 matApedEx1 <- as.matrix(getA(pedEx1))
 ```
 
+Anhand der Verwandtschaftsmatrix $A$ 
+
+```{r RelMatFinalResult, results='asis'}
+cat("$$A = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matApedEx1, pnDigits = 4), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+lässt sich dann die folgende Heatmap erzeugen.
+
+```{r PedHeadMap, fig.width=7.5}
+library(lattice)
+new.palette=colorRampPalette(c("black","red","yellow","white"),space="rgb")
+levelplot(matApedEx1[1:ncol(matApedEx1),ncol(matApedEx1):1],col.regions=new.palette(20))
+```
 
 
 
