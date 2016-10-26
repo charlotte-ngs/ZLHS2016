@@ -2,3 +2,4 @@
 
 export(sGetParentRow)
 export(sGetTexMatrix)
+export(vecGetVecElem)

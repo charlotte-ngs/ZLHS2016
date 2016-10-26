@@ -4,7 +4,7 @@
 \alias{sGetParentRow}
 \title{Determine parent row in demo of Meuwissen-Luo algorithm}
 \usage{
-sGetParentRow(pPed)
+sGetParentRow(pPed, pbShowBothNaParents = TRUE)
 }
 \arguments{
 \item{pPed}{the pedigree}

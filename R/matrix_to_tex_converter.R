@@ -54,3 +54,20 @@ matDiag <- function(psBaseElement, pnNrRow, pnNrCol) {
   matResult[upper.tri(matResult) | lower.tri(matResult)]  <- "0"
   return(matResult)
 }
+
+#' Vector with base elements and index
+#'
+#' The result is a vector of elements that have psBaseElement
+#' as prefix and that have the index of the corresponding
+#' vector element as suffix. The separating charcter might be
+#' given by psSepChar
+#'
+#' @param psBaseElement   suffix of the vector elements
+#' @param pnVecLen        number of elements in the vector
+#' @param psSepChar       separating character (default = "_")
+#' @return Vector with string elements that each have psBaseElement as
+#'         prefix and the index as suffix, separated by psSepChar
+#' @export vecGetVecElem
+vecGetVecElem <- function(psBaseElement, pnVecLen, psSepChar = "_"){
+  return(sapply(1:pnVecLen, function(x) paste(psBaseElement, x, sep = psSepChar)))
+}

@@ -58,7 +58,7 @@ cat("$$\n")
 
 lässt sich dann die folgende Heatmap erzeugen. Die nachfolgenden R-Statements zeigen gleich, wie eine Heatmap in R erzeugt wird, vorausgesetzt, dass das Pedigree in einer Matrix mit Namen `matApedEx1` gespeichert ist.
 
-```{r PedHeadMap, echo=TRUE, fig.width=4, fig.align='center'}
+```{r PedHeadMap, echo=TRUE, fig.width=4}
 library(lattice)
 new.palette=colorRampPalette(c("black","red","yellow","white"),space="rgb")
 levelplot(matApedEx1[1:ncol(matApedEx1),ncol(matApedEx1):1],col.regions=new.palette(20))
@@ -98,7 +98,7 @@ In Matrix-Vektor-Schreibweise können wir die Zerlegung in (\ref{eq:BvAniDecomp}
 
 \begin{equation}
 a = P * a + m
-\label{eq:BvAniDecomp}
+\label{eq:BvAniDecompMat}
 \end{equation}
 
 ### Ein Beispiel
@@ -126,13 +126,19 @@ $$a_1 = m_1$$ und $$a_2 = m_2$$
 
 Fassen wir die Zerlegungen aller Tiere zusammen, so resultiert
 
-\begin{equation}
-a = P * a + m
-\begin{array}{c}
 
-\end{array}
-\label{eq:BvAniDecomp}
-\end{equation}
+```{r ZwZerlMat, results='asis'}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(as.matrix(vecGetVecElem("a", nNrAni), ncol=1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+
+cat("\\right]\n")
+cat("$$\n")
+```
+
+
+
 
 
 
