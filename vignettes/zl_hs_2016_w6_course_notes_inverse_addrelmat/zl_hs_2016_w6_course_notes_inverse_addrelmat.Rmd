@@ -29,7 +29,7 @@ if (!r6ob_abbrtable$is_empty_abbr())
 ```
 
 ## Einleitung
-Die genetische Verwandtschaft zwischen Tieren ist sehr wichtig bei der Zuchtwertschätzung. Wie wir im Kapitel zur Verwandtschaft schon gesehen hatten, zeigen verwandte Tiere eine erhöhte Wahrscheinlichkeit Kopien des gleichen Ahnen-Allels zu tragen. Im Kapitel BLUP-Zuchtwertschätzung werden wir sehen, dass genetische Covarianzen zwischen Tieren als Informationsquellen verlangt werden. Die genetischen Covarianzen zwischen Tieren sind durch die Verwandtschaftsbeziehungen zwischen den Tieren bestimmt.
+Die genetische Verwandtschaft zwischen Tieren ist sehr wichtig bei der Zuchtwertschätzung. Wie wir im Kapitel zur Verwandtschaft schon gesehen hatten, zeigen verwandte Tiere eine erhöhte Wahrscheinlichkeit Kopien des gleichen Ahnen-Allels zu tragen. Im Kapitel BLUP-Zuchtwertschätzung werden wir sehen, dass genetische Covarianzen zwischen Tieren als Informationsquellen verlangt werden. Die genetischen Covarianzen zwischen Tieren sind durch die Verwandtschaftsbeziehungen zwischen den Tieren bestimmt. Technisch gesehen wird die additiv genetische Verwandtschaftsmatrix $A$ und insbesondere ihre Inverse $A^{-1}$ eine wichtige Rolle spielen bei der BLUP-Zuchtwertschätzung.
 
 
 ## Verwandtschaftsmatrix
@@ -56,14 +56,83 @@ cat("\\right]\n")
 cat("$$\n")
 ```
 
-lässt sich dann die folgende Heatmap erzeugen.
+lässt sich dann die folgende Heatmap erzeugen. Die nachfolgenden R-Statements zeigen gleich, wie eine Heatmap in R erzeugt wird, vorausgesetzt, dass das Pedigree in einer Matrix mit Namen `matApedEx1` gespeichert ist.
 
-```{r PedHeadMap, fig.width=7.5}
+```{r PedHeadMap, echo=TRUE, fig.width=4, fig.align='center'}
 library(lattice)
 new.palette=colorRampPalette(c("black","red","yellow","white"),space="rgb")
 levelplot(matApedEx1[1:ncol(matApedEx1),ncol(matApedEx1):1],col.regions=new.palette(20))
 ```
 
+
+## Zerlegung der Verwandtschaftsmatrix
+Die Verwandtschaftsmatrix $A$ kann in ein Produkt von drei Faktoren zerlegt werden. Diese Zerlegung lautet 
+
+\begin{equation}
+A = LDL^T
+\label{eq:RelMatFact}
+\end{equation}
+
+wobei $L$ eine linke untere Dreiecksmatrix ist und $D$ einer Diagonalmatrix entspricht. Aufgrund dieser Zerlegung lässt sich die Inverse $A^{-1}$ der Verwandtschaftsmatrix $A$ sehr einfach berechnen. 
+
+### Herleitung der Zerlegung von $A$
+Die Herleitung der Zerlegung in (\ref{eq:RelMatFact}) basiert auf der Tatsache, dass die Varianz der Zuchtwerte dem Produkt aus Verwandtschaftsmatrix $A$ und genetisch-additiver Varianz $\sigma_a^2$ entspricht. In Matrix-Vektor-Schreibweise heisst das
+
+\begin{equation}
+var(a) = A * \sigma_a^2
+\label{eq:BvCoVarMat}
+\end{equation}
+
+wobei $a$ der Vektor mit den Zuchtwerten aller Tiere in der Population darstellt und $A$ der Verwandtschaftsmatrix entspricht.
+
+Der Zuchtwert $a_i$ eines Tieres $i$ mit Mutter $d$ und Vater $s$ lässt sich zerlegen als
+
+\begin{equation}
+a_i = {1\over 2}\ a_s + {1\over 2}\ a_d + m_i
+\label{eq:BvAniDecomp}
+\end{equation}
+
+wobei $a_s$ und $a_d$ die Zuchtwerte der Eltern $s$ und $d$ von Tier $i$ ist und $m_i$ dem "Mendelian Sampling"-Effekt entspricht. Mendelian Sampling-Effekte entstehen durch die zufällige Auswahl der Elternallele für die Nachkommen. Durch diesen zufälligen Auswahlprozess können bei Geschwistern eine Häufung von Allelen mit positiver (oder negativer) Wirkung auftreten. Somit haben Vollgeschwister nicht den gleichen Zuchtwert. Diese Variation der Zuchtwerte unter Vollgeschwister wird mit den $m_i$-Effekten modelliert.
+
+In Matrix-Vektor-Schreibweise können wir die Zerlegung in (\ref{eq:BvAniDecomp}) für die gesamte Population schreiben als 
+
+\begin{equation}
+a = P * a + m
+\label{eq:BvAniDecomp}
+\end{equation}
+
+### Ein Beispiel
+Zur Veranschaulichung verwenden wir das folgende Beispiel. Gegeben sei das folgende Pedigree
+
+```{r PedEx1, results='markup'}
+nNrAni <- 6
+pedEx2 <- pedigree(sire = c(NA,NA,1,1,4,5),
+                   dam = c(NA,NA,2,NA,3,2),
+                   label = as.character(1:nNrAni))
+print(pedEx2)
+```
+
+Die Zerlegung (\ref{eq:BvAniDecomp}) für Tier $3$ mit bekannten Eltern $1$ und $2$ lautet
+
+$$a_3 = {1\over 2}\ a_1 + {1\over 2}\ a_2 + m_3$$
+
+Analog dazu für Tier $4$ mit bekanntem Vater $1$ und unbekannter Mutter
+
+$$a_4 = {1\over 2}\ a_1 + m_4$$
+
+Für Tiere mit unbekannten Eltern, wie $1$ oder $2$ ist der Zuchtwert einfach dem $m_i$ Effekt. Somit ist
+
+$$a_1 = m_1$$ und $$a_2 = m_2$$
+
+Fassen wir die Zerlegungen aller Tiere zusammen, so resultiert
+
+\begin{equation}
+a = P * a + m
+\begin{array}{c}
+
+\end{array}
+\label{eq:BvAniDecomp}
+\end{equation}
 
 
 
