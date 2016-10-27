@@ -128,16 +128,17 @@ Fassen wir die Zerlegungen aller Tiere zusammen, so resultiert
 
 
 ```{r ZwZerlMat, results='asis'}
+matP <- matrix(data = c(0,0,0,0,0,0,
+                        0,0,0,0,0,0,
+                        0.5,0.5,0,0,0,0,
+                        0.5,0,0,0,0,0,
+                        0,0,0.5,0.5,0,0,
+                        0,0.5,0,0,0.5,0), ncol = nNrAni, byrow = TRUE)
 cat("$$\\left[")
 cat(paste(sGetTexMatrix(as.matrix(vecGetVecElem("a", nNrAni), ncol=1)), collapse = "\n"))
 cat("\\right]\n")
 cat(" = \\left[")
-cat(paste(sGetTexMatrix(matrix(data = c(0,0,0,0,0,0,
-                                        0,0,0,0,0,0,
-                                        0.5,0.5,0,0,0,0,
-                                        0.5,0,0,0,0,0,
-                                        0,0,0.5,0.5,0,0,
-                                        0,0.5,0,0,0.5,0), ncol = nNrAni, byrow = TRUE)), collapse = "\n"))
+cat(paste(sGetTexMatrix(matP), collapse = "\n"))
 cat("\\right]\n")
 cat(" * ")
 cat("\\left[")
@@ -180,16 +181,17 @@ wobei $L$ eine rechte untere Dreiecksmatrix ist mit lauter Einsen auf der Diagon
 Für unser Beispiel sieht die Zerlegung in (\ref{eq:BvLmDecomp}) wie folgt aus.
 
 ```{r BvLmDecomp, results='asis'}
-cat("$$\\left[")
-cat(paste(sGetTexMatrix(as.matrix(vecGetVecElem("a", nNrAni), ncol=1)), collapse = "\n"))
-cat("\\right]\n")
-cat(" = \\left[")
-cat(paste(sGetTexMatrix(matrix(data = c(1,0,0,0,0,0,
+matL <- matrix(data = c(1,0,0,0,0,0,
                                         0,1,0,0,0,0,
                                         0.5,0.5,1,0,0,0,
                                         0.5,0,0,1,0,0,
                                         0.5,0.25,0.5,0.5,1,0,
-                                        0.25,0.625,0.25,0.25,0.5,1), ncol = nNrAni, byrow = TRUE)), collapse = "\n"))
+                                        0.25,0.625,0.25,0.25,0.5,1), ncol = nNrAni, byrow = TRUE)
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(as.matrix(vecGetVecElem("a", nNrAni), ncol=1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(matL), collapse = "\n"))
 cat("\\right]\n")
 cat(" * ")
 cat("\\left[")
@@ -234,7 +236,7 @@ und daraus abgeleitet ist
 
 \begin{equation}
 var(m_i) = \left[1 -  {1\over 4}\ (1+F_d)\right] \sigma_a^2 = \left[{3\over 4} -  {1\over 4}\ F_d\right] \sigma_a^2
-\labe{eq:VarMiOneParentUnknown}
+\label{eq:VarMiOneParentUnknown}
 \end{equation}
 
 Sind beide Eltern unbekannt, dann ist
@@ -243,7 +245,7 @@ $$a_i = m_i$$ und
 
 \begin{equation}
 var(m_i) = \sigma_a^2
-\labe{eq:VarMiBothParentsUnknown}
+\label{eq:VarMiBothParentsUnknown}
 \end{equation}
 
 
@@ -276,10 +278,88 @@ Aus (\ref{eq:VarAAsLdlResult}) folgt
 
 $$A = L * D * L^T$$
 
-was wir schon am Anfang diese Kapitels aufgestellt hatten.
+was wir schon am Anfang diese Kapitels in (\ref{eq:RelMatFact}) postuliert hatten.
 
 
 ## Inverse von $A$
+Der Grund, weshalb wir die Verwandtschaftsmatrix $A$ zerlegt hatten ist, dass die Berechnung der Inversen $A^{-1}$ so einfacher ist, als über die explizite Inversion von $A$ direkt. Aufgrund der Zerlegung von $A$ in (\ref{eq:RelMatFact}) erhalten wir für die Inverse $A^{-1}$
+
+\begin{equation}
+A^{-1} = (L * D * L^T)^{-1} = (L^T)^{-1} * D^{-1} * L^{-1} = (L^{-1})^T * D^{-1} * L^{-1}
+\label{eq:RelMatFactInv}
+\end{equation}
+
+Die Matrix $D$ ist eine Diagonalmatrix und somit einfach zu invertieren. Die Inverse $D^{-1}$ ist wieder eine Diagonalmatrix mit Elementen $1/var(m_i)$. Die Matrix $L^{-1}$ können wir durch das Gleichsetzen von den Gleichungen (\ref{eq:BvAniDecompMat}) und (\ref{eq:BvLmDecomp}). 
+
+\begin{eqnarray}
+a &=& P * a + m \nonumber\\
+a &=& L * m
+\label{eq:CompLinv}
+\end{eqnarray}
+
+Lösen wir die beiden Gleichungen in (\ref{eq:CompLinv}) nach $m$ auf, dann erhalten wir 
+
+\begin{eqnarray}
+m &=& a - P * a = (I - P) * a \nonumber\\
+m &=& L^{-1} * a
+\label{eq:CompMVector}
+\end{eqnarray}
+
+wobei $I$ die Einheitsmatrix ist und $P$ entspricht der Matrix, welche in Zerlegung (\ref{eq:BvAniDecompMat}) die Nachkommen- und die Eltern-Zuchtwerte miteinander verknüpft. Da in (\ref{eq:CompMVector}) beide Gleichungen einen Ausdruck für den Vektor $m$ enthalten, können wir die Gleichungen gleichsetzen und somit die Matrix $L^{-1}$ bestimmen als
+
+$$L^{-1} = I - P$$.
+
+### Unser Beispiel
+Für unser Beispiel ist die Matrix $D$ gegeben als
+
+```{r MatDExPed}
+matDEx2 <- diag(Dmat(pedEx2))
+cat("$$D = \\left[")
+cat(paste(sGetTexMatrix(matDEx2,pnDigits = 5), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Die Inverse $D^{-1}$ ist 
+
+```{r MatDInvExPed}
+matDInvEx2 <- solve(matDEx2)
+cat("$$D^{-1} = \\left[")
+cat(paste(sGetTexMatrix(matDInvEx2,pnDigits = 5), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Die Matrix $P$ zur Berechnung von $L^{-1}$ hatten wir aufgestellt als
+
+```{r MatPExPed}
+cat("$$P = \\left[")
+cat(paste(sGetTexMatrix(matP), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Somit ist $L^{-1}$
+
+```{r MatLinvExPed}
+matLInvEx2 <- diag(1, nrow=nNrAni) - matP 
+cat("$$L^{-1} = \\left[")
+cat(paste(sGetTexMatrix(matLInvEx2,pnDigits = 5), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Somit haben die Faktoren von $A^{-1}$ und können diese direkt aufstellen als
+
+```{r MatAinvExPed}
+matAInvEx2 <- t(matLInvEx2) %*% matDInvEx2 %*% matLInvEx2
+cat("$$A^{-1} = \\left[")
+cat(paste(sGetTexMatrix(matAInvEx2,pnDigits = 5), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
