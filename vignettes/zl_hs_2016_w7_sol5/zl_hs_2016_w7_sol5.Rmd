@@ -1,0 +1,99 @@
+---
+title:  Züchtungslehre - Lösung 5
+author: Peter von Rohr
+date: 2016-11-04
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+devtools::load_all()
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS_2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Aufgabe 1: Pedigree (Prüfungsaufgabe HS2015)
+
+Gegeben ist folgendes Pedigree
+
+```{r ExamPed, echo=FALSE, results='markup'}
+suppressPackageStartupMessages( library(pedigreemm) )
+nNrAni <- 5
+ped <- pedigree(sire = c(NA,NA,1,1,3), dam = c(NA,NA,2,2,4), label = 1:nNrAni)
+print(ped)
+```
+
+\begin{enumerate}
+\item[a)] Stellen Sie die additive genetische Verwandtschaftsmatrix für das oben dargestellte Pedigree auf.
+\end{enumerate}
+
+__Lösung__:
+
+```{r ExamMatA, echo=FALSE}
+matA <- as.matrix(getA(ped))
+cat("$$A = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matA, pnDigits = 4), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+
+```
+
+
+\begin{enumerate}
+\item[b)] Welches der fünf Tiere im gezeigten Pedigree ist ingezüchtet und wie gross ist der Inzuchtkoeffizient $F_X$?
+(Bitte auch für nicht ingezüchtete Tiere den Inzuchtkoeffizienten angeben)
+\end{enumerate}
+
+__Lösung__:
+
+```{r InbreedTable, echo=FALSE}
+dfInbreedTable <- data.frame(TierId = c(1:nNrAni),
+                             bInbred <- sapply(1:nNrAni,function(x) ifelse(matA[x,x]>1,"ja","nein")),
+                             nInbreedCoeff <- sapply(1:nNrAni,function(x) matA[x,x]-1))
+names(dfInbreedTable) <- c("Tier ID", "Ingezüchtet (ja/nein)", "Inzuchtkoeffizient")
+knitr::kable(dfInbreedTable)
+```
+
+```{r SpecialAnimal, echo=FALSE}
+nSpecialAnimalIdx <- 5
+```
+
+\vspace{5ex}
+\begin{enumerate}
+\item[c)] Wir interessieren uns speziell für Tier $`r nSpecialAnimalIdx`$. Welche Elemente der additiv genetischen Verwandtschaftsmatrix enthalten den Inzuchtkoeffizienten von Tier $`r nSpecialAnimalIdx`$. Am besten geben Sie die Elemente der Matrix über die jeweiligen Zeilen- und Kolonnennummern an.
+\end{enumerate}
+
+__Lösung__:
+
+```{r SpecialAnimalInbreeding}
+
+```
+
+(5,5), (3,4), (4,3)
+
+
+## Aufgabe 2: R-Package pedigreemm
+
+
+## Aufgabe 3: Heatmap
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything --> 
