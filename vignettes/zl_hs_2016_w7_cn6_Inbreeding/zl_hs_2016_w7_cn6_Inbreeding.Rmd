@@ -140,9 +140,28 @@ wobei $s$ und $d$ die Eltern von $i$ sind. Die Werte für $a_{ss}$ und $a_{dd}$ 
 
 Aufgrund des kleinen Beispiels in (\ref{eq:SmallExRLS}) werden Offdiagonalelement $r_{ij}$ der Matrix $R$ berechnet als 
 
-$$r_{ij} = l_{ij} * s_{jj}$$
+\begin{equation}
+r_{ij} = l_{ij} * s_{jj}
+\label{eq:ComputeRij}
+\end{equation}
 
-Die Elemente $l_{ij}$ aus Matrix $L$ werden als Durchschnitt der Elemente $l_{sj}$ und $l_{dj}$ berechnet (siehe Kapitel __Inverse Verwandtschaftsmatrix__), wobei $s$ und $d$ die Eltern von $i$ sind.
+Die Elemente $l_{ij}$ aus Matrix $L$ werden als Durchschnitt der Elemente $l_{sj}$ und $l_{dj}$ berechnet, wobei $s$ und $d$ die Eltern von $i$ sind. Setzen wir dies in (\ref{eq:ComputeRij}) ein, dann folgt
+
+\begin{eqnarray}
+r_{ij} &=& l_{ij} * s_{jj} \nonumber\\
+       &=& {1\over 2}(l_{sj} + l_{dj}) * s_{jj} \nonumber\\
+       &=& {1\over 2}(r_{sj} + r_{dj})
+\label{eq:ComputeRijRec}
+\end{eqnarray}
+
+wobei wir im letzten Schritt von (\ref{eq:ComputeRijRec}) die Definition aus (\ref{eq:ComputeRij}) umgekehrt angewendet haben. 
+
+Somit haben wir die Diagonalelemente $r_{ii}$ und $r_{ij}$ rekursiv berechnet. Unter der gängigen Bedingung, dass im Pedigree die Tiere nach ihrem Alter sortiert sein müssen, können wir die Rekursionen auflösen.
+
+
+## Unser Beipielpedigree
+
+
 
 
 
