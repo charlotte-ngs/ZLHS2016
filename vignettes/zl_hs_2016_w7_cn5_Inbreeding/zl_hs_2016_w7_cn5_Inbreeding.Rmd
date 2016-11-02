@@ -7,6 +7,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+devtools::load_all()
 ```
 
 ```{r DocumentStatus, eval=FALSE}
@@ -54,6 +55,98 @@ wobei $R$ eine linke untere Dreiecksmatrix ist. Aufgrund der Dreiecksstruktur vo
 a_{ii} = \sum_{j=1}^i r_{ij}^2
 \label{eq:DiagElemMatA}
 \end{equation}
+
+Für ein kleines Beispiel einer $3\times 3$ Matrix $A$ sieht das wie folgt aus
+
+```{r SmallExCholA}
+nAnzAni <- 3
+matA <- matGetMatElem(psBaseElement = "a", pnNrRow = nAnzAni, pnNrCol = nAnzAni)
+matR <- matLowerTri(psBaseElement = "r", pnNrRow = nAnzAni, pnNrCol = nAnzAni)
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matA), collapse = "\n"))
+cat("\\right] \n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matR), collapse = "\n"))
+cat("\\right] \n")
+cat(" * \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = t(matR)), collapse = "\n"))
+cat("\\right] \n")
+cat("$$\n")
+```
+
+Für das gezeigte Beispiel berechnen wir die Diagonalelemente von $A$ als
+
+\begin{eqnarray}
+  a_{11} &=& r_{11}^2 \nonumber\\
+  a_{22} &=& r_{21}^2 + r_{22}^2\nonumber\\
+  a_{33} &=& r_{31}^2 + r_{32}^2 + r_{33}^2\nonumber
+\label{MatADiag}
+\end{eqnarray}
+
+Die Gleichung (\ref{eq:DiagElemMatA}) zeigt, wie die Diagonalelemente $a_{ii}$ der Verwandtschaftsmatrix $A$ und somit die Inzuchtkoeffizienten aufgrund einer Zeile aus der Matrix $R$ berechnet werden können. Als nächstes müssen wir klären, wie die Elemente der Matrix $R$ berechnet werden können.
+
+
+### Rekursive Berechnung der Matrix $R$
+Wir setzen die LDL-Zerlegung der Verwandtschaftsmatrix $A$ der Cholesky-Zerlegung von $A$ gleich.
+
+\begin{equation}
+A = R * R^T = L * D * L^T
+\label{eq:CholEqLdl}
+\end{equation}
+
+Schreiben wir die Matrix $R$ als Produkt aus den Matrizen $L$ und $S$ und setzen das in Gleichung (\ref{eq:CholEqLdl}) ein, dann folgt 
+
+\begin{equation}
+A = R * R^T = L * S * (L * S)^T = L * S * S^T * L^T= L * D * L^T
+\label{eq:CholRLSEqLdl}
+\end{equation}
+
+Aus Gleichung (\ref{eq:CholRLSEqLdl}) sehen wir, dass 
+
+$$D = S * S^T$$
+
+und somit ist $S$ eine Diagonalmatrix deren Elemente gegeben ist durch $s_{ii} = \sqrt{d_{ii}}$. Schauen wir uns die Zerlegung 
+
+$$R = L * S$$
+
+der Matrix $R$ an unserem kleinen $3\times 3$ Beispiel an
+
+\begin{equation}
+```{r RlsDecompEx}
+matL <- matLowerTri(psBaseElement = "l", pnNrRow = nAnzAni, pnNrCol = nAnzAni, pvecDiag = 1)
+matS <- matDiag(psBaseElement = "s", pnNrRow = nAnzAni, pnNrCol = nAnzAni)
+cat("\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matR), collapse = "\n"))
+cat("\\right]  = \n")
+cat("\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matL), collapse = "\n"))
+cat("\\right]  * \n")
+cat("\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matS), collapse = "\n"))
+cat("\\right]\n")
+```
+\label{eq:SmallExRLS}
+\end{equation}
+
+wird klar, dass aufgrund der speziellen Strukturen von $L$ und $S$ gilt, dass die Diagonalelemente von $R$ den Diagonalelementen von $S$ entsprechen. Es gilt somit 
+
+$$r_{ii} = s_{ii} = \sqrt{d_{ii}}$$
+
+Im Kapitel __Inverse Verwandtschaftsmatrix__ hatten wir gesehen, dass die Diagonalelemente $d_{ii}$ der Matrix $D$ aufgrund der Inzuchtgrade der Eltern berechnet werden können
+
+$$d_{ii} = {1\over 2}\ - {1\over 4}\ (F_s + F_d) = 1 - 0.25(a_{ss} + a_{dd})$$
+
+wobei $s$ und $d$ die Eltern von $i$ sind. Die Werte für $a_{ss}$ und $a_{dd}$ werden aufgrund der Gleichung (\ref{eq:DiagElemMatA}) berechnet. 
+
+Aufgrund des kleinen Beispiels in (\ref{eq:SmallExRLS}) werden Offdiagonalelement $r_{ij}$ der Matrix $R$ berechnet als 
+
+$$r_{ij} = l_{ij} * s_{jj}$$
+
+Die Elemente $l_{ij}$ aus Matrix $L$ werden als Durchschnitt der Elemente $l_{sj}$ und $l_{dj}$ berechnet (siehe Kapitel __Inverse Verwandtschaftsmatrix__), wobei $s$ und $d$ die Eltern von $i$ sind.
+
+
+
+
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
 ```
