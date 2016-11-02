@@ -160,6 +160,21 @@ Somit haben wir die Diagonalelemente $r_{ii}$ und $r_{ij}$ rekursiv berechnet. U
 
 
 ## Unser Beipielpedigree
+Das Beispielpedigree aus dem Kapitel __Inverse Verwandtschaftsmatrix__ soll hier nochmals verwendet werden, um die Berechnung der Inzuchtkoeffizienten zu zeigen.
+
+
+```{r PedEx1, results='markup'}
+suppressPackageStartupMessages(library(pedigreemm))
+nNrAni <- 6
+pedEx1 <- pedigree(sire = c(NA,NA,1,1,4,5),
+                   dam = c(NA,NA,2,NA,3,2),
+                   label = as.character(1:nNrAni))
+print(pedEx1)
+```
+
+Wir wollen nun die Diagonalelemente $a_{11}$ bis $a_{66}$ und damit die Inzuchtkoeffizienten $F_1$ bis $F_6$ berechnen ohne die gesamte Verwandtschaftsmatrix $A$ aufstellen zu müssen.
+
+
 
 
 
