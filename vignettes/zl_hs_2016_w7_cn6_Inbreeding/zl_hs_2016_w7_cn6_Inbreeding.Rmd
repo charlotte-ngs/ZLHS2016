@@ -130,7 +130,10 @@ cat("\\right]\n")
 
 wird klar, dass aufgrund der speziellen Strukturen von $L$ und $S$ gilt, dass die Diagonalelemente von $R$ den Diagonalelementen von $S$ entsprechen. Es gilt somit 
 
-$$r_{ii} = s_{ii} = \sqrt{d_{ii}}$$
+\begin{equation}
+r_{ii} = s_{ii} = \sqrt{d_{ii}}
+\label{eq:ComputeRii}
+\end{equation}
 
 Im Kapitel __Inverse Verwandtschaftsmatrix__ hatten wir gesehen, dass die Diagonalelemente $d_{ii}$ der Matrix $D$ aufgrund der Inzuchtgrade der Eltern berechnet werden können
 
@@ -139,7 +142,13 @@ d_{ii} = {1\over 2}\ - {1\over 4}\ (F_s + F_d) = 1 - 0.25(a_{ss} + a_{dd})
 \label{eq:ComputeDii}
 \end{equation}
 
-wobei $s$ und $d$ die Eltern von $i$ sind. Die Werte für $a_{ss}$ und $a_{dd}$ werden aufgrund der Gleichung (\ref{eq:DiagElemMatA}) berechnet. 
+wobei $s$ und $d$ die Eltern von $i$ sind. Die Werte für $a_{ss}$ und $a_{dd}$ werden aufgrund der Gleichung (\ref{eq:DiagElemMatA}) berechnet. Setzen wir das Resultat von (\ref{eq:ComputeDii}) in (\ref{eq:ComputeRii}) ein, dann folgt
+
+\begin{equation}
+r_{ii} = \sqrt{1 - 0.25(a_{ss} + a_{dd})}
+\label{eq:ComputeRiiResult}
+\end{equation}
+
 
 Aufgrund des kleinen Beispiels in (\ref{eq:SmallExRLS}) werden Offdiagonalelement $r_{ij}$ der Matrix $R$ berechnet als 
 
@@ -215,17 +224,46 @@ $$r_{32} = {1\over 2}(r_{12} + r_{22}) = {1\over 2}(`r matR[1,2]` + `r matR[2,2]
 stopifnot(identical(0.5*(matR[1,2] + matR[2,2]), matR[3,2]))
 ```
 
+Für das Diagonalelement $r_{33}$ verwenden wir die Gleichung (\ref{eq:ComputeRiiResult})
 
-$$r_{33} = $$
+$$r_{33} = \sqrt{1 - 0.25(a_{11} + a_{22})} = \sqrt{1 - 0.25(`r vecA[1]` + `r vecA[2]`)}
+         = \sqrt{`r 1-0.25*(vecA[1]+vecA[2])`}
+         = `r sqrt(1-0.25*(vecA[1]+vecA[2]))`$$
+```{r VerifyR33}
+stopifnot(identical(sqrt(1-0.25*(vecA[1]+vecA[2])), matR[3,3]))
+```
 
+Das Diagonalelement $a_{33}$ der Verwandtschaftsmatrix $A$ für Tier $3$ kann nun berechnet werden als
 
+$$a_{33} = r_{31}^2 + r_{32}^2 + r_{33}^2
+         = `r matR[3,1]`^2 + `r matR[3,2]`^2 + `r matR[3,3]`^2
+         = `r matR[3,1]^2 + matR[3,2]^2 + matR[3,3]^2`
+$$
+```{r VerifyA33}
+stopifnot(identical(matR[3,1]^2 + matR[3,2]^2 + matR[3,3]^2, vecA[3]))
+```
 
+### Tier 4
+Bei Tier 4 haben wir eine spezielle Situation, da die Mutter unbekannt ist. Somit ist klar, dass der Inzuchtkoeffizient $F_4 = 0$ ist und somit $a_{44} = 1$. Da das Tier $4$ Nachkommen hat, berechnen wir aber trotzdem noch die Elemente auf der Zeile $4$ in der Matrix $R$. 
 
+$$r_{41} = {1\over 2} * r_{11} = {1\over 2}  * `r matR[1,1]` = `r 0.5 * matR[1,1]`$$
+```{r VerifyR41}
+stopifnot(identical(0.5 * matR[1,1], matR[4,1]))
+```
 
+$$r_{42} = {1\over 2} *  r_{12} = {1\over 2}  * `r matR[1,2]` = `r 0.5 * matR[1,2]`$$
+```{r VerifyR42}
+stopifnot(identical(0.5 * matR[1,2], matR[4,2]))
+```
 
+$$r_{43} = {1\over 2} *  r_{13} = {1\over 2}  * `r matR[1,3]` = `r 0.5 * matR[1,3]`$$
+```{r VerifyR43}
+stopifnot(identical(0.5 * matR[1,3], matR[4,3]))
+```
 
+$$r_{44} = \sqrt{{1\over 2}\ - {1\over 4}\ (F_s + F_d)}$$
 
-
+$a_{ss} = 1 + F_s \rightarrow F_s = a_{ss} - 1$
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
