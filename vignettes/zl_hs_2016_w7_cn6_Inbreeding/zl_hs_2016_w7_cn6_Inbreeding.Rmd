@@ -207,7 +207,7 @@ Da die Eltern von Tier $2$ unbekannt sind, sind die Terme $r_{sj}$ und $r_{dj}$ 
 $$a_{22} = r_{21}^2 + r_{22}^2 = `r matR[2,1]^2` + `r matR[2,2]^2` = `r matR[2,1]^2 + matR[2,2]^2`$$
 
 ```{r VerifyA22}
-stopifnot(identical(matR[2,1]^2 + matR[2,2]^2, vecA[2]))
+stopifnot(all.equal(matR[2,1]^2 + matR[2,2]^2, vecA[2]))
 ```
 
 ### Tier 3
@@ -215,13 +215,13 @@ Die Berechnung des Diagonalelements $a_{33}$ erfordert die Elemente $r_{31}$, $r
 
 $$r_{31} = {1\over 2}(r_{11} + r_{21}) = {1\over 2}(`r matR[1,1]` + `r matR[2,1]`) = `r 0.5*(matR[1,1] + matR[2,1])`$$
 ```{r VerifyR31}
-stopifnot(identical(0.5*(matR[1,1] + matR[2,1]), matR[3,1]))
+stopifnot(all.equal(0.5*(matR[1,1] + matR[2,1]), matR[3,1]))
 ```
 
 
 $$r_{32} = {1\over 2}(r_{12} + r_{22}) = {1\over 2}(`r matR[1,2]` + `r matR[2,2]`) = `r 0.5*(matR[1,2] + matR[2,2])`$$
 ```{r VerifyR32}
-stopifnot(identical(0.5*(matR[1,2] + matR[2,2]), matR[3,2]))
+stopifnot(all.equal(0.5*(matR[1,2] + matR[2,2]), matR[3,2]))
 ```
 
 Für das Diagonalelement $r_{33}$ verwenden wir die Gleichung (\ref{eq:ComputeRiiResult})
@@ -230,7 +230,7 @@ $$r_{33} = \sqrt{1 - 0.25(a_{11} + a_{22})} = \sqrt{1 - 0.25(`r vecA[1]` + `r ve
          = \sqrt{`r 1-0.25*(vecA[1]+vecA[2])`}
          = `r sqrt(1-0.25*(vecA[1]+vecA[2]))`$$
 ```{r VerifyR33}
-stopifnot(identical(sqrt(1-0.25*(vecA[1]+vecA[2])), matR[3,3]))
+stopifnot(all.equal(sqrt(1-0.25*(vecA[1]+vecA[2])), matR[3,3]))
 ```
 
 Das Diagonalelement $a_{33}$ der Verwandtschaftsmatrix $A$ für Tier $3$ kann nun berechnet werden als
@@ -240,7 +240,7 @@ $$a_{33} = r_{31}^2 + r_{32}^2 + r_{33}^2
          = `r matR[3,1]^2 + matR[3,2]^2 + matR[3,3]^2`
 $$
 ```{r VerifyA33}
-stopifnot(identical(matR[3,1]^2 + matR[3,2]^2 + matR[3,3]^2, vecA[3]))
+stopifnot(all.equal(matR[3,1]^2 + matR[3,2]^2 + matR[3,3]^2, vecA[3]))
 ```
 
 ### Tier 4
@@ -248,22 +248,111 @@ Bei Tier 4 haben wir eine spezielle Situation, da die Mutter unbekannt ist. Somi
 
 $$r_{41} = {1\over 2} * r_{11} = {1\over 2}  * `r matR[1,1]` = `r 0.5 * matR[1,1]`$$
 ```{r VerifyR41}
-stopifnot(identical(0.5 * matR[1,1], matR[4,1]))
+stopifnot(all.equal(0.5 * matR[1,1], matR[4,1]))
 ```
 
 $$r_{42} = {1\over 2} *  r_{12} = {1\over 2}  * `r matR[1,2]` = `r 0.5 * matR[1,2]`$$
 ```{r VerifyR42}
-stopifnot(identical(0.5 * matR[1,2], matR[4,2]))
+stopifnot(all.equal(0.5 * matR[1,2], matR[4,2]))
 ```
 
 $$r_{43} = {1\over 2} *  r_{13} = {1\over 2}  * `r matR[1,3]` = `r 0.5 * matR[1,3]`$$
 ```{r VerifyR43}
-stopifnot(identical(0.5 * matR[1,3], matR[4,3]))
+stopifnot(all.equal(0.5 * matR[1,3], matR[4,3]))
 ```
 
-$$r_{44} = \sqrt{{1\over 2}\ - {1\over 4}\ (F_s + F_d)}$$
+$$r_{44} = \sqrt{1 - {1\over 4} * a_{11}}
+         = \sqrt{1 - {1\over 4} * `r vecA[1]`}
+         = `r sqrt(1 - 0.25*vecA[1])`
+$$
+```{r VerifyR44}
+stopifnot(all.equal(sqrt(1 - 0.25*vecA[1]), matR[4,4]))
+```
 
-$a_{ss} = 1 + F_s \rightarrow F_s = a_{ss} - 1$
+
+### Tiere 5 und 6
+Bei den Tieren $5$ und $6$ sind die Berechnungen vergleichbar mit Tier $3$. Folgende Schritte sind nötig für die Berechnung der Inzuchtgrade $F_5$ und $F_6$.
+
+$$r_{51} = {1\over 2}(r_{41} + r_{31}) = {1\over 2}(`r matR[4,1]` + `r matR[3,1]`) = `r 0.5*(matR[4,1] + matR[3,1])`$$
+```{r VerifyR51}
+stopifnot(all.equal(0.5*(matR[4,1] + matR[3,1]), matR[5,1]))
+```
+$$r_{52} = {1\over 2}(r_{42} + r_{32}) = {1\over 2}(`r matR[4,2]` + `r matR[3,2]`) = `r 0.5*(matR[4,2] + matR[3,2])`$$
+```{r VerifyR52}
+stopifnot(all.equal(0.5*(matR[4,2] + matR[3,2]), matR[5,2]))
+```
+$$r_{53} = {1\over 2}(r_{43} + r_{33}) = {1\over 2}(`r matR[4,3]` + `r matR[3,3]`) = `r 0.5*(matR[4,3] + matR[3,3])`$$
+```{r VerifyR53}
+stopifnot(all.equal(0.5*(matR[4,3] + matR[3,3]), matR[5,3]))
+```
+$$r_{54} = {1\over 2}(r_{44} + r_{34}) = {1\over 2}(`r matR[4,4]` + `r matR[3,4]`) = `r 0.5*(matR[4,4] + matR[3,4])`$$
+```{r VerifyR54}
+stopifnot(all.equal(0.5*(matR[4,4] + matR[3,4]), matR[5,4]))
+```
+$$r_{55} = \sqrt{1 - 0.25*(a_{44}+a_{33})} = \sqrt{1 - 0.25*(`r vecA[4]` + `r vecA[3]`)}
+         = `r sqrt(1 - 0.25*(vecA[4] + vecA[3]))`
+$$
+```{r VerifyR55}
+stopifnot(all.equal(sqrt(1 - 0.25*(vecA[4] + vecA[3])), matR[5,5]))
+```
+
+$$a_{55} = r_{51}^2 + r_{52}^2 + r_{53}^2 + r_{54}^2 + r_{55}^2
+         = `r matR[5,1]^2 + matR[5,2]^2 + matR[5,3]^2 + matR[5,4]^2 + matR[5,5]^2`
+$$
+```{r VerifyA55}
+stopifnot(all.equal(matR[5,1]^2 + matR[5,2]^2 + matR[5,3]^2 + matR[5,4]^2 + matR[5,5]^2, vecA[5]))
+```
+
+
+$$r_{61} = {1\over 2}(r_{51} + r_{21}) = {1\over 2}(`r matR[5,1]` + `r matR[2,1]`) = `r 0.5*(matR[5,1] + matR[2,1])`$$
+```{r VerifyR61}
+stopifnot(all.equal(0.5*(matR[5,1] + matR[2,1]), matR[6,1]))
+```
+$$r_{62} = {1\over 2}(r_{52} + r_{22}) = {1\over 2}(`r matR[5,2]` + `r matR[2,2]`) = `r 0.5*(matR[5,2] + matR[2,2])`$$
+```{r VerifyR62}
+stopifnot(all.equal(0.5*(matR[5,2] + matR[2,2]), matR[6,2]))
+```
+$$r_{63} = {1\over 2}(r_{53} + r_{23}) = {1\over 2}(`r matR[5,3]` + `r matR[2,3]`) = `r 0.5*(matR[5,3] + matR[2,3])`$$
+```{r VerifyR63}
+stopifnot(all.equal(0.5*(matR[5,3] + matR[2,3]), matR[6,3]))
+```
+$$r_{64} = {1\over 2}(r_{54} + r_{24}) = {1\over 2}(`r matR[5,4]` + `r matR[2,4]`) = `r 0.5*(matR[5,4] + matR[2,4])`$$
+```{r VerifyR64}
+stopifnot(all.equal(0.5*(matR[5,4] + matR[2,4]), matR[6,4]))
+```
+$$r_{65} = {1\over 2}(r_{55} + r_{25}) = {1\over 2}(`r matR[5,5]` + `r matR[2,5]`) = `r 0.5*(matR[5,5] + matR[2,5])`$$
+```{r VerifyR65}
+stopifnot(all.equal(0.5*(matR[5,5] + matR[2,5]), matR[6,5]))
+```
+$$r_{66} = \sqrt{1 - 0.25*(a_{55}+a_{22})}
+         = \sqrt{1 - 0.25*(`r vecA[5]`+ `r vecA[2]`)}
+         = `r sqrt(1 - 0.25*(vecA[5]+ vecA[2]))`
+$$
+```{r VerifyR66}
+stopifnot(all.equal(sqrt(1 - 0.25*(vecA[5]+ vecA[2])), matR[6,6]))
+```
+$$a_{66} = r_{61}^2 + r_{62}^2 + r_{63}^2 + r_{64}^2 + r_{65}^2 + r_{66}^2
+         = `r matR[6,1]^2 + matR[6,2]^2 + matR[6,3]^2 + matR[6,4]^2 + matR[6,5]^2 + matR[6,6]^2`
+$$
+```{r VerifyA66}
+stopifnot(all.equal(matR[6,1]^2 + matR[6,2]^2 + matR[6,3]^2 + matR[6,4]^2 + matR[6,5]^2 + matR[6,6]^2, vecA[6]))
+```         
+
+\pagebreak
+
+## Zusammenfassung der Ergebnisse
+
+Als Zusammenfassung stellen wir die Ergebnisse in einer Tabelle zusammen.
+
+```{r SummaryResult}
+dfSummaryResult <- data.frame(TierId = 1:nNrAni, 
+                              Diagonalelement = vecA, 
+                              Inzuchtkoeffzient = vecA-1, 
+                              stringsAsFactors = FALSE )
+knitr::kable(dfSummaryResult)
+```
+
+
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
