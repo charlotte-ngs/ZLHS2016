@@ -134,7 +134,10 @@ $$r_{ii} = s_{ii} = \sqrt{d_{ii}}$$
 
 Im Kapitel __Inverse Verwandtschaftsmatrix__ hatten wir gesehen, dass die Diagonalelemente $d_{ii}$ der Matrix $D$ aufgrund der Inzuchtgrade der Eltern berechnet werden können
 
-$$d_{ii} = {1\over 2}\ - {1\over 4}\ (F_s + F_d) = 1 - 0.25(a_{ss} + a_{dd})$$
+\begin{equation}
+d_{ii} = {1\over 2}\ - {1\over 4}\ (F_s + F_d) = 1 - 0.25(a_{ss} + a_{dd})
+\label{eq:ComputeDii}
+\end{equation}
 
 wobei $s$ und $d$ die Eltern von $i$ sind. Die Werte für $a_{ss}$ und $a_{dd}$ werden aufgrund der Gleichung (\ref{eq:DiagElemMatA}) berechnet. 
 
@@ -172,7 +175,51 @@ pedEx1 <- pedigree(sire = c(NA,NA,1,1,4,5),
 print(pedEx1)
 ```
 
-Wir wollen nun die Diagonalelemente $a_{11}$ bis $a_{66}$ und damit die Inzuchtkoeffizienten $F_1$ bis $F_6$ berechnen ohne die gesamte Verwandtschaftsmatrix $A$ aufstellen zu müssen.
+Wir wollen nun die Diagonalelemente $a_{11}$ bis $a_{66}$ und damit die Inzuchtkoeffizienten $F_1$ bis $F_6$ berechnen ohne die gesamte Verwandtschaftsmatrix $A$ aufstellen zu müssen. 
+
+### Tier 1
+Wir beginnen mit Tier $1$ und dem entsprechenden Element $a_{11}$. Da Tier $1$ keine bekannten Eltern hat, ist es auch nicht ingezüchtet. Somit ist $F_1 = 0$ und 
+
+```{r StoreMatAMatR}
+matA <- as.matrix(getA(pedEx1))
+vecA <- as.vector(diag(matA))
+matR <- t(chol(matA))
+```
+
+$$a_{11} = 1 + F_1 = `r vecA[1]`$$
+
+### Tier 2
+Den Inzuchtgrad für Tier $2$ wird aufgrund von $a_{22}$ berechnet. Dazu verwenden wir die Gleichung (\ref{eq:DiagElemMatA}}). Somit ist 
+
+$$a_{22} = r_{21}^2 + r_{22}^2$$
+
+Da die Eltern von Tier $2$ unbekannt sind, sind die Terme $r_{sj}$ und $r_{dj}$ aus (\ref{eq:ComputeRijRec}) beide gleich $0$ und somit ist auch $r_{21} = `r matR[2,1]`$. Da die Eltern von Tier $2$ beide unbekannt sind, ist $r_{22} = `r matR[2,2]`$ und somit folgt
+
+$$a_{22} = r_{21}^2 + r_{22}^2 = `r matR[2,1]^2` + `r matR[2,2]^2` = `r matR[2,1]^2 + matR[2,2]^2`$$
+
+```{r VerifyA22}
+stopifnot(identical(matR[2,1]^2 + matR[2,2]^2, vecA[2]))
+```
+
+### Tier 3
+Die Berechnung des Diagonalelements $a_{33}$ erfordert die Elemente $r_{31}$, $r_{32}$ und $r_{33}$. Dabei berücksichtigen wir, dass Tier $3$ die Tiere $1$ und $2$ als Eltern hat.
+
+$$r_{31} = {1\over 2}(r_{11} + r_{21}) = {1\over 2}(`r matR[1,1]` + `r matR[2,1]`) = `r 0.5*(matR[1,1] + matR[2,1])`$$
+```{r VerifyR31}
+stopifnot(identical(0.5*(matR[1,1] + matR[2,1]), matR[3,1]))
+```
+
+
+$$r_{32} = {1\over 2}(r_{12} + r_{22}) = {1\over 2}(`r matR[1,2]` + `r matR[2,2]`) = `r 0.5*(matR[1,2] + matR[2,2])`$$
+```{r VerifyR32}
+stopifnot(identical(0.5*(matR[1,2] + matR[2,2]), matR[3,2]))
+```
+
+
+$$r_{33} = $$
+
+
+
 
 
 
