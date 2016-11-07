@@ -1,0 +1,77 @@
+---
+title:  Züchtungslehre - Lösung 6
+author: Peter von Rohr
+date: 2016-11-11
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+devtools::load_all()
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS_2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Aufgabe 1: LDL-Zerlegung der Verwandtschaftsmatrix
+
+Gegeben ist das folgende Pedigree
+
+```{r PedEx1A1}
+suppressPackageStartupMessages(require(pedigreemm))
+nNrAni <- 5
+ped <- pedigree(sire = c(NA,NA,1,1,4),dam = c(NA,NA,2,NA,2), label = as.character(1:nNrAni))
+print(ped)
+```
+
+a) Stellen Sie die Verwandtschaftsmatrix $A$ auf
+b) Ermitteln Sid die LDL-Zerlegung von $A$
+c) Berechnen Sie die Inverse der Verwandtschaftsmatrix
+
+__Hinweise__:
+
+- Für Pedigrees ohne Inzucht, können die Diagonalelemente $d_{ii}$ nur drei verschiedene Werte annehmen. Diese sind entweder $1$, falls das Tier ein Foundertier ist ohne bekannte Eltern, $3/4$ falls ein Elternteil bekannt ist, oder $1/2$ falls beide Eltern bekannt sind.
+
+- Ohne Berücksichtigung der Inzucht kann die Inverse $A^{-1}$ einfach aufgrund folgender Regeln aufgestellt werden.
+
+
+__Lösung__:
+
+a) Die Verwantschaftsmatrix 
+
+```{r RelMatPedEx6A1}
+matA <- as.matrix(getA(ped=ped))
+cat("$$A = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matA, pnDigits = 4), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+
+b) Die LDL-Zerlegung von $A$
+
+## Aufgabe 2: Zuchtwert aufgrund Nachkommenleistung
+
+
+## Aufgabe 3: Bedingungen und Schleifen (Loops) in R
+
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything --> 
