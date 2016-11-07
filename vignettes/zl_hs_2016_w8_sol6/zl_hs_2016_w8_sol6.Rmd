@@ -129,15 +129,23 @@ cat("$$\n")
 
 
 ## Aufgabe 2: Zuchtwert aufgrund Nachkommenleistung
-Stier Elvis hat $10$ Nachkommen. Von diesen Nachkommen wurden der tägliche Zuwachs (in kg) bis zum Absetzen aufgezeichnet. Das Merkmal hat ein Populationsmittel von $1$ kg pro Tag.
-
-```{r}
-set.seed(123)
+```{r AssumptionsEx2}
 nNrOffspring <- 10
 nMeanWwg <- 1.25
 nSdWwg <- 0.3
+nPopMean <- 1
+nH2 <- 0.35
+k <- (4-nH2)/nH2
+nPhenSd <- 1.1
+```
+
+Stier Elvis hat $`r nNrOffspring`$ Nachkommen. Von diesen Nachkommen wurden der tägliche Zuwachs (in kg) bis zum Absetzen aufgezeichnet. Das Merkmal hat ein Populationsmittel von $`r nPopMean`$ kg pro Tag. Die Heritabilität $h^2$ beträgt $`r nH2`$. 
+
+```{r}
+set.seed(123)
 dfWeanWeightGain = data.frame(Tier=1:nNrOffspring, Zuwachs = round(rnorm(nNrOffspring, mean=nMeanWwg, sd=nSdWwg), digits = 2))
 knitr::kable(dfWeanWeightGain)
+nMeanZuw <- mean(dfWeanWeightGain$Zuwachs)
 ```
 
 a) Schätzen Sie den Zuchtwert von Elvis für das Merkmal tägliche Zunahme bis zum Absetzen aufgrund der Nachkommenleistung
@@ -147,8 +155,22 @@ c) Berechnen Sie aufgrund des Vertrauensintervalls, dass der Zuchtwert von Elvis
 
 __Lösung__:
 
+a) Der geschätzte Zuchtwert für Elvis beträgt
+
+$$\hat{a} = \frac{2n}{n+k}(\tilde{y} - \mu)$$
+
+wobei $n$: Anzahl Beobachtungen, $\tilde{y}$ der Nachkommendurchschnitt, $\mu$ das Populationsmittel und $k=\frac{4-h^2}{h^2}$. Setzen wir diese Werte ein, dann folgt
+
+$$\hat{a} = \frac{2*`r nNrOffspring`}{`r nNrOffspring`+`r k`}(`r nMeanZuw` - `r nPopMean`)
+          = `r round(2*nNrOffspring/(nNrOffspring + k) * (nMeanZuw-nPopMean), digits = 2)`$$
+
+b) Das Bestimmtheitsmass für den Zuchtwert von Elvis ist
+
+$$B = r_{a,\tilde{y}}^2 = \frac{n}{n+k} = \frac{`r nNrOffspring`}{`r nNrOffspring`+`r k`}
+    = `r round(nNrOffspring/(nNrOffspring+k), digits=3)`$$
 
 
+c) 
 ## Aufgabe 3: Bedingungen und Schleifen (Loops) in R
 
 
