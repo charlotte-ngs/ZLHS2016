@@ -46,7 +46,19 @@ __Hinweise__:
 - Für Pedigrees ohne Inzucht, können die Diagonalelemente $d_{ii}$ nur drei verschiedene Werte annehmen. Diese sind entweder $1$, falls das Tier ein Foundertier ist ohne bekannte Eltern, $3/4$ falls ein Elternteil bekannt ist, oder $1/2$ falls beide Eltern bekannt sind.
 
 - Ohne Berücksichtigung der Inzucht kann die Inverse $A^{-1}$ einfach aufgrund folgender Regeln aufgestellt werden.
-
+    + Initialisiere alle Elemente der Matrix $A^{-1}$ mit $0$
+    + Für Tier $i$ mit Eltern $s$ und $d$, 
+        + addiere $\alpha_i$ zum Element $(i,i)$, 
+        + addiere $-\alpha_i/2$ zu den Elementen $(s,i)$, $(i,s)$, $(d,i)$ und $(i,d)$ und 
+        + addiere $\alpha_i/4$ zu den Elementen $(s,s)$, $(s,d)$, $(d,s)$ und $(d,d)$
+    + Für Tier $i$ mit bekanntem Elternteil $d$,
+        + addiere $\alpha_i$ zum Element $(i,i)$, 
+        + addiere $-\alpha_i/2$ zu den Elementen $(d,i)$ und $(i,d)$ und 
+        + addiere $\alpha_i/4$ zu den Elementen $(d,d)$
+    + Für Tier $i$ mit unbekannten Eltern
+        + addiere $\alpha_i$ zum Element $(i,i)$ 
+        
+wobei $\alpha_i$ das $i$-te Element auf der Diagonalen von $D$ ist.
 
 __Lösung__:
 
@@ -54,6 +66,7 @@ a) Die Verwantschaftsmatrix
 
 ```{r RelMatPedEx6A1}
 matA <- as.matrix(getA(ped=ped))
+matR <- t(chol(matA))
 cat("$$A = \\left[")
 cat(paste(sGetTexMatrix(pmatAMatrix = matA, pnDigits = 4), collapse = "\n"))
 cat("\\right]\n")
@@ -61,9 +74,79 @@ cat("$$\n")
 ```
 
 
-b) Die LDL-Zerlegung von $A$
+b) Die LDL-Zerlegung von $A$: Da es im Pedigree keine ingezüchteten Tiere gibt, ist die Matrix $D$ einfach zu bestimmen als.
+
+```{r}
+matD <- diag(Dmat(ped = ped))
+cat("$$D = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matD, pnDigits = 4), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Die Diagonalelemente sind $1$ für Foundertiere, $3/4$ für Tiere mit einem bekannten Elternteil und $1/2$ für Tiere mit bekannten Eltern.
+
+Die Matrix $L$ ist eine linke untere Dreiecksmatrix, wobei Zeile $i$ dem Mittelwert der Zeilen $s$ und $d$ entsprechen, angenommen, dass die Tiere $s$ und $d$ die Eltern von Tier $i$ sind.
+
+```{r}
+matSInv <- solve(sqrt(matD))
+matL <- matR %*% matSInv
+cat("$$L = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matL, pnDigits = 4), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Daraus finden wir 
+
+```{r}
+matDInv <- solve(matD)
+cat("$$D^{-1} = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matDInv, pnDigits = 4), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+und 
+
+```{r}
+matLInv <- solve(matL)
+cat("$$L^{-1} = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matLInv, pnDigits = 4), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Multiplizieren wir die Inversen, dann folgt
+
+```{r}
+matAInv <- as.matrix(getAInv(ped = ped))
+cat("$$A^{-1} = (L^{-1})^T * D^{-1} * L^{-1}= \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matAInv, pnDigits = 4), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
 
 ## Aufgabe 2: Zuchtwert aufgrund Nachkommenleistung
+Stier Elvis hat $10$ Nachkommen. Von diesen Nachkommen wurden der tägliche Zuwachs (in kg) bis zum Absetzen aufgezeichnet. Das Merkmal hat ein Populationsmittel von $1$ kg pro Tag.
+
+```{r}
+set.seed(123)
+nNrOffspring <- 10
+nMeanWwg <- 1.25
+nSdWwg <- 0.3
+dfWeanWeightGain = data.frame(Tier=1:nNrOffspring, Zuwachs = round(rnorm(nNrOffspring, mean=nMeanWwg, sd=nSdWwg), digits = 2))
+knitr::kable(dfWeanWeightGain)
+```
+
+a) Schätzen Sie den Zuchtwert von Elvis für das Merkmal tägliche Zunahme bis zum Absetzen aufgrund der Nachkommenleistung
+b) Wie gross ist das Bestimmtheitsmass des unter a) geschätzten Zuchtwertes
+c) Berechnen Sie aufgrund des Vertrauensintervalls, dass der Zuchtwert von Elvis grösser als $+2$ kg pro Tag ist
+
+
+__Lösung__:
+
 
 
 ## Aufgabe 3: Bedingungen und Schleifen (Loops) in R
