@@ -27,7 +27,7 @@ if (!r6ob_abbrtable$is_empty_abbr())
 
 
 ## Aufgabe 1: Erweiterung der `if`-Bedingungen
-```{r Ex7A1Init, ref.label="Ex7A1Loop", echo=FALSE}
+```{r Ex7A1Init, ref.label="Ex7A1Loop", echo=FALSE, results='hide'}
 ```
 
 In der letzten Übung hatten wir gesehen, wie der Programmablauf mit `if`-Bedingungen gesteuert werden. Im einfachsten Fall wird eine Bedingung überprüft und falls diese zutrifft, werden gewissen Anweisungen ausgeführt. Dieses Konzept kann auch erweitert werden. Wir können verschiedene Bedingungen gleichzeitig überprüfen und bei deren Zutreffen jeweilen verschiedene Anweisungen ausführen. 
@@ -44,10 +44,17 @@ for (nIdx in nLowerLimit:nUpperLimit){
     cat(nIdx, " ist durch 3 teilbar\n")
   }  else if(identical(nIdx %% 5, 0)) {
     cat(nIdx, " ist durch 5 teilbar\n")
+  } else {
+    cat(nIdx, " ist weder durch 2 noch durch 3 noch durch 5 teilbar\n")
   }
 }
 ```
 
+Aufgrund des Resultats sehen wir klar, dass jede Bedingung nur einmal getestet wird. Dies erkennen wir aufgrund der Tatsache, dass für die Zahlen $6$ und $10$ nur die Teilbarkeit durch $2$ aufgelistet wird.
+
+
+### Ihre Aufgabe
+Finden Sie mit einer Kombination aus einem Loop und von verschiedenen `if`-Bedingungen alle Primzahlen zwischen $11$ und $100$. Für das Finden der Primzahlen reicht es, wenn Sie die Teilbarkeit bis zur Zahl $10$ überprüfen. Ist eine Zahl nur durch $1$ und sich selber teilbar, dann ist es eine Primzahl.
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()

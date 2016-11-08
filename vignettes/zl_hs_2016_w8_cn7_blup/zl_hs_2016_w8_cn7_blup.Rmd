@@ -1,0 +1,38 @@
+---
+title:  Züchtungslehre - BLUP von Zuchtwerten
+author: Peter von Rohr
+date: 2016-11-11
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "[REPLACE_WITH_PROJECT]")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Einführung
+Die Schätzung von Zuchtwerten mit der Regressionsmethode oder mit dem Selektionsindex verlangt, dass wir die phänotypischen Leistungen um bekannte Umwelteinflüsse korrigieren können. Diese Korrektur wurde jeweilen im Populationsmittel zusammengefasst. Im routinemässigen Betrieb, wo Zuchtwerte aufgrund von Daten aus dem Feld geschätzt werden sollen, sind die Umwelteinflüsse sehr verschieden und a priori nicht bekannt. Somit brauchen wir ein Verfahren, mit welchem wir gleichzeitig den Einfluss von verschiedenen Umweltfaktoren schätzen können und Zuchtwerte voraussagen können.
+
+## BLUP-Verfahren
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything -->
