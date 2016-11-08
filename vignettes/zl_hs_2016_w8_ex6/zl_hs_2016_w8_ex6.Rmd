@@ -1,5 +1,5 @@
 ---
-title:  Züchtungslehre - Lösung 6
+title:  Züchtungslehre - Übung 6
 author: Peter von Rohr
 date: 2016-11-11
 output: pdf_document
@@ -7,7 +7,6 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
-devtools::load_all()
 ```
 
 ```{r DocumentStatus, eval=FALSE}
@@ -60,74 +59,6 @@ __Hinweise__:
         
 wobei $\alpha_i$ das $i$-te Element auf der Diagonalen von $D$ ist.
 
-__Lösung__:
-
-a) Die Verwantschaftsmatrix 
-
-```{r RelMatPedEx6A1}
-matA <- as.matrix(getA(ped=ped))
-matR <- t(chol(matA))
-cat("$$A = \\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = matA, pnDigits = 4), collapse = "\n"))
-cat("\\right]\n")
-cat("$$\n")
-```
-
-
-b) Die LDL-Zerlegung von $A$: Da es im Pedigree keine ingezüchteten Tiere gibt, ist die Matrix $D$ einfach zu bestimmen als.
-
-```{r}
-matD <- diag(Dmat(ped = ped))
-cat("$$D = \\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = matD, pnDigits = 4), collapse = "\n"))
-cat("\\right]\n")
-cat("$$\n")
-```
-
-Die Diagonalelemente sind $1$ für Foundertiere, $3/4$ für Tiere mit einem bekannten Elternteil und $1/2$ für Tiere mit bekannten Eltern.
-
-Die Matrix $L$ ist eine linke untere Dreiecksmatrix, wobei Zeile $i$ dem Mittelwert der Zeilen $s$ und $d$ entsprechen, angenommen, dass die Tiere $s$ und $d$ die Eltern von Tier $i$ sind.
-
-```{r}
-matSInv <- solve(sqrt(matD))
-matL <- matR %*% matSInv
-cat("$$L = \\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = matL, pnDigits = 4), collapse = "\n"))
-cat("\\right]\n")
-cat("$$\n")
-```
-
-Daraus finden wir 
-
-```{r}
-matDInv <- solve(matD)
-cat("$$D^{-1} = \\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = matDInv, pnDigits = 4), collapse = "\n"))
-cat("\\right]\n")
-cat("$$\n")
-```
-
-und 
-
-```{r}
-matLInv <- solve(matL)
-cat("$$L^{-1} = \\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = matLInv, pnDigits = 4), collapse = "\n"))
-cat("\\right]\n")
-cat("$$\n")
-```
-
-Multiplizieren wir die Inversen, dann folgt
-
-```{r}
-matAInv <- as.matrix(getAInv(ped = ped))
-cat("$$A^{-1} = (L^{-1})^T * D^{-1} * L^{-1}= \\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = matAInv, pnDigits = 4), collapse = "\n"))
-cat("\\right]\n")
-cat("$$\n")
-```
-
-
 \pagebreak
 
 ## Aufgabe 2: Zuchtwert aufgrund Nachkommenleistung
@@ -164,38 +95,6 @@ b) Wie gross ist das Bestimmtheitsmass des unter a) geschätzten Zuchtwertes
 c) Berechnen Sie aufgrund der Standardabweichung des geschätzten Zuchtwertes die Wahrscheinlichkeit, dass der Zuchtwert von Elvis grösser oder gleich $+`r round(nOgHatA, digits = 2)`$ kg pro Tag ist.
 
 
-__Lösung__:
-
-a) Der geschätzte Zuchtwert für Elvis beträgt
-
-$$\hat{a} = \frac{2n}{n+k}(\tilde{y} - \mu)$$
-
-wobei $n$: Anzahl Beobachtungen, $\tilde{y}$ der Nachkommendurchschnitt, $\mu$ das Populationsmittel und $k=\frac{4-h^2}{h^2}$. Setzen wir diese Werte ein, dann folgt
-
-
-$$\hat{a} = \frac{2*`r nNrOffspring`}{`r nNrOffspring`+`r k`}(`r nMeanZuw` - `r nPopMean`)
-          = `r round(nHatA, digits = 2)`$$
-
-b) Das Bestimmtheitsmass für den Zuchtwert von Elvis ist
-
-$$B = r_{a,\tilde{y}}^2 = \frac{n}{n+k} = \frac{`r nNrOffspring`}{`r nNrOffspring`+`r k`}
-    = `r round(nNrOffspring/(nNrOffspring+k), digits=3)`$$
-
-\pagebreak
-
-c) Für die Standardabweichung des geschätzten Zuchtwertes, berechnen wir zuerst die Varianz $var(\hat{a})$ und ziehen dann die Wurzel. 
-
-
-\begin{eqnarray}
-\sqrt{var(\hat{a})} &=& \sqrt{var(b * (\tilde{y} - \mu))} \nonumber\\
-                    &=& b * \sqrt{var(\tilde{y})}         \nonumber\\
-                    &=& \frac{2n}{n+k}\sqrt{({1\over 4}h^2 + (1-{1\over 4}h^2)/n) \sigma_y^2} \nonumber\\
-                    &=& \frac{2 * `r nNrOffspring`}{`r nNrOffspring` + `r k`}
-                        * \sqrt{{1\over 4} * `r nH2` + (1 - {1\over 4} * `r nH2`) / `r nNrOffspring`} * `r nPhenSd`\nonumber\\
-                    &=& `r round(nSigmaHatA, digits=3)` \nonumber
-\end{eqnarray}               
-                 
-Da $`r round(nOgHatA, digits = 2)` \approx `r round(nHatA, digits=2)` + `r round(qnorm(0.025, lower.tail = FALSE), digits = 2)` * `r round(nSigmaHatA, digits=3)`$ ist, folgt, dass die Wahrscheinlichkeit rund $`r nPvalHatA`$ oder $`r 100*nPvalHatA`\%$ beträgt.
 
 
 ## Aufgabe 3: Bedingungen und Schleifen (Loops) in R
@@ -250,20 +149,10 @@ ped <- pedigree(sire = c(NA,NA,1,1,4),dam = c(NA,NA,2,NA,2), label = as.characte
 - Die Mutter des Tieres $i$ bekommen Sie mit dem Ausdruck `ped@dam[i]`
 
 
-__Lösung__:
-
-```{r PedUnknownMotherInit, echo=TRUE, results='markup'}
+```{r PedUnknownMotherInit, echo=FALSE, results='hide'}
 suppressPackageStartupMessages(require(pedigreemm))
 nNrAni <- 5
 ped <- pedigree(sire = c(NA,NA,1,1,4),dam = c(NA,NA,2,NA,2), label = as.character(1:nNrAni))
-```
-
-```{r PedLoopUnknownMother, echo=TRUE, results='markup'}
-for (idx in 1:length(ped@label)){
-  if (is.na(ped@dam[idx])) {
-    cat("Tier ", idx, " hat eine unbekannte Mutter\n")
-  }
-}
 ```
 
 

@@ -1,0 +1,56 @@
+---
+title:  Züchtungslehre - Lösung 7
+author: Peter von Rohr
+date: 2016-11-18
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS_2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+
+## Aufgabe 1: Erweiterung der `if`-Bedingungen
+```{r Ex7A1Init, ref.label="Ex7A1Loop", echo=FALSE}
+```
+
+In der letzten Übung hatten wir gesehen, wie der Programmablauf mit `if`-Bedingungen gesteuert werden. Im einfachsten Fall wird eine Bedingung überprüft und falls diese zutrifft, werden gewissen Anweisungen ausgeführt. Dieses Konzept kann auch erweitert werden. Wir können verschiedene Bedingungen gleichzeitig überprüfen und bei deren Zutreffen jeweilen verschiedene Anweisungen ausführen. 
+
+Als Beispiel können wir bei den natürlichen Zahlen zwischen `r nLowerLimit` und `r nUpperLimit` überprüfen, ob diese durch 2, 3 oder 5 teilbar sind.
+
+```{r Ex7A1Loop, echo=TRUE, results='markup'}
+nLowerLimit <- 1
+nUpperLimit <- 10
+for (nIdx in nLowerLimit:nUpperLimit){
+  if (identical(nIdx %% 2, 0)) {
+    cat(nIdx, " ist durch 2 teilbar\n")
+  } else if(identical(nIdx %% 3, 0)) {
+    cat(nIdx, " ist durch 3 teilbar\n")
+  }  else if(identical(nIdx %% 5, 0)) {
+    cat(nIdx, " ist durch 5 teilbar\n")
+  }
+}
+```
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything --> 
