@@ -25,10 +25,104 @@ if (!r6ob_abbrtable$is_empty_abbr())
   r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
 ```
 
+
 ## Einführung
+Die in diesem Kapitel eingeführten und besprochenen Verfahren werden in der __traditionellen Zuchtwertschätzung__ verwendet. Unter traditionellen Zuchtwertschätzungen verstehen wir die Auswertungen, bei welchen Zuchtwerte aufgrund von phänotypischen Leistungen und  Pedigreeinformationen geschätzt werden. Im Gegensatz dazu steht die __genomische Selektion__ bei welcher Zuchtwerte aufgrund von genomischen Informationen ermittelt werden.
+
 Die Schätzung von Zuchtwerten mit der Regressionsmethode oder mit dem Selektionsindex verlangt, dass wir die phänotypischen Leistungen um bekannte Umwelteinflüsse korrigieren können. Diese Korrektur wurde jeweilen im Populationsmittel zusammengefasst. Im routinemässigen Betrieb, wo Zuchtwerte aufgrund von Daten aus dem Feld geschätzt werden sollen, sind die Umwelteinflüsse sehr verschieden und a priori nicht bekannt. Somit brauchen wir ein Verfahren, mit welchem wir gleichzeitig den Einfluss von verschiedenen Umweltfaktoren schätzen können und Zuchtwerte voraussagen können.
 
+
 ## BLUP-Verfahren
+Das BLUP Verfahren ist für die traditionelle Zuchtwertschätzung die Methode der Wahl. BLUP wurde ab 1949 unter der Leitung von Charles Henderson entwickelt. Im Gegensatz zu anderen Methoden, wie dem Selektionsindex, erlaubt BLUP die simultane Schätzung von Umwelteffekten zusammen mit der Vorhersage der Zuchtwerte. 
+
+Die Abkürzung BLUP steht für __Best Linear Unbiased Prediction__ und beschreibt damit die Eigenschaften der geschätzten zufälligen Effekte in statistischen Modell. Was diese Eigenschaften genau bedeuten werden wir später noch genauer betrachten. Der Ausgangspunkt von BLUP ist ein sogenanntens __lineares gemischtes Modell__ (linear mixed model). Ein Beispiel für ein solches lineares gemischtes Modell ist in Gleichung (\ref{eq:LinearMixedModel}) gezeigt. Ein statistisches Modell, welches neben den fixen Effekten $b$ und den zufälligen Resteffekten $b$ zusätzlich noch weitere zufällige Effekte $u$ aufweist, wird als ein gemischtes Modell bezeichnet. 
+
+### Modell
+
+\begin{equation}
+y = Xb + Zu + e
+\label{eq:LinearMixedModel}
+\end{equation}
+
+\begin{tabular}{lll}
+mit & $y$:  & Vektor der Beobachtungswerte\\
+    & $b$:  & Vektor der fixen Effekte\\
+    & $u$:  & Vektor der zufälligen Effekte\\
+    & $e$:  & Vektor der zufälligen Resteffekte\\
+    & $X$:  & Inzidenzmatrix zur Verknüpfung der Beobachtungen mit den fixen Effekten\\
+    & $Z$:  & Inzidenzmatrix zur Verknüpfung der Beobachtungen mit den zufälligen Effekten
+\end{tabular}
+
+\pagebreak
+
+### Erwartungswerte und Varianzen
+Die Erwartungswerte und Varianzen der Zufallsvariablen im Modell (\ref{eq:LinearMixedModel}) sind definiert als
+
+\begin{equation}
+E\left[
+\begin{array}{c} 
+y\\
+u\\
+e
+\end{array}\right]
+= \left[
+\begin{array}{c} 
+Xb\\
+0\\
+0
+\end{array}\right]
+\label{eq:ExpValMme}
+\end{equation}
+
+Aufgrund der Definition der Erwartungswerte in (\ref{eq:ExpValMme}) können wir erkennen, dass die zufälligen Effekte $u$ und $e$ jeweilen einen Erwartungswert von $0$ haben und somit als Abweichung von einem allgemeinen Populationsmittel definiert sind. Dieses allgemeine Mittel entspricht dem Erwartungswert der phänotypischen Beobachtungen $y$ und ist gleich $Xb$. 
+
+\begin{equation}
+var\left[
+\begin{array}{c} 
+y\\
+u\\
+e
+\end{array}\right]
+= \left[
+\begin{array}{ccc} 
+ZGZ^T + R  &  ZG  &  R \\
+GZ^T       &  G   &  0 \\
+R          &  0   &  R
+\end{array}\right]
+\label{eq:CovMme}
+\end{equation}
+
+Die Covarianzmatrix der zufälligen Resteffekte $e$ wird mit $R$ bezeichnet und die der zufälligen Effekte $u$ wird mit $G$ bezeichnet. Die Covarianz $cov(u,e^T)$ zwischen den zufälligen Effekte $u$ und $e$ wird als $0$ angenommen. 
+
+Die fixen Effekte $b$ werden als fixe Faktorstufen bezeichnet und haben somit keine Varianz, d.h. dass $var(b) = 0$. Auch alle Covarianzen zwischen den zufälligen Effekten $u$ und $e$ und den fixen Effekten $b$ sind $0$. 
+
+Aus den bisher getroffenen Annahmen betreffend der Varianzen und Covarianzen können die anderen Elemente der Matrix in (\ref{eq:CovMme}) berechnet werden. Die Varianz $var(y)$ der phänotypischen Beobachtungen $y$ wird mit $V$ bezeichnet und berechnet sich als
+
+\begin{eqnarray}
+var(y) &=& var(Xb + Zu + e) \nonumber\\
+       &=& var(Zu) + var(e) \nonumber\\
+       &=& Z * var(u) * Z^T + var(e) \nonumber\\
+       &=& Z * G * Z^T + R = V \nonumber
+\end{eqnarray}
+
+Die Covarianz $cov(y,u^T)$ zwischen den phänotypischen Beobachtungen $y$ und den zufälligen Effekten $u$ ergibt sich als
+
+\begin{eqnarray}
+cov(y,u^T) &=& cov(Xb + Zu + e, u^T)      \nonumber\\
+           &=& cov(Zu, u^T) + cov(e, u^T) \nonumber\\
+           &=& Z * cov(u, u^T)            \nonumber\\
+           &=& Z * G                      \nonumber
+\end{eqnarray}
+
+
+## Eigenschaften der Schätzwerte 
+Wie schon erwähnt beschreibt die Abkürzung BLUP die Eigenschaften der Schätzwerte $\hat{u}$ der zufälligen Effekte $u$. Die Bedeutung dieser Eigenschaften wollen wir jetzt genauer analysieren.
+
+- __Linear__: fixe Effekte $Kb$ plus zufällige Effekte $Mu$ werden mit einer Linearkombination $By$ der Beobachtungswerte geschätzt.
+- __Unbiased__: die Schätzungen für die fixen Effekte plus die zufälligen Effekte sollen unverzerrt (unbiased) oder erwartungstreu sein. Somit ist $E\left[ Kb + Mu \right] = E\left[By \right]$. Daraus folgt aufgrund der Definitionen zum Modell (\ref{eq:LinearMixedModel}), dass $Kb = BXb$
+- Best
+
+
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
