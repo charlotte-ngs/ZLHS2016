@@ -120,9 +120,24 @@ Wie schon erwähnt beschreibt die Abkürzung BLUP die Eigenschaften der Schätzw
 
 - __Linear__: fixe Effekte $Kb$ plus zufällige Effekte $Mu$ werden mit einer Linearkombination $By$ der Beobachtungswerte geschätzt.
 - __Unbiased__: die Schätzungen für die fixen Effekte plus die zufälligen Effekte sollen unverzerrt (unbiased) oder erwartungstreu sein. Somit ist $E\left[ Kb + Mu \right] = E\left[By \right]$. Daraus folgt aufgrund der Definitionen zum Modell (\ref{eq:LinearMixedModel}), dass $Kb = BXb$
-- Best
+- __Best__: unter allen linearen unverzerrten Schätzern weist der BLUP-Schäter die kleinste Fehlervarianz auf. Das heisst $var(By - (Kb + Mu))$ ist minimal
 
+Aus den BLUP-Eigenschaften lassen sich die folgenden Schätzgleichungen ableiten.
 
+\begin{equation}
+\hat{b} = (X^TV^{-1}X)^- X^TV^{-1}y
+\label{eq:BlueBhat}
+\end{equation}
+
+\begin{equation}
+\hat{u} = GZ^TV^{-1}(y - X\hat{b})
+\label{eq:BlupUhat}
+\end{equation}
+
+\begin{tabular}{lll}
+mit & $\hat{b}$ & Lösungsvektor der fixen Effekte\\
+    & $\hat{u}$ & 
+\end{tabular}
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
