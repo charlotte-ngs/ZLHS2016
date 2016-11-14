@@ -54,7 +54,67 @@ Aufgrund des Resultats sehen wir klar, dass jede Bedingung nur einmal getestet w
 
 
 ### Ihre Aufgabe
-Finden Sie mit einer Kombination aus einem Loop und von verschiedenen `if`-Bedingungen alle Primzahlen zwischen $11$ und $100$. Für das Finden der Primzahlen reicht es, wenn Sie die Teilbarkeit bis zur Zahl $10$ überprüfen. Ist eine Zahl nur durch $1$ und sich selber teilbar, dann ist es eine Primzahl.
+Finden Sie mit einer Kombination aus einem Loop und von verschiedenen `if`-Bedingungen die Zahlen, welche durch $2$, $3$ und $7$ teilbar sind und alle Primzahlen zwischen $11$ und $50$. Für das Finden der Primzahlen reicht es, wenn Sie die Teilbarkeit bis zur Zahl $7$ überprüfen. Ist eine Zahl nur durch $1$ und sich selber teilbar, dann ist es eine Primzahl.
+
+__Lösung__:
+
+```{r Ex7A1Sol, echo=TRUE, results='markup'}
+nLowerLimit <- 11
+nUpperLimit <- 50
+for (nIdx in nLowerLimit:nUpperLimit){
+  if (identical(nIdx %% 2, 0)) {
+     cat(nIdx, " ist durch 2 teilbar\n")
+  } else if(identical(nIdx %% 3, 0)) {
+     cat(nIdx, " ist durch 3 teilbar\n")
+  }  else if(identical(nIdx %% 5, 0)) {
+     cat(nIdx, " ist durch 5 teilbar\n")
+  }  else if(identical(nIdx %% 7, 0)) {
+     cat(nIdx, " ist durch 7 teilbar\n")
+  } else {
+    cat(nIdx, " ist eine Primzahl\n")
+  }
+}
+```
+
+
+## Aufgabe 2:
+
+Gegeben ist das folgende Pedigree. Berechnen Sie die Inzuchtkoeffizienten aller Tiere im Pedigree und die Elemente der Matrix $R$, wobei $R$ aus der Cholesky-Zerlegung der additive genetischen Verwandtschaftsmatrix $A$. Es gilt also 
+
+\begin{equation}
+A = R * R^T
+\label{eq:AChol}
+\end{equation}
+
+wobei $R$ eine linke untere Dreiecksmatrix ist.
+
+```{r PedigreeSetUp, results='markup'}
+nNrAniInPedEx2 <- 8
+suppressPackageStartupMessages(require(pedigreemm))
+pedEx2 <- pedigree(sire = c(NA, NA, 1, 1, 4, 5, 5, 6), 
+                   dam  = c(NA, NA, 2, 3, 3, 2, 3, 7),
+                   label = as.character(1:nNrAniInPedEx2))
+print(pedEx2)
+```
+
+__Lösung__:
+
+- Inzuchtkoeffizienten: berechnen sich aus den Diagonalelementen $a_{ii}$ der Verwandtschaftsmatrix. Diese werden aus den Elementen der $i$-ten Zeile der Matrix $R$ aus (\ref{eq:AChol}) berechnet. Genauer gilt
+
+$$a_{ii} = \sum_{j=1}^i r_{ij}^2$$
+
+- Die Diagonalelemente $r_{ii}$ der Matrix $R$ berechnen sich als
+
+$$r_{ii} = \sqrt{1 - 0.25(a_{ss} + a_{dd})}$$
+
+wobei $s$ und $d$ die Eltern von $i$ sind. Ist ein Elternteil unbekannt, dann ist der entsprechende Wert aus $A$ gleich $0$. 
+
+- Die Offdiagonalelemente $r_{ij}$ (für $i\ne j$) entsprechen
+
+$$r_{ij} = {1\over 2}(r_{sj} + r_{dj})$$
+
+wobei $s$ und $d$ die Eltern von $i$ sind. 
+
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
