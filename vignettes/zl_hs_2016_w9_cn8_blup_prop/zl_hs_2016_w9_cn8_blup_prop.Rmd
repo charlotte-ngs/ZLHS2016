@@ -26,6 +26,70 @@ if (!r6ob_abbrtable$is_empty_abbr())
 ```
 
 ## Einleitung
+In diesem Kapitel werden die Eigenschaften von BLUP-Zuchtwerten genauer erklärt. Im letzten Kapitel hatten wir gesehen, dass die geschätzten Zuchtwerte eine Funktion der Beobachtungen ist. Tiere ohne phänotypische Beobachtungen erhalten Zuchtwerte über Verknüpfungen in der inversen Verwandtschaftsmatrix. Welche Beobachtungen in einem geschätzten Zuchtwert eine Rolle spielen wollen wir bei der Zerlegung der geschätzten Zuchtwerte analysieren.
+
+
+## Vergleich verschiedener Zuchtwertschätzmethoden
+Wir haben bisher eine Reihe von Zuchtwertschätzmethoden kennengelernt. Für den Vergleich sollen Zuchtwerte mit den zu vergleichenden Methoden aufgrund des gleichen Datensatzes geschätzt werden. Folgende Methoden werden miteinander verglichen.
+
+- Zuchtwerte aufgrund von Eigenleistungen
+- Zuchtwerte aufgrund von Nachkommenleistungen
+- BLUP Zuchtwertschätzung mit Vatermodell
+- BLUP Zuchtwertschätzung mit Tiermodell
+
+
+### Daten
+Als Datensatz verwenden wir die Zunahmen bis zu Absetzen aus dem letzten Kapitel. Die folgende Tabelle gibt nochmals eine Übersicht über das Datenmaterial.
+
+```{r WwgDataSet, results='hide'}
+nNrAniInPed <- 8
+nIdxFirstAniWithData <- 4
+dfWwg <- data.frame(Kalb = c(nIdxFirstAniWithData:nNrAniInPed),
+                    Geschlecht = c("M","F","F","M","M"),
+                    Vater = c(1,3,1,4,3),
+                    Mutter = c(NA,2,2,5,6),
+                    WWG = c(4.5,2.9,3.9,3.5,5.0))
+sigmae2 <- 40
+sigmaa2 <- 20
+alpha <- sigmae2/sigmaa2
+sigmap2 <- sigmaa2 + sigmae2
+h2 <- sigmaa2 / sigmap2
+```
+
+```{r WwgDataSetShow}
+knitr::kable(dfWwg)
+```
+
+Die Varianzkomponenten $\sigma_e^2$ und $\sigma_a^2$ sind bekannt und haben die Werte $\sigma_e^2 = `r sigmae2`$ und $\sigma_a^2 = `r sigmaa2`$.
+
+
+### Zuchtwerte aufgrund von Eigenleistungen
+Diese Methode ist die einfachste um Zuchtwerte zu schätzen. Sie ist aber auch sehr limitiert, da nur Tiere mit einer eigenen beobachteten Leistung einen Zuchtwert bekommen. Für alle anderen Tiere kann kein Zuchtwert geschätzt werden. Für unser Beispiel bedeutet das, dass die Tiere in folgender Tabelle einen geschätzten Zuchtwert erhalten. Der Einfachheit halber nehmen wir den Mittelwert der Beobachtungen als Populationsmittel an.
+
+\pagebreak
+
+```{r PredBvOwnPerf}
+muWwg <- mean(dfWwg$WWG)
+bvOwnPerf <- h2*(dfWwg$WWG - muWwg)
+dfBvOwnPerf <- data.frame(Tier = dfWwg$Kalb, Zuchtwert = round(bvOwnPerf, digits = 3))
+knitr::kable(dfBvOwnPerf)
+```
+
+
+### Zuchtwerte aufgrund von Nachkommenleistungen
+```{r ParentsWithOffspringMean, echo=FALSE, results='hide'}
+tabVater <- table(dfWwg$Vater)
+tabMutter <- table(dfWwg$Mutter)
+vEltern <- c(names(tabVater)[which(tabVater>1)],names(tabMutter)[which(tabMutter > 1)])
+vEltern <- vEltern[order(vEltern)]
+nNrEltern <- length(vEltern)
+```
+
+Zuchtwerte aufgrund von Nachkommenleistungen zu schätzen, macht eigentlich nur dann Sinn, wenn ein Tier mehr als ein Nachkommen hat. Dies trifft bei unserem Datensatz für die Tiere `r vEltern[1:(nNrEltern-1)]` und `r vEltern[nNrEltern]` zu.
+
+
+
+## Zerlegung eines mit dem Tiermodell geschätzten Zuchtwertes
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
