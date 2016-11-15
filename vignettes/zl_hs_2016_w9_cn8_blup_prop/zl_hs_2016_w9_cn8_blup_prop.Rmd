@@ -120,7 +120,28 @@ Es gilt aber zu beachten, dass diese Standardabweichungen auf sehr wenigen Beoba
 
 
 ### Das Vatermodell
-Das Vatermodell gilt als eigentlicher Vorläufer des Tiermodells. Bei besonderen Datenkonstellationen wird dieses Modell aber heute noch in der Praxis - so zum Beispiel in der Fleischrinderzucht - heute noch eingesetzt. Beim Vatermodell handelt es sich auch wie beim Tiermodell um ein lineares gemischtes Modell. Die zufälligen Effekte des Vatermodells sind aber die sogenannten Vatereffekte und nicht wie im Tiermodell die Zuchtwerte. Aufgrund dieser Tatsache bekommen nur männliche Tiere einen Zuchtwert und es werden auch nur die Verwandtschaften über die väterlichen Pfade berücksichtigt.
+Das Vatermodell gilt als eigentlicher Vorläufer des Tiermodells. Bei besonderen Datenkonstellationen wird dieses Modell aber heute noch in der Praxis - so zum Beispiel in der Fleischrinderzucht - eingesetzt. Beim Vatermodell handelt es sich auch wie beim Tiermodell um ein lineares gemischtes Modell. Die zufälligen Effekte des Vatermodells sind aber die sogenannten Vatereffekte und nicht wie im Tiermodell die Zuchtwerte. Aufgrund dieser Tatsache bekommen nur männliche Tiere einen Zuchtwert und es werden auch nur die Verwandtschaften über die väterlichen Pfade berücksichtigt. Beim Vatermodell nehmen wir an, dass alle Paarungspartner genetisch ähnlich sind zueinander. Dies kann zu Verzerrungen bei den geschätzten Zuchtwerten führen, falls eine gezielte Paarung praktiziert wird. Der Vorteil des Vatermodells liegt in der reduzierten Anzahl an Gleichungen, welche zu lösen sind.
+
+In Matrixnotation lautet das Vatermodell
+
+\begin{equation}
+y = Xb + Zs + e
+\label{eq:SireModel}
+\end{equation}
+
+Alle Terme in (\ref{eq:SireModel}) sind gleich definiert, wie im Tiermodell, ausser dass $s$ jetzt für den Vektor der zufälligen Vatereffekte steht und dass die Inzidenzmatrix $Z$ die Beobachtungen mit den Vatereffekten verknüpft. Die Varianzkomponenten der zufälligen Effekte lauten
+
+\begin{equation}
+var(s) = A\ \sigma_s^2
+\label{eq:VarSireEffect}
+\end{equation}
+
+wobei $A$ die Verwandtschaftsmatrix zwischen den Vätern ist und $\sigma_s^2 = 0.25\sigma_a^2$ beträgt. Die Mischmodellgleichungen sind gleich, wie beim Tiermodell, ausser, dass 
+
+$$\alpha = \frac{\sigma_e^2}{\sigma_s^2} = \frac{4-h^2}{h^2}$$
+
+### Ein Beispiel
+
 
 
 ## Zerlegung eines mit dem Tiermodell geschätzten Zuchtwertes
