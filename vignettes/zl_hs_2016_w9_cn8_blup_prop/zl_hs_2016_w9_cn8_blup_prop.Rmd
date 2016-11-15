@@ -83,10 +83,44 @@ tabMutter <- table(dfWwg$Mutter)
 vEltern <- c(names(tabVater)[which(tabVater>1)],names(tabMutter)[which(tabMutter > 1)])
 vEltern <- vEltern[order(vEltern)]
 nNrEltern <- length(vEltern)
+k <- (4-h2)/h2
 ```
 
-Zuchtwerte aufgrund von Nachkommenleistungen zu schätzen, macht eigentlich nur dann Sinn, wenn ein Tier mehr als ein Nachkommen hat. Dies trifft bei unserem Datensatz für die Tiere `r vEltern[1:(nNrEltern-1)]` und `r vEltern[nNrEltern]` zu.
+Zuchtwerte aufgrund von Nachkommenleistungen zu schätzen, macht eigentlich nur dann Sinn, wenn ein Tier mehr als ein Nachkommen hat. Dies trifft bei unserem Datensatz für die Tiere `r vEltern[1:(nNrEltern-1)]` und `r vEltern[nNrEltern]` zu. Die geschätzten Zuchtwerte aufgrund von Nachkommendurchschnitten sind definiert als
 
+$$\hat{a} = \frac{2n}{n+k}(\tilde{y} - \mu)$$
+
+wobei $n$ für die Anzahl Nachkommen steht und $k$ als $(4-h^2)/h^2$ definiert ist. Für unser Beispiel gilt also, dass $k= `r k`$. Der Durchschnitt der phänotypischen Leistungen der Nachkommen wird mit $\tilde{y}$ bezeichnet. Als Populationsmittel $\mu$ verwenden wir wieder das Mittel aller phänotypischen Beobachtungen. Dieses beträgt $`r muWwg`$. Die folgende Tabelle gibt eine Übersicht über die verwendeten Werte und die geschätzten Zuchtwerte (Kolonnen `BV`).
+
+```{r InfoBvOffspring, echo=FALSE}
+vecNrOffSpring <- sapply(as.numeric(vEltern), function(x) return(length(which(dfWwg$Vater == x)) + 
+                                                                                     length(which(dfWwg$Mutter == x))))
+vecMeanOffspring <- sapply(as.numeric(vEltern), function(x) mean(dfWwg$WWG[c(which(dfWwg$Vater == x), which(dfWwg$Mutter == x))]))
+vecBv <- 2*vecNrOffSpring/(vecNrOffSpring+k) * (vecMeanOffspring-muWwg)
+dfInfoBvOffspring <- data.frame(Tier = vEltern,
+                                n = vecNrOffSpring,
+                                y = vecMeanOffspring,
+                                BV = round(vecBv, digits = 3))
+knitr::kable(dfInfoBvOffspring)
+```
+
+wobei die Anzahl Nachkommen in Kolonne `n` und die Nachkommendurchschnitte in Kolonne `y` aufgelistet sind.
+
+Zusammenfassend können wir feststellen, dass die geschätzten Zuchtwerte eine tiefere Variabilität aufweisen als die phänotypischen Beobachtungen und die Nachkommendurchschnitte. Vergleichen wir die empirischen Standardabweichungen, wie in folgender Tabelle gezeigt, wird diese Reduktion der Variabilität deutlich.
+
+```{r VarReduction, echo=FALSE}
+dfVarRed <- data.frame(Zufallsvariable = c("phänotypische Beobachtungen", "Nachkommendurchschnitt", 
+                                           "Zuchtwerte EL", "Zuchtwerte NL"),
+                       Standardabweichung = round(c(sd(dfWwg$WWG), sd(vecMeanOffspring),
+                                              sd(bvOwnPerf), sd(vecBv)), digits = 3))
+knitr::kable(dfVarRed)
+```
+
+Es gilt aber zu beachten, dass diese Standardabweichungen auf sehr wenigen Beobachtungen basieren. Somit ist diese Beobachtung zunächst einmal einfach für diesen Datensatz gültig. 
+
+
+### Das Vatermodell
+Das Vatermodell gilt als eigentlicher Vorläufer des Tiermodells. Bei besonderen Datenkonstellationen wird dieses Modell aber heute noch in der Praxis - so zum Beispiel in der Fleischrinderzucht - heute noch eingesetzt. Beim Vatermodell handelt es sich auch wie beim Tiermodell um ein lineares gemischtes Modell. Die zufälligen Effekte des Vatermodells sind aber die sogenannten Vatereffekte und nicht wie im Tiermodell die Zuchtwerte. Aufgrund dieser Tatsache bekommen nur männliche Tiere einen Zuchtwert und es werden auch nur die Verwandtschaften über die väterlichen Pfade berücksichtigt.
 
 
 ## Zerlegung eines mit dem Tiermodell geschätzten Zuchtwertes
