@@ -386,7 +386,7 @@ cat("\\right]$$")
 ```
 
 ```{r MatZtZ}
-matZtZ <- crossprod(matXtZ)
+matZtZ <- crossprod(matZ)
 cat("$$Z^TZ = \\left[\n")
 cat(paste(sGetTexMatrix(pmatAMatrix = matZtZ, pnDigits = 0), collapse = "\n"))
 cat("\\right]$$")

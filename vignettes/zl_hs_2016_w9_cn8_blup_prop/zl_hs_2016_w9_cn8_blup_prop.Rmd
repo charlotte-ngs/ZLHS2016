@@ -7,6 +7,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+devtools::load_all()
 ```
 
 ```{r DocumentStatus, eval=FALSE}
@@ -141,7 +142,163 @@ wobei $A$ die Verwandtschaftsmatrix zwischen den Vätern ist und $\sigma_s^2 = 0
 $$\alpha = \frac{\sigma_e^2}{\sigma_s^2} = \frac{4-h^2}{h^2}$$
 
 ### Ein Beispiel
+Zur Erklärung des Vatermodells verwenden wir den gleichen Datensatz wie für das Tiermodell. Bei den Verwandtschaftsbeziehungen werden die Mütter ignoriert. Der für das Vatermodell modifizierte Datensatz sieht dann wie folgt aus.
 
+```{r WwgDataSetSireModel, results='hide'}
+nNrAniInPed <- 8
+nIdxFirstAniWithData <- 4
+dfWwgSire <- data.frame(Kalb = c(nIdxFirstAniWithData:nNrAniInPed),
+                    Geschlecht = c("M","F","F","M","M"),
+                    Vater = c(1,3,1,4,3),
+                    Mutter = c(NA,NA,NA,NA,NA),
+                    WWG = c(4.5,2.9,3.9,3.5,5.0))
+#sigmae2 <- 40
+#sigmaa2 <- 20
+sigmas2 <- sigmaa2/4
+#alpha <- sigmae2/sigmaa2
+#sigmap2 <- sigmaa2 + sigmae2
+sigmae2sire <- sigmap2-sigmas2
+alphasire <- sigmae2sire/sigmas2
+#h2 <- sigmaa2 / sigmap2
+### # order sires into a vector
+vecSire <- unique(dfWwgSire$Vater)
+vecSire <- vecSire[order(vecSire)]
+nNrSire <- length(vecSire)
+```
+
+Das Ziel hier ist den fixen Effekt des Geschlechts zu schätzen und Zuchtwerte für die Väter `r vecSire[1:(nNrSire-1)]` und `r vecSire[nNrSire]` vorauszusagen. Die Parameter seien die gleichen wie im Tiermodell, somit ist $\sigma_s^2 = \sigma_a^2/4 = `r sigmas2`$ und $\sigma_e^2 = `r sigmae2sire`$ daraus folgt $\alpha = `r alphasire`$. 
+
+```{r WwgDataSetSireShow}
+knitr::kable(dfWwgSire)
+```
+
+Die Inzidenzmatrix $X$ ist gleich wie beim Tiermodell. Da $Z$ die Beobachtungen zu den Vatereffekten zuordnet, sieht $Z$ nun anders aus als im Tiermodell. Die Inzidenzmatrix $Z$ für die Vatereffekte ist
+
+```{r DesignMatrixSireModelZ}
+matSireZ <- matrix(data = c(1,0,1,0,0,
+                            0,1,0,0,1,
+                            0,0,0,1,0), ncol = nNrSire)
+cat("$$ Z = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matSireZ, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n")
+cat("$$")
+```
+
+Die Komponenten der Mischmodellgleichungen sehen wie folgt aus
+
+```{r MatXtX}
+matX <- matrix(c(1,0,0,1,1,0,1,1,0,0), ncol = 2)
+matXtX <- crossprod(matX)
+cat("$$X^TX = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtX, pnDigits = 0), collapse = "\n"))
+cat("\\right]$$")
+```
+
+```{r MatXtZ}
+matXtZ <- crossprod(matX,matSireZ)
+cat("$$X^TZ = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtZ, pnDigits = 0), collapse = "\n"))
+cat("\\right]$$")
+```
+
+```{r MatZtZ}
+matZtZ <- crossprod(matSireZ)
+cat("$$Z^TZ = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZtZ, pnDigits = 0), collapse = "\n"))
+cat("\\right]$$")
+```
+
+Beim Vatermodell werden nur Verwandtschaftsbeziehungen zwischen den Vätern berücksichtigt. Abgesehen davon, dass Vater $4$ der Sohn von Vater $1$ ist, gibt es keine Abhängigkeiten. Die Inverse $A^{-1}$ sieht somit folgendermassen aus.
+
+```{r MatASire}
+suppressPackageStartupMessages(require(pedigreemm))
+pedASire <- pedigree(sire = c(NA,NA,NA,1,3,1,4,3),
+                     dam = c(NA,NA,NA,NA,NA,NA,NA,NA),
+                     label = as.character(1:nNrAniInPed))
+#matAInvSire <- as.matrix(getAInv(ped = pedASire))[vecSire,vecSire]
+matAInvSire <- matrix(c(1.333,0,-.667,0,1,0,-.667,0,1.333), ncol = nNrSire)
+cat("$$A^{-1} = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matAInvSire, pnDigits = 3), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Bei der rechten Handseite sieht $X^Ty$ gleich aus wie beim Tiermodell und $Z^Ty$ berechnen wir aus dem Produkt von $Z^T$ und $y$. 
+
+```{r VecZty}
+vecZty <- crossprod(matSireZ,dfWwg$WWG)
+cat("$$Z^Ty = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = vecZty, pnDigits = 1), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Nun haben wir alle Komponenten und können die Mischmodellgleichungen für das Vatermodell aufstellen.
+
+```{r MmeSire, eval=TRUE}
+matCoeffSire <- rbind(cbind(matXtX,matXtZ),cbind(t(matXtZ),matZtZ+matAInvSire*alphasire))
+vecXty <- crossprod(matX,dfWwg$WWG)
+vecRhs <- rbind(vecXty,vecZty)
+vecBetaHat <- vecGetVecElem(psBaseElement = "\\hat{\\beta}", pnVecLen = 2)
+vecSireHat <- vecGetVecElem(psBaseElement = "\\hat{s}", pnVecLen = nNrSire)
+vecUnknown <- c(vecBetaHat, vecSireHat)
+cat("$$\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matCoeffSire, pnDigits = 3, pnAlign = rep("c", ncol(matCoeffSire)+1)), collapse = "\n"))
+cat("\\right]\n")
+cat("\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecUnknown), pnAlign = rep("c", 2)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = vecRhs, pnDigits = 1, pnAlign = rep("c",2)), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+Aus den oben gezeigten Mischmodellgleichungen lassen sich die Lösungen für die fixen Effekte und die zufälligen Vatereffekte, welche als vorausgesagte Zuchtwerte der Väter gelten, berechnen.
+
+```{r SolutionMmeSire}
+vecSol <- solve(matCoeffSire, vecRhs)
+cat("$$\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecUnknown), pnAlign = rep("c", 2)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSol), pnDigits = 3, pnAlign = rep("c",2)), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+```
+
+## Vergleich zwischen Tiermodell und Vatermodell
+Wir haben fixe Effekte geschätzt und Zuchtwerte vorausgesagt einmal mit dem Tiermodell (sliehe letztes Kapitel) und soeben mit dem Vatermodell. Wir wollen nun die Resultate der beiden Modelle miteinander vergleichen.
+
+## Fixe Effekte
+In beiden Modellen waren das Geschlecht als fixer Effekt berücksichtigt. Die folgende Tabelle zeigt die geschätzten Effekte für die zwei Ausprägungen des Geschlechts
+
+```{r CompareFixedEffects}
+### # solutions from animal model
+matX <- matrix(c(1,0,0,1,1,0,1,1,0,0), ncol = 2)
+nNrObs <- nrow(dfWwg)
+nNrFounder <- nNrAniInPed - nIdxFirstAniWithData - 1
+matZ <- cbind(matrix(0, nrow = nNrObs, ncol = nNrFounder),diag(1,nrow = nNrObs, ncol = nNrObs))
+### # mme components of design matrices
+matXtX <- crossprod(matX)
+matXtZ <- crossprod(matX,matZ)
+matZtZ <- crossprod(matZ)
+### # pedigree
+suppressPackageStartupMessages(require(pedigreemm))
+vecSire <- c(rep(NA,nNrFounder),dfWwg$Vater)
+vecDam <-  c(rep(NA,nNrFounder),dfWwg$Mutter)
+pedEx1 <- pedigree(sire = vecSire, dam = vecDam, label = 1:nNrAniInPed)
+matAInv <- as.matrix(getAInv(ped = pedEx1))
+matZtZAInvAlpha <- matZtZ + matAInv * alpha
+### # rhs 
+vecY <- dfWwg$WWG
+vecXtY <- crossprod(matX,vecY)
+vecZtY <- crossprod(matZ,vecY)
+### # mme
+matCoeff <- cbind(rbind(matXtX, t(matXtZ)), rbind(matXtZ, matZtZAInvAlpha))
+vecRhs <- rbind(vecXtY, vecZtY)
+vecSol <- solve(matCoeff,vecRhs)
+```
 
 
 ## Zerlegung eines mit dem Tiermodell geschätzten Zuchtwertes

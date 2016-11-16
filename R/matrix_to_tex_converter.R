@@ -11,10 +11,11 @@
 #' @param  pnOutStartLine     line index where output should start, default = 5
 #' @param  pnEndIgnoreLines   number of lines to be ignored at the end of the output, default = 1
 #' @param  pnDigits           specify the number of digits to be used
+#' @param  pnAlign            character vector denoting column alignment
 #' @return string containing tex representation of matrix
 #' @export sGetTexMatrix
-sGetTexMatrix <- function(pmatAMatrix, pnOutStartLine = 5, pnEndIgnoreLines = 1, pnDigits = 2) {
-  sResultTexMatrix <- capture.output(print(xtable::xtable(pmatAMatrix, digits = pnDigits),
+sGetTexMatrix <- function(pmatAMatrix, pnOutStartLine = 5, pnEndIgnoreLines = 1, pnDigits = 2, pnAlign = NULL) {
+  sResultTexMatrix <- capture.output(print(xtable::xtable(pmatAMatrix, align = pnAlign, digits = pnDigits),
                                            include.rownames = FALSE,
                                            include.colnames = FALSE,
                                            hline.after = NULL,
