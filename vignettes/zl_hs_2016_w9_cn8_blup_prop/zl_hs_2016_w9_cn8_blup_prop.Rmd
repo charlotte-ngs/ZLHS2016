@@ -152,14 +152,10 @@ dfWwgSire <- data.frame(Kalb = c(nIdxFirstAniWithData:nNrAniInPed),
                     Vater = c(1,3,1,4,3),
                     Mutter = c(NA,NA,NA,NA,NA),
                     WWG = c(4.5,2.9,3.9,3.5,5.0))
-#sigmae2 <- 40
-#sigmaa2 <- 20
+
 sigmas2 <- sigmaa2/4
-#alpha <- sigmae2/sigmaa2
-#sigmap2 <- sigmaa2 + sigmae2
 sigmae2sire <- sigmap2-sigmas2
 alphasire <- sigmae2sire/sigmas2
-#h2 <- sigmaa2 / sigmap2
 ### # order sires into a vector
 vecSireId <- unique(dfWwgSire$Vater)
 vecSireId <- vecSireId[order(vecSireId)]
@@ -358,6 +354,22 @@ y_i &=& \hat{\mu} + \left[1 + \alpha d^{(i)} + {\alpha\over 4} \sum_{j=1}^n d^{(
 \label{eq:YiDecompEq}
 \end{eqnarray}
 
+Lösen wir die Gleichung (\ref{eq:YiDecompEq}) nach $\hat{a}_i$ auf so folgt
+
+\begin{eqnarray}
+\hat{a}_i &=& \frac{1}{1 + \alpha d^{(i)} + {\alpha\over 4} \sum_{j=1}^n d^{(k_j)}}
+              \left[y_i - \hat{\mu} + {\alpha\over 2}\left\{d^{(i)}(\hat{a}_s + \hat{a}_d) 
+              + \sum_{j=1}^n d^{(k_j)} (\hat{a}_{k_j} - {1\over 2}\hat{a}_{l_j}) \right\} \right]
+\label{eq:AhatDecompEq}
+\end{eqnarray}
+
+Aus dieser Zerlegung ist ersichtlich, dass sich der geschätzte Zuchtwert im Tiermodell aus den folgenden Komponenten zusammensetzt:
+
+- Elternzuchtwerte: $\hat{a}_s$ und $\hat{a}_d$
+- Eigenleistung: $y_i$
+- Zuchtwerte von Nachkommen und Paarungspartern: $\hat{a}_{k_j}$ und $\hat{a}_{l_j}$
+
+
 ### Ein Beispiel
 ```{r MmeSmdSetup, ref.label="MmeSimpleModelDecomp", echo=FALSE, results='hide'}
 ```
@@ -401,6 +413,22 @@ cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecZtYSmd, nrow = nNrObsSmd), pn
 cat("\\right]\n$$")
 ```
 
+Beim Pedigree nehmen wir den einfachsten Fall mit `r nNrObsSmd` Tieren. 
+
+```{r ExPedSmd, results='markup'}
+pedSmd <- pedigree(sire = c(NA,NA,NA,1,4), dam = c(NA,NA,NA,2,3), label = as.character(1:nNrObsSmd))
+print(pedSmd)
+```
+
+Aus dem oben gezeigten Pedigree berechnen wir die folgende Inverse $A^{-1}$.
+
+```{r}
+matAinvSmd <- as.matrix(getAInv(ped = pedSmd))
+cat("$$A^{-1} = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matAinvSmd, pnDigits = 2, pnAlign = rep("c", nNrObsSmd+1)), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
 Wir setzen nun die Komponenten zusammen zu 
 
 \begin{equation}
@@ -421,12 +449,42 @@ Z^TX  &  Z^TZ + A^{-1} * \alpha
 \begin{array}{c}
 X^Ty\\
 Z^Ty
-\hat{a}
 \end{array}
 \right]
 \label{eq:MmeSmd}
 \end{equation}
 
+Setzen wir als Beobachtungen $y$ die Werte von unserem Datensatz ein und verwenden auch den gleichen Wert für $\alpha = `r alpha`$, dann sehen die Mischmodellgleichungen in Zahlen wie folgt aus.
+
+```{r MmeSmdNumeric}
+matCoeffSmd <- cbind(rbind(matXtXSmd,t(matXtZSmd)),rbind(matXtZSmd,matZtZSmd + matAinvSmd * alpha))
+cat("$$\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matCoeffSmd, pnDigits = 2, pnAlign = rep("c", nNrObsSmd+2)), collapse = "\n"))
+cat("\\right]\n")
+solVecSmd <- c("\\mu", vecGetVecElem(psBaseElement = "\\hat{a}", pnVecLen = nNrObsSmd))
+cat("\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(solVecSmd, nrow = nNrObsSmd+1), pnAlign = rep("c", 2)), collapse = "\n"))
+cat("\\right]\n")
+vecRhsSmd <- rbind(crossprod(matXSmd,vecY), crossprod(matZSmd,vecY))
+cat(" = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhsSmd, nrow = nNrObsSmd+1), pnDigits = 1, pnAlign = rep("c", 2)), collapse = "\n"))
+cat("\\right]\n")
+cat("$$")
+```
+
+Für unser Beispiel betrachten wir nun das Tier $4$ mit Eltern $1$ und $2$. Das Tier $4$ hat mit Paarungspartner $3$ einen Nachkommen ($5$). 
+
+Aus den Mischmodellgleichungen betrachten wir die zweitletzte Gleichung und können so die Formel (\ref{eq:AhatDecompEq}) verifizieren. Dabei gilt zu berücksichtigen, dass $d^{(i)}$ nur drei Werte annehmen kann.
+
+$$
+d^{(i)} = \left\{
+  \begin{array}{rl} 
+  2           & \text{falls beide Eltern bekannt}\\
+  {4\over 3}  & \text{falls ein Elternteil bekannt}\\
+  1           & \text{falls beide Eltern unbekannt}
+  \end{array}
+  \right.
+$$
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
 ```
