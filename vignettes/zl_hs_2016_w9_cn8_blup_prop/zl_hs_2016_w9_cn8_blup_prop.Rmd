@@ -328,7 +328,104 @@ Die Zuchtwerte und auch paarweise Differenzen zwischen den Zuchtwerten sind vers
 
 
 ## Zerlegung eines mit dem Tiermodell geschätzten Zuchtwertes
+Extrahiert man einzelne Gleichungen aus den Mischmodellgleichungen, so kann gezeigt werden, aus welchen Komponenten sich die vorhergesagten Zuchtwerte zusammensetzen. Diese Technik der Zerlegung erlaubt es weitere Eigenschaften des Tiermodells aufzuzeigen. 
 
+\pagebreak
+
+Wir gehen von folgendem vereinfachten Modell aus
+
+\begin{equation}
+y_i = \mu + a_i + e_i
+\label{eq:SimpleAnimalModelDecomp}
+\end{equation}
+
+\begin{tabular}{lll}
+mit  &  $y_i$  &  Beobachtung für Tier $i$\\
+     &  $a_i$  &  Zuchtwert von Tier $i$ mit Varianz $(1+F_i)\sigma_a^2$\\
+     &  $e_i$  &  zufälliger Rest mit Varianz $\sigma_e^2$\\
+     &  $\mu$  &  übrige fixe Effekte im Modell
+\end{tabular}
+
+In einem fiktiven angenommenen Datensatz haben alle Tiere nur eine Beobachtung. Tier $i$ hat Eltern $s$ und $d$ und $n$ Nachkommen $k_j$ (wobei $j = 1, \ldots, n$) und $n$ Paarungspartner $l_j$ (wobei $j = 1, \ldots, n$). Also hat der Nachkomme $k_j$ die Eltern $i$ und $l_j$. Die Mischmodellgleichungen für das vereinfachte Modell (\ref{eq:SimpleAnimalModelDecomp}) lauten, wie im nachfolgenden Abschnitt gezeigt. Da die fixen Effekte alle in einem gemeinsamen Mittel $\mu$ zusammengefasst werden ist die Inzidenzmatrix $X$ einfach ein Vektor mit lauter Einsen. Da jedes Tier eine Beobachtung hat, entspricht die Matrix $Z$ der Einheitsmatrix.
+
+Unter Berücksichtigung der Regeln zur Aufstellung der Inversen Verwandtschaftsmatrix $A^{-1}$ lässt sich die Gleichung für die Beobachtung $y_i$ wie folgt darstellen.
+
+\begin{eqnarray}
+y_i &=& \hat{\mu} + \left[1 + \alpha d^{(i)} + {\alpha\over 4} \sum_{j=1}^n d^{(k_j)}\right]\hat{a}_i
+    - {\alpha\over 2} d^{(i)}\hat{a}_s - {\alpha\over 2} d^{(i)}\hat{a}_d \nonumber\\
+    & & - {\alpha\over 2} \sum_{j=1}^n d^{(k_j)}\hat{a}_{k_j} 
+        + {\alpha\over 4} \sum_{j=1}^n d^{(k_j)}\hat{a}_{l_j}
+\label{eq:YiDecompEq}
+\end{eqnarray}
+
+### Ein Beispiel
+```{r MmeSmdSetup, ref.label="MmeSimpleModelDecomp", echo=FALSE, results='hide'}
+```
+
+Zur Illustration nehmen wir ein Beispiel mit $n = `r nNrObsSmd`$ Tieren an. 
+
+```{r MmeSimpleModelDecomp}
+### # constants
+nNrObsSmd <- 5
+### # design matrics
+matXSmd <- matrix(data = 1, nrow = nNrObsSmd)
+matZSmd <- diag(1, nrow = nNrObsSmd, ncol = nNrObsSmd)
+matXtXSmd <- crossprod(matXSmd)
+matXtZSmd <- crossprod(matXSmd,matZSmd)
+matZtZSmd <- crossprod(matZSmd)
+```
+```{r MmeSmdCoeffMatShow}
+cat("$$X = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXSmd, pnDigits = 0, pnAlign = rep("c", 2)), collapse = "\n"))
+cat("\\right]\n$$")
+cat("$$Z = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZSmd, pnDigits = 0, pnAlign = rep("c", nNrObsSmd+1)), collapse = "\n"))
+cat("\\right]\n$$")
+cat("$$X^TX = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtXSmd, pnDigits = 0, pnAlign = rep("c", 2)), collapse = "\n"))
+cat("\\right]\n$$")
+cat("$$X^TZ = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtZSmd, pnDigits = 0, pnAlign = rep("c", nNrObsSmd+1)), collapse = "\n"))
+cat("\\right]\n$$")
+cat("$$Z^TZ = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZtZSmd, pnDigits = 0, pnAlign = rep("c", nNrObsSmd+1)), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+$$X^Ty = \left[\sum_{j=1}^n y_i\right]$$
+
+```{r VecZtYSmd}
+vecZtYSmd <- vecGetVecElem(psBaseElement = "y", pnVecLen = nNrObsSmd)
+cat("$$Z^Ty = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecZtYSmd, nrow = nNrObsSmd), pnDigits = 0, pnAlign = rep("c", 2)), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+Wir setzen nun die Komponenten zusammen zu 
+
+\begin{equation}
+\left[
+\begin{array}{cc}
+X^TX  &  X^TZ\\
+Z^TX  &  Z^TZ + A^{-1} * \alpha
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+\hat{\mu}\\
+\hat{a}
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+X^Ty\\
+Z^Ty
+\hat{a}
+\end{array}
+\right]
+\label{eq:MmeSmd}
+\end{equation}
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
