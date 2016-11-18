@@ -15,7 +15,7 @@ devtools::load_all()
 - steht für __Best Linear Unbiased Prediction__
 - __Linear__: fixe Effekte plus zufällige Effekte als Linearkombination der Beobachtungswerte geschätzt.
 - __Unbiased__: Schätzungen für fixe Effekte plus zufällige Effekte unverzerrt (unbiased) oder erwartungstreu
-- __Best__: unter allen linearen unverzerrten Schätzern weist der BLUP-Schäter die kleinste Fehlervarianz auf
+- __Best__: unter allen linearen unverzerrten Schätzern weist der BLUP-Schätzer die kleinste Fehlervarianz auf
 
 
 ## Modell

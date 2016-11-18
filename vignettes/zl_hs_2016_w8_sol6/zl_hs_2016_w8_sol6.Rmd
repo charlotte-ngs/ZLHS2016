@@ -48,17 +48,17 @@ __Hinweise__:
 - Ohne Berücksichtigung der Inzucht kann die Inverse $A^{-1}$ einfach aufgrund folgender Regeln aufgestellt werden.
     + Initialisiere alle Elemente der Matrix $A^{-1}$ mit $0$
     + Für Tier $i$ mit Eltern $s$ und $d$, 
-        + addiere $\alpha_i$ zum Element $(i,i)$, 
-        + addiere $-\alpha_i/2$ zu den Elementen $(s,i)$, $(i,s)$, $(d,i)$ und $(i,d)$ und 
-        + addiere $\alpha_i/4$ zu den Elementen $(s,s)$, $(s,d)$, $(d,s)$ und $(d,d)$
+        + addiere $\delta_i$ zum Element $(i,i)$,
+        + addiere $-\delta_i/2$ zu den Elementen $(s,i)$, $(i,s)$, $(d,i)$ und $(i,d)$ und 
+        + addiere $\delta_i/4$ zu den Elementen $(s,s)$, $(s,d)$, $(d,s)$ und $(d,d)$
     + Für Tier $i$ mit bekanntem Elternteil $d$,
-        + addiere $\alpha_i$ zum Element $(i,i)$, 
-        + addiere $-\alpha_i/2$ zu den Elementen $(d,i)$ und $(i,d)$ und 
-        + addiere $\alpha_i/4$ zu den Elementen $(d,d)$
+        + addiere $\delta_i$ zum Element $(i,i)$, 
+        + addiere $-\delta_i/2$ zu den Elementen $(d,i)$ und $(i,d)$ und 
+        + addiere $\delta_i/4$ zu den Elementen $(d,d)$
     + Für Tier $i$ mit unbekannten Eltern
-        + addiere $\alpha_i$ zum Element $(i,i)$ 
+        + addiere $\delta_i$ zum Element $(i,i)$ 
         
-wobei $\alpha_i$ das $i$-te Element auf der Diagonalen von $D$ ist.
+wobei $\delta_i$ das $i$-te Element auf der Diagonalen von $D^{-1}$ ist.
 
 __Lösung__:
 
