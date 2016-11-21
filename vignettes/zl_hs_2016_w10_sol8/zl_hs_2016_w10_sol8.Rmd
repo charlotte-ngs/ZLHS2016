@@ -1,0 +1,48 @@
+---
+title:  Züchtungslehre - Lösung 8
+author: Peter von Rohr
+date: 2016-11-25
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS_2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Aufgabe 1
+In der Vorlesung wurden die linearen gemischten Modelle zur Voraussage von Zuchtwerten vorgestellt. Damit der Unterschied zwischen linearen Modellen mit nur fixen Effekten (Regressionsmodelle) und den linearen gemischten Modellen besser verständlich wird, soll in dieser Übung nochmals gezeigt werden, wie multiple lineare Regressionen an Daten angepasst werden.
+
+Gegeben sei der folgende Datensatzt
+
+```{r MultLinRegModelData}
+nNrRecords <- 9
+dfMlrData <- data.frame(Tochter = c(1:9),
+                        Herde   = c(1,1,2,2,2,3,3,3,3),
+                        Vater   = c("A","D","B","D","D","C","C","D","D"),
+                        Leistung = c(110,100,110,100,100,110,110,100,100))
+knitr::kable(dfMlrData)
+```
+
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything --> 
