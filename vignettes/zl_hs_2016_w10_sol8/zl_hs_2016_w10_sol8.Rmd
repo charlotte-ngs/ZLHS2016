@@ -37,6 +37,10 @@ dfMlrData <- data.frame(Tochter = c(1:nNrRecords),
                         Herde   = c("1","1","2","2","2","3","3","3","3"),
                         Vater   = c("C","A","B","A","C","C","C","A","B"),
                         Leistung = c(110,100,110,100,100,110,110,100,100))
+### # write data to outfile
+sMlrOutfile <- "mlrdata.csv"
+if (!file.exists(sMlrOutfile)) write.csv2(dfMlrData, file = sMlrOutfile)
+### # create the table
 knitr::kable(dfMlrData)
 ```
 
