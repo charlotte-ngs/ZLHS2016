@@ -30,6 +30,29 @@ Im Kapitel BLUP-Zuchtwertschätzung haben wir die Varianzkomponenten $\sigma_e^2
 
 
 ## Regression und Least Squares
+In einem klassischen Regressionsmodell (\ref{eq:RegModel}) werden die fixen Effekte mit `Least Squares` geschätzt. 
+
+\begin{equation}
+y = Xb + e
+\label{eq:RegModel}
+\end{equation}
+
+Unter der Annahme, dass die Matrix $X$ vollen Kolonnenrang $p$ hat, entspricht die Least Squares-Schätzung $\hat{b}$ für die fixen Effekte $b$
+
+\begin{equation}
+\hat{b} = (X^TX)^{-1}X^Ty
+\label{eq:LsEst}
+\end{equation}
+
+Die Least-Squares Prozedur an sich liefert keine Schätzung $\hat{\sigma_e}^2$ für die Restvarianz $\sigma_e^2$. Häufig wird 
+eine Schätzung $\hat{sigma_e}^2$ basierend auf den Residuen $r_i = y_i - x_i^T\hat{b}$ verwendet. Dieser Schätzer für $\sigma_e^2$ lautet
+
+\begin{equation}
+\hat{\sigma_e}^2 = \frac{1}{n-p} \sum_{i=1}^n r_i^2
+\label{eq:EstResidualVar}
+\end{equation}
+
+Die Residuen $r_i$ sind plausible Schätzungen für die Reste $e_i$. Somit ist der Schätzer für die Restvarianz plausibel bis auf den Faktor $\frac{1}{n-p}$. Dieser Faktor macht den Schätzer in (\ref{eq:EstResidualVar}) erwartungstreu, was bedeutet, dass $E\left[\hat{\sigma_e}^2 \right] = \sigma_e^2$. 
 
 
 ## Varianzanalyse
