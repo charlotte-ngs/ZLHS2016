@@ -53,7 +53,7 @@ b) Berechnen Sie die Schätzungen für die fixen Effekte der `Herde` und des `Va
 
 ### Hinweise
 - Die Funktion zur Anpassung von Regressionen in `R` lautet `lm()`
-- Die Angabe der Daten für die Funktion `lm()` muss über ein `Dataframe` gemacht werden. Dies kann entweder über die direkte Angabe der Daten in der Funktion `data.frame()` gemacht werden, oder die Daten können auch mit `read.csv2()` von der Webseite eingelesen werden. Die direkte Angabe des Dataframes sieht wie folgt aus:
+- Die Angabe der Daten für die Funktion `lm()` muss über ein `Dataframe` gemacht werden. Dies kann entweder über die direkte Angabe der Daten in der Funktion `data.frame()` gemacht werden, oder die Daten können auch mit `read.csv2()` von der Webseite (https://charlotte-ngs.github.io/LBGHS2016/w10/mlrdata.csv) eingelesen werden. Die direkte Angabe des Dataframes sieht wie folgt aus:
 
 ```{r DirectSpecDataframe, eval=FALSE} 
 nNrRecords <- 9
