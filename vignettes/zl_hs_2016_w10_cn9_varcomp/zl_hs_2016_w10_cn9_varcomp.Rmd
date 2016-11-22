@@ -1,0 +1,47 @@
+---
+title:  Züchtungslehre - Varianzkomponentenschätzung
+author: Peter von Rohr
+date: 2016-11-25
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS_2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Einleitung
+Im Kapitel BLUP-Zuchtwertschätzung haben wir die Varianzkomponenten $\sigma_e^2$ und $\sigma_a^2$ als bekannt angenommen. In der praktischen Zuchtarbeit sind diese unbekannt und müssen aus den Daten geschätzt werden. Der Prozess, welcher aus beobachteten Daten Varianzparameter für ein bestimmtes Modell liefert wird als __Varianzkomponentenschätzung__ bezeichnet. In gewissen Studiengängen ist die Varianzkomponentenschätzung das Thema einer ganzen Vorlesung. Wir versuchen hier einen ersten Einblick in dieses Thema in einer Woche zu bekommen.
+
+
+## Regression und Least Squares
+
+
+## Varianzanalyse
+
+
+## Likelihood basierte Verfahren
+
+
+## Bayes'sche Ansätze
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything --> 

@@ -62,7 +62,7 @@ dfMlrData <- data.frame(Tochter = c(1:nNrRecords),
 - Das Modell wird mit der speziellen Model-Syntax von R spezifiziert. Diese würde für unser Beispiel, wie folgt aussehen:
 
 ```
-Leistung ~ Herde + Vater
+Leistung ~ -1 + Herde + Vater
 ```
 
 - Die Resultate des angepassten Modells können mit der Funktion `summary()` angezeigt werden.
@@ -114,7 +114,7 @@ cat("\\right]\n$$")
 b) Angenommen, die Daten sind in einem Dataframe namens `dfMlrData` gespeichert. Dann wird das Regressionsmodell mit folgenden Anweisungen angepasst.
 
 ```{r LinRegModel, echo=TRUE, results='markup'}
-lmMlrData <- lm(Leistung ~ Herde + Vater, data = dfMlrData)
+lmMlrData <- lm(Leistung ~ -1 + Herde + Vater, data = dfMlrData)
 summary(lmMlrData)
 ```
 
@@ -143,12 +143,12 @@ $$\left[
 \right]
 \left[
   \begin{array}{c}
-  Herde_1\\
-  Herde_2\\
-  Herde_3\\
-  Vater_A\\
-  Vater_B\\
-  Vater_C
+  \hat{Herde}_1\\
+  \hat{Herde}_2\\
+  \hat{Herde}_3\\
+  \hat{Vater}_A\\
+  \hat{Vater}_B\\
+  \hat{Vater}_C
   \end{array}
 \right]
 =
@@ -202,6 +202,23 @@ cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecZtYTask2, ncol = 1), pnDigits
 cat("\\right]\n$$")
 ```
 
+Stellen wir alle Komponenten zusammen erhalten wir
+
+```{r MmeTask2}
+matCoeffTask2 <- cbind(rbind(matXtXTask2,t(matXtZTask2)),rbind(matXtZTask2,matZtZTask2 + 10*diag(1,nrow = nrow(matZtZTask2))))
+vecRhsTask2 <- c(vecXtYTask2,vecZtYTask2)
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matCoeffTask2, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n")
+vecFixEffectsHat <- c("\\hat{Herde}_1", "\\hat{Herde}_2", "\\hat{Herde}_3", "\\hat{Vater}_A", "\\hat{Vater}_B", "\\hat{Vater}_C")
+cat("\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecFixEffectsHat, ncol = 1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhsTask2, ncol = 1), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
 b) Die Lösungen berechnen wir als 
 
 $$\hat{s} = M^{-1} * r$$ 
@@ -209,8 +226,7 @@ $$\hat{s} = M^{-1} * r$$
 
 
 ```{r SolMmeTask2, eval=TRUE}
-matCoeffTask2 <- cbind(rbind(matXtXTask2,t(matXtZTask2)),rbind(matXtZTask2,matZtZTask2 + 10*diag(1,nrow = nrow(matZtZTask2))))
-vecSolTask2 <- solve(matCoeffTask2,c(vecXtYTask2,vecZtYTask2))
+vecSolTask2 <- solve(matCoeffTask2,vecRhsTask2)
 cat("$$\\hat{s} = \\left[")
 cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolTask2, ncol = 1), pnDigits = 4), collapse = "\n"))
 cat("\\right]\n$$")
