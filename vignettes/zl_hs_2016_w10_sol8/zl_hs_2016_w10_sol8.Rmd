@@ -7,6 +7,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+devtools::load_all()
 ```
 
 ```{r DocumentStatus, eval=FALSE}
@@ -68,7 +69,49 @@ Leistung ~ Herde + Vater
 
 
 ### Lösung
-Angenommen, die Daten sind in einem Dataframe namens `dfMlrData` gespeichert. Dann wird das Regressionsmodell mit folgenden Anweisungen angepasst.
+a) Das Regressionsmodell lautet
+
+$$y = Xb + e$$
+
+wobei der Beobachtungsvektor $y$
+
+```{r VecYTask1}
+vecYTask1 <- dfMlrData$Leistung
+cat("$$y = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecYTask1, ncol = 1), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+Die Inzidenzmatrix $X$
+
+```{r DesignMatTask1}
+matXTask1 <- matrix(data = c(1,0,0,0,0,1,
+                             1,0,0,1,0,0,
+                             0,1,0,0,1,0,
+                             0,1,0,1,0,0,
+                             0,1,0,0,0,1,
+                             0,0,1,0,0,1,
+                             0,0,1,0,0,1,
+                             0,0,1,1,0,0,
+                             0,0,1,0,1,0), nrow = nNrRecords, byrow = TRUE)
+cat("$$X = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXTask1, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+Der Vektor $b$ der fixen Effekte
+
+```{r VecFixEffectsTask1}
+vecFixEffects <- c("Herde_1", "Herde_2", "Herde_3", "Vater_A", "Vater_B", "Vater_C")
+cat("$$b = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecFixEffects, ncol = 1), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+
+
+
+b) Angenommen, die Daten sind in einem Dataframe namens `dfMlrData` gespeichert. Dann wird das Regressionsmodell mit folgenden Anweisungen angepasst.
 
 ```{r LinRegModel, echo=TRUE, results='markup'}
 lmMlrData <- lm(Leistung ~ Herde + Vater, data = dfMlrData)
@@ -90,7 +133,88 @@ b) Berechnen Sie die Schätzer für die fixen Effekte der Herde und machen Sie e
 
 
 ### Lösung
+a) Die Mischmodellgleichungen lauten
 
+$$\left[
+  \begin{array}{rr}
+  X^TX  &  X^TZ\\
+  Z^TX  &  Z^TZ + G^{-1}
+  \end{array}
+\right]
+\left[
+  \begin{array}{c}
+  Herde_1\\
+  Herde_2\\
+  Herde_3\\
+  Vater_A\\
+  Vater_B\\
+  Vater_C
+  \end{array}
+\right]
+=
+\left[
+  \begin{array}{c}
+  X^Ty\\
+  Z^Ty
+  \end{array}
+\right]
+$$
+
+Abgekürzt können wir die Mischmodellgleichungen schreiben als
+
+$$M * \hat{s} = r$$
+
+Die einzelnen Komponenten lauten
+
+```{r MatXtXTask2}
+matXTask2 <- matXTask1[,1:3]
+matXtXTask2 <- crossprod(matXTask2)
+cat("$$X^TX = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtXTask2, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+```{r MatXtZTask2}
+matZTask2 <- matXTask1[,4:6]
+matXtZTask2 <- crossprod(matXTask2,matZTask2)
+cat("$$X^TZ = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtZTask2, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+```{r MatZtZTask2}
+matZtZTask2 <- crossprod(matZTask2)
+cat("$$Z^TZ = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZtZTask2, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+$$G^{-1} = 10*I$$
+
+```{r VecXtYTask2}
+vecXtYTask2 <- crossprod(matXTask2,vecYTask1)
+vecZtYTask2 <- crossprod(matZTask2,vecYTask1)
+cat("$$X^Ty = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecXtYTask2, ncol = 1), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+cat("$$Z^Ty = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecZtYTask2, ncol = 1), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+b) Die Lösungen berechnen wir als 
+
+$$\hat{s} = M^{-1} * r$$ 
+
+
+
+```{r SolMmeTask2, eval=TRUE}
+matCoeffTask2 <- cbind(rbind(matXtXTask2,t(matXtZTask2)),rbind(matXtZTask2,matZtZTask2 + 10*diag(1,nrow = nrow(matZtZTask2))))
+vecSolTask2 <- solve(matCoeffTask2,c(vecXtYTask2,vecZtYTask2))
+cat("$$\\hat{s} = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolTask2, ncol = 1), pnDigits = 4), collapse = "\n"))
+cat("\\right]\n$$")
+```
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
