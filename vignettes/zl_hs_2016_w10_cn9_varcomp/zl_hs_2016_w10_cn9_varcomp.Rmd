@@ -110,7 +110,28 @@ aovWwg <- aov(WWG ~ -1 + Geschlecht, data = dfWwgRed)
 summary(aovWwg)
 ```
 
-Die Test-Statistik für unseren globalen Test entnehmen wir der Spalte, welche mit `F-value` überschrieben ist. Den gleichen Wert hatten wir schon bei den Resultaten der Funktion `lm()` gefunden. Die sehr tiefe Irrtumswahrscheinlichkeit bedeutet, 
+Die Test-Statistik für unseren globalen Test entnehmen wir der Spalte, welche mit `F-value` überschrieben ist. Den gleichen Wert hatten wir schon bei den Resultaten der Funktion `lm()` gefunden. Die sehr tiefe Irrtumswahrscheinlichkeit ($Pr(>|t|) = 0.00294$) bedeutet, dass wir bei einer Ablehnung der globalen Nullhypothese $H_0:\ b_F = b_M = 0$ nur mit einer sehr tiefen Wahrscheinlichkeit einen Fehler erster Art begehen würden. Die Summenquadrate (Sum Sq) berechnen wir gemäss
+
+\begin{equation}
+SSQ_T = \sum_{i=1}^n y_i^2
+\label{eq:SsqTotal}
+\end{equation}
+
+Die Summenquadrate der Residuen (Residuals) entspricht der Summe der quadrierten Residuen. 
+
+
+\begin{equation}
+SSQ_R = \sum_{i=1}^n r_i^2
+\label{eq:SsqResidual}
+\end{equation}
+
+wobei $r_i = y_i - \hat{y}_i = y_i - x^T_ib$. Die Summenquadrate des Geschlechts $SSQ_b$ entsprechen der Summe der quadrierten gefitteten Werte $\hat{y}_i = x^T_ib$. Die Summenquadrate $SSQ_b$ sind auch gleich der Differenz zwischen $SSQ_T$ und $SSQ_R$. 
+
+\begin{equation}
+SSQ_b = \sum_{i=1}^n \hat{y}_i^2 = \sum_{i=1}^n (x^T_ib)^2
+\label{eq:SsqModel}
+\end{equation}
+
 
 
 ## Likelihood basierte Verfahren
