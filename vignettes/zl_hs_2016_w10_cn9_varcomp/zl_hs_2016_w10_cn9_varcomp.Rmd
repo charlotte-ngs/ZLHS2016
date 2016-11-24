@@ -132,6 +132,71 @@ SSQ_b = \sum_{i=1}^n \hat{y}_i^2 = \sum_{i=1}^n (x^T_ib)^2
 \label{eq:SsqModel}
 \end{equation}
 
+Die mittleren Summenquadrate (abgekürzt MSQ, wird im R-output mit `Mean Sq` bezeichnet) berechnen sich aus dem Verhältnis der Summenquadrate durch die Anzahl Freiheitsgrade (df). In diesem einfachen Bespiel entspricht die totale Anzahl an Freiheitsgraden ($df_T$) der Anzahl Beobachtungen ($n$) minus $1$. Die Anzahl Freiheitsgrade $df_b$ für das Geschlecht entspricht den Anzahl Faktorstufen, somit ist $df_b = 2$. Die Anzahl Freiheitsgrade der Residuen $df_e$ ist dann die Differenz zwischen $df_T$ und $df_b$. 
+
+Das Verhältnis der mittleren Summenquadrate des Modells (Geschlecht) und der mittleren Summenquadrate der Residuen (Residuals) definiert eine Teststatistik $F$. Unter der globalen Nullhypothese folgt die Teststatistik $F$ einer $F$-Verteilung mit $df_b$ und $df_R$ Freiheitsgraden. Aus dieser Verteilung lässt sich dann die Irrtumswahrscheinlichkeit $Pr(>|t|)$ ableiten.
+
+
+### Schätzung einer Varianzkomponente
+Lineare Modelle, welche neben den Resteffekten auch noch weitere zufällige Effekte aufweisen werden häufig als "zufällige Modelle" (random models) bezeichnet. Als Beispiel eines zufälligen Models können wir wieder den Datensatz mit den Zunahmen anschauen. In dieser Variante betrachten wir aber nur den Effekt der Väter auf die Zunahmen und ignorieren den Geschlechtseinfluss. Wir haben also  einen reduzierten Datensatz, wo nur die Vätereffekte vorkommen. Damit wir die später geforderte Unabhängigkeit der Vatereffekte in unserem Datensatz nicht verletzen, weisen wir Kalb $7$ den Vater $3$ an Stelle vom aktuellen Vater $4$ zu. 
+
+
+```{r WwgRedSire}
+dfWwgSire <- dfWwg[, c("Kalb", "Vater", "WWG")]
+dfWwgSire
+knitr::kable(dfWwgSire)
+```
+
+Das Modell (\ref{eq:RandomModelWwg}), welches die Beobachtungen als Funktion der zufälligen Vatereffekte darstellt sieht algebraisch ähnlich aus wie das fixe Modell in (\ref{eq:FixModelWwg}). Beim fixen Modell (\ref{eq:FixModelWwg}) sind die einzelnen Stufen $b_i$ fix und es wurden alle möglichen Faktorstufen des Geschlechts berücksichtigt. Hingegen in (\ref{eq:RandomModelWwg}) steht $u_i$ für den Effekt vom Vater $i$ und Vater $i$ ist einfach ein Vater aus einer sehr grossen Population von Vätern. Die Väter, welche im Vektor $u$ berücksichtigt sind, entsprechen einer zufälligen Auswahl aus der Population von Vätern.
+
+\begin{equation}
+y = Zu + e
+\label{eq:RandomModelWwg}
+\end{equation}
+
+Die Väter in (\ref{eq:RandomModelWwg}) sind also charakteristisch für zufällige Effekte. Trotzdem, dass wir nur eine zufällige Stichprobe an Vätern kennen, möchten wir doch Aussagen zur ganzen Population machen. Da die Beiträge der Väter als zufällige Effekte modelliert werden, entspricht der einzelne Vatereffekt $u_i$ einer Zufallsvariablen, welcher wir eine Dichteverteilung zuordnen. Zwei Eigenschaften von Dichteverteilungen, welche wir im Zusammenhang mit zufälligen Effekten häufig postulieren sind 
+
+1. die zufälligen Effekte $u_i$ sind unabhängig voneinander. In unserem Beispiel trifft das nur zu, wenn die Väter nicht verwandt sind miteinander.
+2. der Erwartungswert der zufälligen Effekte $u_i$ ist $0$ und die zufälligen Effekte haben alle die gleiche Varianz $\sigma_u^2$. 
+
+Für das zufällige Modell müssen wir also abgesehen von den Effekten auch noch die Varianzkomponenten $\sigma_u^2$ und $\sigma_e^2$ schätzen. Eine Möglichkeit zu Schätzungen für die Varianzkomponenten zu gelangen ist über die Varianzanalyse. Es kann gezeigt werden, dass die Erwartungswerte der mittleren Summenquadrate als Funktionen der unbekannten Varianzkomponenten dargestellt werden können. Spezifisch für unser Modell kann gezeigt werden, dass der Erwartungswert der mittleren Summenquadrate der Resteffekte gleich der Restvarianz ist. Es gilt also
+
+\begin{equation}
+E\left[MSQ_e \right] = \sigma_e^2
+\label{eq:MsqVarRes}
+\end{equation}
+
+Für die Varianzkomponente der Vatereffekte können wir die erwarteten mittleren Summenquadrate einer Funktion aus $\sigma_u^2$ und $\sigma_e^2$ gleichsetzen.
+
+\begin{equation}
+E\left[MSQ_u \right] = n\sigma_u^2 + \sigma_e^2
+\label{eq:MsqVarSire}
+\end{equation}
+
+Wir setzen nun die empirischen Werte der mittleren Summenquadrate gleich den Erwartungswerten und verwenden diese als Schätzer für die Varianzkomponenten. Somit erhalten wir
+
+\begin{equation}
+MSQ_e = \widehat{\sigma_e^2}
+\label{eq:EstVarRes}
+\end{equation}
+
+und 
+
+\begin{equation}
+MSQ_u = n\widehat{\sigma_u^2} + \widehat{\sigma_e^2}
+\label{eq:EstVarSire}
+\end{equation}
+
+Lösen wir (\ref{eq:EstVarSire}) nach $\widehat{\sigma_u^2}$ auf, so erhalten wir als Schätzer für die Varianzkomponenten der Vatereffekte
+
+\begin{equation}
+\widehat{\sigma_u^2} = \frac{MSQ_u - MSQ_e}{n}
+\label{eq:ResultEstVarSire}
+\end{equation}
+
+
+### Unser Beispiel
+
 
 
 ## Likelihood basierte Verfahren
