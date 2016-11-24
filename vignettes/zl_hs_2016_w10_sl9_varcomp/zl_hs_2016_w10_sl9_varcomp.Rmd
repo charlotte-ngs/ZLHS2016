@@ -1,0 +1,23 @@
+---
+title: Varianzkomponentenschätzung
+author: Peter von Rohr
+date: 2016-11-25
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Einleitung
+
+- BLUP-Zuchtwertschätzung: bekannte Varianzkomponenten $\sigma_e^2$ und $\sigma_a^2$
+- In Praxis: Schätzung der Varianzkomponenten von Daten, Verwendung von Schätzwerten in MME
+- Abgesehen von BLUP, wo sind Varianzkomponenten schon aufgetaucht?
+
+
+## Regression und Least Squares
+
+
+
+## Varianzanalyse
