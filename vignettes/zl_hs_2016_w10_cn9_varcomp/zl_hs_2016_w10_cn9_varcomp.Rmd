@@ -143,7 +143,7 @@ Lineare Modelle, welche neben den Resteffekten auch noch weitere zufällige Effe
 
 ```{r WwgRedSire}
 dfWwgSire <- dfWwg[, c("Kalb", "Vater", "WWG")]
-dfWwgSire
+dfWwgSire[dfWwgSire$Kalb == 7,"Vater"] <- 3
 knitr::kable(dfWwgSire)
 ```
 
@@ -196,13 +196,38 @@ Lösen wir (\ref{eq:EstVarSire}) nach $\widehat{\sigma_u^2}$ auf, so erhalten wi
 
 
 ### Unser Beispiel
+Die folgenden Anweisungen in `R` zeigen, wie die Varianzanalysentabelle für unser zufälliges Modell aufgestellt wird.
 
+```{r VarTabSireData, results='markup'}
+aovWwgSire <- aov(formula = WWG ~ Vater, data = dfWwgSire)
+summary(aovWwgSire)
+```
 
+Aufgrund von Gleichung (\ref{eq:EstVarRes}) erhalten wir eine Schätzung für die Restvarianz als
 
-## Likelihood basierte Verfahren
+```{r VarEst, echo=FALSE, results='hide'}
+nNrObs <- length(dfWwgSire)
+nMeanObs <- mean(dfWwgSire$WWG)
+vecWwgSireCorrected <- dfWwgSire$WWG - nMeanObs
+nSsqRes <- crossprod(residuals(aovWwgSire))
+nResVarEst <- nSsqRes / aovWwgSire$df.residual 
+nSsqVater <- crossprod(vecWwgSireCorrected) - nSsqRes
+ndfVater <- nNrObs - aovWwgSire$df.residual - 1 ### -1 comes due to intercept in model
+nMsqVater <- nSsqVater / ndfVater
+nVaterVarEst <- (nMsqVater - nResVarEst)/nNrObs
+```
 
+$$\widehat{\sigma_e^2} = `r nResVarEst`$$
 
-## Bayes'sche Ansätze
+Setzen wir diese Schätzung in Gleichung (\ref{eq:ResultEstVarSire}) ein, dann erhalten wir
+
+$$\widehat{\sigma_u^2} = `r nVaterVarEst`$$
+
+### Negative Schätzwerte
+Der Schätzwert für die Varianzkomponente $\sigma_u^2$ ist negativ. Dies ist durch die spezielle Datenkonstellation verursacht. Aufgrund von nur `r nNrObs` Beobachtungen können keine zuverlässigen Varianzkomponenten geschätzt werden. Die Methode der Varianzanalyse hat keinen Mechanismus zur Verfügung, welcher negative Schätzwerte verhindern könnte.
+
+Varianzkomponenten sind als Quadrate definiert und somit können diese nicht negativ sein. Da aber aufgrund von Datenkonstellationen die Schätzungen negativ sein können, ist die Methode der Varianzanalyse für die Varianzkomponentenschätzung nicht sehr beliebt.
+
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
