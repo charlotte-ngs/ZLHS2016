@@ -24,6 +24,7 @@ r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
 if (!r6ob_abbrtable$is_empty_abbr())
   r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
 ```
+__Hinweis__: Da diese Übung recht viel Zeit in Anspruch nimmt, ist es empfehlenswert diese in Gruppen zu lösen.
 
 In dieser Übung wollen wir geschätzte Zuchtwerte aufgrund von verschiedenen Schätzmethoden miteinander vergleichen. Bei den Methoden handelt es sich um
 
@@ -36,19 +37,82 @@ Dazu verwenden wir den Datensatz aus der Übung von letzter Woche in einer verä
 
 ```{r ShowDataSet}
 nNrRecords <- 9
-
-dfMlrData <- data.frame(Tochter = c(1:nNrRecords),
+nNrSire <- 3
+dfMlrData <- data.frame(Tochter = c(1:nNrRecords) + nNrSire,
                         Herde   = c("1","1","2","2","2","3","3","3","3"),
                         Vater   = c("C","A","B","A","C","C","C","A","B"),
-                        Mutter  = c("NA","1")
+                        Mutter  = c("NA","4","NA","5","5","6","6","4","7"),
                         Leistung = c(110,100,110,100,100,110,110,100,100))
 knitr::kable(dfMlrData)
 ```
 
+```{r VarCompDef, echo=FALSE, results='hide'}
+sigmae2 <- 100
+sigmaa2 <- 25
+sigmap2 <- sigmaa2 + sigmae2
+h2 <- sigmaa2/sigmap2
+k <- (4-h2)/h2
+### # phenotypes and mean
+vecYMlr <- dfMlrData$Leistung
+muMlr <- mean(vecYMlr)
+```
 
+
+Für die Varianzkomponenten nehmen wir an, dass $\sigma_e^2 = 100$ und $\sigma_a^2 = 25$ ist. Die phänotypische Varianz $\sigma_p^2$ lässt sich vollständig in $\sigma_a^2$ und  $\sigma_e^2$ zerlegen.
 
 
 ## Aufgabe 1
+Schätzen Sie für jede der Töchter Zuchtwerte aufgrund ihrer Eigenleistungen. Wir nehmen an das Populationsmittel $\mu$ liege beim Mittelwert der phänotypischen Leistungen der Töchter.
+
+
+__Lösung__
+
+Die Erblichkeit ($h^2$) entspricht 
+$$h^2 = \frac{\sigma_a^2}{\sigma_a^2 + \sigma_e^2} = \frac{`r sigmaa2`}{`r sigmap2`} = `r sigmaa2/sigmap2`$$. 
+
+Das Populationsmittel als Mittel über alle beobachteten Töchterleistung entspricht
+
+$$\mu = {1\over n}\sum_{i=1}^ny_i =  `r round(mean(vecYMlr), digits = 1)`$$
+
+\pagebreak
+
+Der geschätzte Zuchtwert $\hat{a}_i$ ist definiert als
+
+$$\hat{a}_i = h^2(y - \mu)$$
+
+
+```{r ZwEl}
+vecZwEl <-  h2*(vecYMlr - muMlr)
+dfZwEl <- data.frame(Tochter   = c(1:nNrRecords) + nNrSire,
+                     Zuchtwert = round(vecZwEl, digits = 3))
+knitr::kable(dfZwEl)
+```
+
+
+## Aufgabe 2
+Schätzen Sie für die drei Väter "A", "B", "C" Zuchtwerte aufgrund der mittleren Leistungen ihrer jeweiligen Nachkommen. Das Populationsmittel ($\mu$) und die Erblichkeit ($h^2$) haben den gleichen Wert, wie in Aufgabe 1.
+
+
+__Lösung__:
+
+Die geschätzten Zuchtwerte aufgrund von Nachkommenleistungen sind abhängig von $$k = \frac{4-h^2}{h^2} = `r round(k, digits = 2)`$$
+
+Für einen bestimmten Vater $s$ ist der geschätzte Zuchtwert aufgrund seiner Nachkommenleistungen definiert als
+
+$$\hat{a}_s = \frac{2n}{n+k}(\tilde{y}_s - \mu)$$
+
+wobei $\tilde{y}_s$ die durchschnittliche Leistung der Nachkommen von Vater $s$ ist.
+
+Die folgende Tabelle gibt eine Übersicht über die Resultate
+
+```{r BvEstNk}
+suppressPackageStartupMessages(require(dplyr))
+byVater <- group_by(dfMlrData, Vater)
+dfBvNk <- summarise(byVater, AnzahlNk = n(), MeanLeistung = mean(Leistung), BvNk = 2*AnzahlNk/(AnzahlNk + k)*(MeanLeistung - muMlr))
+names(dfBvNk) <- c("Vater", "Anzahl Nachkommen", "Mittlere Leistung", "Zuchtwert")
+dfBvNk$Zuchtwert <- round(dfBvNk$Zuchtwert, digits = 3)
+knitr::kable(dfBvNk)
+```
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}

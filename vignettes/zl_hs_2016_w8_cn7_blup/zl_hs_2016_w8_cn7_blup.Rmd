@@ -436,22 +436,21 @@ cat(paste(sGetTexMatrix(pmatAMatrix = vecZtY, pnDigits = 1), collapse = "\n"))
 cat("\\right]$$")
 ```
 
-<!--Das gesamte Gleichungssystem für unser Beispiel sieht wie folgt aus:-->
+Das gesamte Gleichungssystem für unser Beispiel sieht wie folgt aus:
 
-```{r CompleteMme}
+```{r CompleteMme, warning=FALSE}
 matM <- cbind(rbind(matXtX, t(matXtZ)), rbind(matXtZ, matZtZAInvAlpha))
-vecSol <- rbind(c("\\hat{b}_M", "\\hat{b}_F"), vecA)
+vecSol <- c("\\hat{b}_M", "\\hat{b}_F", vecA)
 vecRhs <- rbind(vecXtY, vecZtY)
-#cat("$$ \\left[\n")
-#cat(paste(sGetTexMatrix(pmatAMatrix = matM, pnDigits = 1), collapse = "\n"))
-#cat("\\right]\n")
-#cat("\\left[\n")
-#cat(paste(sGetTexMatrix(pmatAMatrix = vecSol), collapse = "\n"))
-#cat("\\right]\n")
-#cat(" = \\left[\n")
-#cat(paste(sGetTexMatrix(pmatAMatrix = vecRhs), collapse = "\n"))
-#cat("\\right]$$")
-#cat("$$")
+cat("$$ \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matM, pnDigits = 1), collapse = "\n"))
+cat("\\right]\n")
+cat("\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSol)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = vecRhs), collapse = "\n"))
+cat("\\right]$$")
 ```
 
 Lösen wir nun das Gleichungssystem nach dem Lösungsvektor auf, dann erhalten wir Schätzwerte für die fixen Effekte $b$ und die Zuchtwerte $a$. Für unser einfaches Beispiel können wir die Lösung über eine explizite Inversion der Koeffizientenmatrix $M$ bekommen. Wir haben also 
@@ -460,27 +459,14 @@ $$\hat{s} = M^{-1} * r$$
 
 Die Zahlenwerte für den Lösungsvektor bekommen wir
 
-```{r SolMme}
+```{r SolMme, warning=FALSE}
 vecNumSol <- solve(matM,vecRhs)
 # FIXME: xtable::xtable inside of sGetTexMatrix produces a WARNING which might be the problem here
-#cat("$$\\hat{s} = \\left[\n")
-#cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecNumSol,ncol=1), pnDigits = 3), collapse = "\n"))
-#cat("\\right]$$")
+cat("$$\\hat{s} = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecNumSol,ncol=1), pnDigits = 3), collapse = "\n"))
+cat("\\right]$$")
 ```
-$$\hat{s} = \left[
-\begin{array}{r}
-  4.359 \\ 
-  3.404 \\ 
-  0.098 \\ 
-  -0.019 \\ 
-  -0.041 \\ 
-  -0.009 \\ 
-  -0.186 \\ 
-  0.177 \\ 
-  -0.249 \\ 
-  0.183 \\ 
-  \end{array}
-\right]$$
+
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
