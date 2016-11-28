@@ -463,9 +463,9 @@ Die Zahlenwerte für den Lösungsvektor bekommen wir
 ```{r SolMme}
 vecNumSol <- solve(matM,vecRhs)
 # FIXME: xtable::xtable inside of sGetTexMatrix produces a WARNING which might be the problem here
-#cat("$$\\hat{s} = \\left[\n")
-#cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecNumSol,ncol=1), pnDigits = 3), collapse = "\n"))
-#cat("\\right]$$")
+cat("$$\\hat{s} = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecNumSol,ncol=1), pnDigits = 3), collapse = "\n"))
+cat("\\right]$$")
 ```
 $$\hat{s} = \left[
 \begin{array}{r}
