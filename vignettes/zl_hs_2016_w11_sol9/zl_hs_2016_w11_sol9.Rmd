@@ -1,0 +1,58 @@
+---
+title:  Züchtungslehre - Lösung 9
+author: Peter von Rohr
+date: 2016-12-02
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "ZL_HS_2016")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+In dieser Übung wollen wir geschätzte Zuchtwerte aufgrund von verschiedenen Schätzmethoden miteinander vergleichen. Bei den Methoden handelt es sich um
+
+- Zuchtwerte aufgrund von Eigenleistungen
+- Zuchtwerte aufgrund von Nachkommenleistungen
+- Zuchtwerte aufgrund eines Vatermodells
+- Zuchtwerte aufgrund eines Tiermodells
+
+Dazu verwenden wir den Datensatz aus der Übung von letzter Woche in einer veränderten Version. Der modifizierte Datensatz enthält auch Informationen zur Mutter.
+
+```{r ShowDataSet}
+nNrRecords <- 9
+
+dfMlrData <- data.frame(Tochter = c(1:nNrRecords),
+                        Herde   = c("1","1","2","2","2","3","3","3","3"),
+                        Vater   = c("C","A","B","A","C","C","C","A","B"),
+                        Mutter  = c("NA","1")
+                        Leistung = c(110,100,110,100,100,110,110,100,100))
+knitr::kable(dfMlrData)
+```
+
+
+
+
+## Aufgabe 1
+
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything --> 

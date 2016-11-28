@@ -147,7 +147,7 @@ Zur Lösung der Gleichungen (\ref{eq:BlueBhat}) und (\ref{eq:BlupUhat}) wird die
 \left[ 
 \begin{array}{cc}
 X^TR^{-1}X  &  X^TR^{-1}Z\\
-Z^tR^{-1}X  &  Z^TR^{-1}Z + G^{-1}
+Z^TR^{-1}X  &  Z^TR^{-1}Z + G^{-1}
 \end{array}
 \right] 
 \left[
@@ -216,7 +216,7 @@ Stellen wir nun die Mischmodellgleichungen gemäss (\ref{eq:MixedModelEq}) für 
 \left[ 
 \begin{array}{cc}
 X^TR^{-1}X  &  X^TR^{-1}Z\\
-Z^tR^{-1}X  &  Z^TR^{-1}Z + G^{-1}
+Z^TR^{-1}X  &  Z^TR^{-1}Z + G^{-1}
 \end{array}
 \right] 
 \left[
@@ -462,23 +462,23 @@ Die Zahlenwerte für den Lösungsvektor bekommen wir
 
 ```{r SolMme}
 vecNumSol <- solve(matM,vecRhs)
+# FIXME: xtable::xtable inside of sGetTexMatrix produces a WARNING which might be the problem here
 #cat("$$\\hat{s} = \\left[\n")
-#cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecNumSol,ncol=1,dimnames = NULL), pnDigits = 3), collapse = "\n"))
+#cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecNumSol,ncol=1), pnDigits = 3), collapse = "\n"))
 #cat("\\right]$$")
 ```
-
 $$\hat{s} = \left[
 \begin{array}{r}
-  4.348 \\ 
-  3.392 \\ 
-  0.158 \\ 
-  -0.018 \\ 
-  -0.054 \\ 
-  0.002 \\ 
-  -0.263 \\ 
-  0.280 \\ 
-  -0.332 \\ 
-  0.287 \\ 
+  4.359 \\ 
+  3.404 \\ 
+  0.098 \\ 
+  -0.019 \\ 
+  -0.041 \\ 
+  -0.009 \\ 
+  -0.186 \\ 
+  0.177 \\ 
+  -0.249 \\ 
+  0.183 \\ 
   \end{array}
 \right]$$
 
