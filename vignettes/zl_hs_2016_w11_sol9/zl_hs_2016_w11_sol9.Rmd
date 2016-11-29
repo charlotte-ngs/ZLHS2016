@@ -25,7 +25,6 @@ r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
 if (!r6ob_abbrtable$is_empty_abbr())
   r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
 ```
-__Hinweis__: Da diese Übung recht viel Zeit in Anspruch nimmt, ist es empfehlenswert diese in Gruppen zu lösen.
 
 In dieser Übung wollen wir geschätzte Zuchtwerte aufgrund von verschiedenen Schätzmethoden miteinander vergleichen. Bei den Methoden handelt es sich um
 
@@ -44,6 +43,7 @@ dfMlrData <- data.frame(Tochter = c(1:nNrRecords) + nNrSire,
                         Vater   = c("C","A","B","A","C","C","C","A","B"),
                         Mutter  = c("NA","4","NA","5","5","6","6","4","7"),
                         Leistung = c(110,100,110,100,100,110,110,100,100))
+nNrHerde <- length(unique(dfMlrData$Herde))
 knitr::kable(dfMlrData)
 ```
 
@@ -115,6 +115,7 @@ dfBvNk$Zuchtwert <- round(dfBvNk$Zuchtwert, digits = 3)
 knitr::kable(dfBvNk)
 ```
 
+\pagebreak
 
 ## Aufgabe 3
 Schätzen Sie die Zuchtwerte für die drei Väter "A", "B" und "C" mit einem Vatermodell. Dabei soll die `Herde` als fixer Effekt und der `Vater` als zufälliger Effekt im Modell berücksichtigt werden. Die Väter "A", "B" und "C" sind nicht verwandt miteinander und haben auch keine bekannten Eltern. 
@@ -243,29 +244,31 @@ cat("\\right]\n$$")
 ```
 
 - __Schritt 5__: Identifikation der fixen und zufälligen Effekte
+
 Die ersten drei Elemente des Lösungsvektor entsprechen den Lösungen für die fixen Effekte. 
 
 ```{r SolFixEffectSire}
 cat("$$\\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSire[1:3], ncol = 1)), collapse = "\n"))
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSire[1:nNrHerde], ncol = 1)), collapse = "\n"))
 cat("\\right]\n")
 cat(" = \\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSireNum[1:3], ncol = 1), pnDigits = 1), collapse = "\n"))
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSireNum[1:nNrHerde], ncol = 1), pnDigits = 1), collapse = "\n"))
 cat("\\right]\n$$")
 ```
 
 Die Elemente vier bis sechs entsprechen den Vorhersagen für die Vatereffekte
 
 ```{r SolRandomEffectSire}
+nLenSolVec <- length(vecSolSire)
 cat("$$\\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSire[4:6], ncol = 1)), collapse = "\n"))
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSire[(nNrHerde+1):nLenSolVec], ncol = 1)), collapse = "\n"))
 cat("\\right]\n")
 cat(" = \\left[")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSireNum[4:6], ncol = 1), pnDigits = 1), collapse = "\n"))
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSireNum[(nNrHerde+1):nLenSolVec], ncol = 1), pnDigits = 1), collapse = "\n"))
 cat("\\right]\n$$")
 ```
 
-
+\pagebreak
 
 ## Aufgabe 4
 Schätzen Sie die Zuchtwerte für alle Tiere im Pedigree (Väter und Töchter) mit dem Tiermodell. Dabei soll wieder die `Herde` als fixer Effekt und der Zuchtwert des Tieres als zufälliger Effekt berücksichtigt werden. Der Lösungsweg ist der gleiche, wie derjenige von Aufgabe 3. Der Unterschied besteht einzig im verwendeten Modell
@@ -339,10 +342,78 @@ cat("\\right]\n$$")
 
 - __Schritt 4__: Lösungen
 
+```{r SolMmeAni, warning=FALSE}
+vecSolNumAni <- solve(matCoeffAni, vecRhsAni)
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolAni, ncol = 1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matCoeffAni, pnDigits = 0), collapse = "\n"))
+cat("\\right]^{-1}\n")
+cat("\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhsAni, ncol = 1), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolNumAni, ncol = 1), pnDigits = 1), collapse = "\n"))
+cat("\\right]\n$$")
+```
 
+- __Schritt 5__: Identifikation der Effekte
+
+Die Lösungen für die fixen Effekte entsprechen wie in Aufgabe den ersten drei Elementen des Lösungsvektors.
+
+```{r SolFixEffectAni}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolAni[1:nNrHerde], ncol = 1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolNumAni[1:nNrHerde], ncol = 1), pnDigits = 1), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+Die verbleibenden Elemente im Lösungsvektor entsprechen den Zuchtwerten der drei Väter "A", "B" und "C" und der neun Töchter $1$ bis $9$. 
+
+```{r SolRandomEffectAni}
+nLenSolVecAni <- length(vecSolAni)
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolAni[(nNrHerde+1):nLenSolVecAni], ncol = 1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolNumAni[(nNrHerde+1):nLenSolVecAni], ncol = 1), pnDigits = 1), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+\pagebreak
 
 ## Aufgabe 5
 Vergleichen Sie die Rangierungen der Tiere gemäss ihrer geschätzer Zuchtwerte aus den verschiedenen Methoden
+
+__Lösung__:
+
+Bei den Töchtern können wir die Zuchtwerte aufgrund der Eigenleistung und aufgrund des Tiermodells verglichen werden. 
+
+```{r CompBvDaughter}
+dfCompBvDaughter <- data.frame(Tochter = as.vector(dfMlrData$Tochter),
+                               Eigenleistung = round(vecZwEl, digits = 1),
+                               Tiermodell = round(vecSolNumAni[(nNrHerde+nNrSire+1):nLenSolVecAni], digits = 1))
+knitr::kable(dfCompBvDaughter)
+```
+
+Bei den Töchtern unterscheiden sich die Rangierungen zwischen "Eigenleistung" und "Tiermodell". Die vorausgesagten Zuchtwerte aufgrund des Tiermodells sind klar zu bevorzugen, da diese die gesamte verfügbare Information, d.h. phänotypsiche Beobachtungen, systematische Umwelteinflüsse, Informationen zu Paarungspartnern und den Nachkommen, berücksichtigen. Bei der Eigenleistung wird nur die phänotypische Beobachtung berücksichtigt.
+
+Bei den Väter können wir einen Vergleich zwischen Zuchtwerten aufgrund von Nachkommenleistungen, aufgrund vom Vatermodell und aufgrund vom Tiermodell machen
+
+```{r CompBvSire}
+dfCompBvSire <- data.frame(Vater              = c("A","B","C"),
+                           Nachkommenleistung = round(as.vector(dfBvNk$Zuchtwert), digits = 1),
+                           Vatermodell        = round(vecSolSireNum[(nNrHerde+1):nLenSolVec], digits = 1),
+                           Tiermodell         = round(vecSolNumAni[(nNrHerde+1):(nNrHerde+nNrSire)], digits = 1))
+knitr::kable(dfCompBvSire)
+```
+
+Bei den Vätern stimmt die Rangierung bei den Nachkommenleistungen und dem Vatermodell überein. Beim Tiermodell ist Vater "B" besser als Vater "C". Auch hier gilt wieder, dass nur im Tiermodell alle verfügbaren Informationen berücksichtigt werden. Somit wären die Zuchtwerte aus dem Tiermodell also zu bevorzugen.
+
+
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
