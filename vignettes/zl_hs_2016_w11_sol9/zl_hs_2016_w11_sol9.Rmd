@@ -383,7 +383,6 @@ cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolNumAni[(nNrHerde+1):nLenSo
 cat("\\right]\n$$")
 ```
 
-\pagebreak
 
 ## Aufgabe 5
 Vergleichen Sie die Rangierungen der Tiere gemäss ihrer geschätzer Zuchtwerte aus den verschiedenen Methoden
