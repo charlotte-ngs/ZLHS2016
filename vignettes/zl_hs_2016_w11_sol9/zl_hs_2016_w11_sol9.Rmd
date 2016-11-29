@@ -7,6 +7,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+devtools::load_all()
 ```
 
 ```{r DocumentStatus, eval=FALSE}
@@ -105,7 +106,7 @@ wobei $\tilde{y}_s$ die durchschnittliche Leistung der Nachkommen von Vater $s$ 
 
 Die folgende Tabelle gibt eine Übersicht über die Resultate
 
-```{r BvEstNk}
+```{r BvEstNk, eval=FALSE}
 suppressPackageStartupMessages(require(dplyr))
 byVater <- group_by(dfMlrData, Vater)
 dfBvNk <- summarise(byVater, AnzahlNk = n(), MeanLeistung = mean(Leistung), BvNk = 2*AnzahlNk/(AnzahlNk + k)*(MeanLeistung - muMlr))
@@ -114,6 +115,234 @@ dfBvNk$Zuchtwert <- round(dfBvNk$Zuchtwert, digits = 3)
 knitr::kable(dfBvNk)
 ```
 
+
+## Aufgabe 3
+Schätzen Sie die Zuchtwerte für die drei Väter "A", "B" und "C" mit einem Vatermodell. Dabei soll die `Herde` als fixer Effekt und der `Vater` als zufälliger Effekt im Modell berücksichtigt werden. Die Väter "A", "B" und "C" sind nicht verwandt miteinander und haben auch keine bekannten Eltern. 
+
+Die Aufgabe gliedert sich in die folgenden Schritte:
+
+1. Notation des Gleichungssystems in Matrix-Vektor-Schreibweise
+2. Bestimmung der Inzidenzmatrizen $X$ und $Z$
+3. Aufstellen der Mischmodellgleichungen für das Vatermodell
+4. Lösen der Mischmodellgleichungen
+5. Aus den Lösungen von (4) die Schätzwerte für die fixen Effekte und die vorausgesagten Zuchtwerte für die Väter identifizieren
+
+
+__Lösung__:
+
+- __Schritt 1__: Notation des Gleichungssystems
+
+$$y = Xb + Zs + e$$
+
+\begin{tabular}{lll}
+mit  &  $y$  &  Vektor der phänotypischen Beobachtungen \\
+     &  $b$  &  Vektor der fixen Herdeneffekte \\
+     &  $s$  &  Vektor der zufälligen Vatereffekte \\
+     &  $X$  &  Inzidenzmatrix für $b$ \\
+     &  $Z$  &  Inzidenzmatrix für $s$
+\end{tabular}
+
+
+- __Schritt 2__: Inzidenzmatrizen $X$ und $Z$
+
+```{r DesignMatSire}
+matXSire <- matrix(data = c(1,0,0,
+                            1,0,0,
+                            0,1,0,
+                            0,1,0,
+                            0,1,0,
+                            0,0,1,
+                            0,0,1,
+                            0,0,1,
+                            0,0,1), nrow = nNrRecords, byrow = TRUE)
+cat("$$X = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXSire, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+
+matZSire <- matrix(data = c(0,0,1,
+                            1,0,0,
+                            0,1,0,
+                            1,0,0,
+                            0,0,1,
+                            0,0,1,
+                            0,0,1,
+                            1,0,0,
+                            0,1,0), nrow = nNrRecords, byrow = TRUE)
+cat("$$Z = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZSire, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+- __Schritt 3__: Mischmodellgleichungen
+
+```{r CoeffMatSire}
+matXtXSire <- crossprod(matXSire)
+cat("$$X^TX = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtXSire, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+
+matXtZSire <- crossprod(matXSire,matZSire)
+cat("$$X^TZ = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtZSire, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+
+alphaSire <- sigmae2/sigmaa2
+matZtZAinvSire <- crossprod(matZSire) + diag(alphaSire, nrow = nNrSire)
+cat("$$Z^TZ + A^{-1} \\cdot \\alpha = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZtZAinvSire, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+wobei $\alpha = \sigma_e^2 / \sigma_a^2$ und $A$ die Verwandtschaftsmatrix zwischen den Vätern. Da die Väter nicht verwandt sind untereinander, ist $A = I$. Der Vektor der rechten Handseite besteht aus
+
+```{r VecRhsSire}
+vecXtYSire <- crossprod(matXSire,vecYMlr)
+cat("$$X^Ty = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = vecXtYSire, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+vecZtYSire <- crossprod(matZSire,vecYMlr)
+cat("$$Z^Ty = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = vecZtYSire, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+Zusammengestellt sehen die Mischmodellgleichungen für das Vatermodell, wie folgt aus
+
+```{r MmeSire}
+matCoefSire <- cbind(rbind(matXtXSire,t(matXtZSire)), rbind(matXtZSire,matZtZAinvSire))
+vecSolSire <- c("\\hat{b}_{Herde1}","\\hat{b}_{Herde2}","\\hat{b}_{Herde3}",
+            "\\hat{s}_{VaterA}","\\hat{s}_{VaterB}","\\hat{s}_{VaterC}")
+vecRhsSire <- c(vecXtYSire,vecZtYSire)
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matCoefSire, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n")
+cat("\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSire, ncol = 1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhsSire, ncol = 1), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+- __Schritt 4__: Lösung der Mischmodellgleichungen
+
+```{r MmeSireSolution}
+vecSolSireNum <- solve(matCoefSire,vecRhsSire)
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSire, ncol = 1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matCoefSire, pnDigits = 0), collapse = "\n"))
+cat("\\right]^{-1}\n")
+cat("\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhsSire, ncol = 1), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSireNum, ncol = 1), pnDigits = 1), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+- __Schritt 5__: Identifikation der fixen und zufälligen Effekte
+Die ersten drei Elemente des Lösungsvektor entsprechen den Lösungen für die fixen Effekte. 
+
+```{r SolFixEffectSire}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSire[1:3], ncol = 1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSireNum[1:3], ncol = 1), pnDigits = 1), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+Die Elemente vier bis sechs entsprechen den Vorhersagen für die Vatereffekte
+
+```{r SolRandomEffectSire}
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSire[4:6], ncol = 1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSireNum[4:6], ncol = 1), pnDigits = 1), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+
+
+## Aufgabe 4
+Schätzen Sie die Zuchtwerte für alle Tiere im Pedigree (Väter und Töchter) mit dem Tiermodell. Dabei soll wieder die `Herde` als fixer Effekt und der Zuchtwert des Tieres als zufälliger Effekt berücksichtigt werden. Der Lösungsweg ist der gleiche, wie derjenige von Aufgabe 3. Der Unterschied besteht einzig im verwendeten Modell
+
+__Lösung__:
+
+- __Schritt 1__: Notation des Gleichungssystems
+
+$$y = Xb + Za + e$$
+
+\begin{tabular}{lll}
+mit  &  $y$  &  Vektor der phänotypischen Beobachtungen \\
+     &  $b$  &  Vektor der fixen Herdeneffekte \\
+     &  $a$  &  Vektor der zufälligen Zuchtwerte \\
+     &  $X$  &  Inzidenzmatrix für $b$ \\
+     &  $Z$  &  Inzidenzmatrix für $a$
+\end{tabular}
+
+Wichtig ist hier, dass der Vektor $a$ Zuchtwerte der drei Väter und aller neun Töchter enthält.
+
+- __Schritt 2__: Inzidenzmatrizen $X$ und $Z$
+
+Bei den fixen Effekten hat sich im Vergleich zu Aufgabe 3 nichts geändert. Deshalb können wir die Matrix $X$ aus der Aufgabe 3 übernehmen. Als zufällige Effekte haben wir jetzt die Zuchtwerte aller Tiere und nicht mehr Vatereffekte. Die Matrix $Z$ sieht somit etwas anders aus.
+
+```{r MatZAniModel}
+matZAni <- cbind(matrix(0, nrow = nNrRecords, ncol = nNrSire), diag(1, nrow = nNrRecords, ncol = nNrRecords))
+cat("$$Z = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZAni, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+```
+
+- __Schritt 3__: Mischmodellgleichungen
+Da wir die Matrix $X$ aus der Aufgabe 3 übernommen haben, bleibt sich auch $X^TX$ gleich. Die verbleibenden Komponenten werden nun aufgelistet
+
+```{r MmeAniMod, warning=FALSE}
+matXtXAni <- matXtXSire
+matXtZAni <- crossprod(matXSire, matZAni)
+
+### # pedigree
+suppressPackageStartupMessages(require(pedigreemm))
+pedTask4 <- pedigree(sire = c(NA,NA,NA,3,1,2,1,3,3,3,1,2), 
+                     dam  = c(NA,NA,NA,NA,4,NA,5,5,6,6,4,7), 
+                     label = as.character(1:(nNrSire+nNrRecords)))
+AinvAni <- as.matrix(getAInv(ped = pedTask4))
+matZtZAinvAni <- crossprod(matZAni) + AinvAni * alphaSire
+
+### # rhs
+vecXtYAni<- vecXtYSire
+vecZtYAni <- crossprod(matZAni,vecYMlr)
+vecRhsAni <- c(vecXtYAni,vecZtYAni)
+
+### # mme
+matCoeffAni <- cbind(rbind(matXtXAni,t(matXtZAni)),rbind(matXtZAni,matZtZAinvAni))
+vecSolAni <- c("\\hat{b}_{Herde1}","\\hat{b}_{Herde2}","\\hat{b}_{Herde3}",
+            "\\hat{a}_{VaterA}","\\hat{a}_{VaterB}","\\hat{a}_{VaterC}",
+            "\\hat{a}_4","\\hat{a}_5","\\hat{a}_6",
+            "\\hat{a}_7","\\hat{a}_8","\\hat{a}_9",
+            "\\hat{a}_{10}","\\hat{a}_{11}","\\hat{a}_{12}")
+
+cat("$$\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = matCoeffAni, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n")
+cat("\\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolAni, ncol = 1)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhsAni, ncol = 1), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+
+```
+
+- __Schritt 4__: Lösungen
+
+
+
+## Aufgabe 5
+Vergleichen Sie die Rangierungen der Tiere gemäss ihrer geschätzer Zuchtwerte aus den verschiedenen Methoden
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
