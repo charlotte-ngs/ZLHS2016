@@ -106,7 +106,7 @@ wobei $\tilde{y}_s$ die durchschnittliche Leistung der Nachkommen von Vater $s$ 
 
 Die folgende Tabelle gibt eine Übersicht über die Resultate
 
-```{r BvEstNk, eval=FALSE}
+```{r BvEstNk, eval=TRUE}
 suppressPackageStartupMessages(require(dplyr))
 byVater <- group_by(dfMlrData, Vater)
 dfBvNk <- summarise(byVater, AnzahlNk = n(), MeanLeistung = mean(Leistung), BvNk = 2*AnzahlNk/(AnzahlNk + k)*(MeanLeistung - muMlr))
