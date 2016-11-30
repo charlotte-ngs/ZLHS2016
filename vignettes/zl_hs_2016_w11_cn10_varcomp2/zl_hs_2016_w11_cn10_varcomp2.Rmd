@@ -26,9 +26,103 @@ if (!r6ob_abbrtable$is_empty_abbr())
 ```
 
 ## Einleitung
+Im vorherigen Kapitel haben wir Varianzkomponenten mit Hilfe der Varianzanalyse geschätzt. Wir haben gesehen, dass Schätzungen für die Varianzkomponenten berechnet werden können, indem wir die Beziehung zwischen den Erwartungswerten von Summenquadraten und den Varianzkomponenten verwendeten. Anstelle der Erwartungswerte wurden die empirischen Summenquadrate den Schätzwerten für die Varianzkomponenten gleichgesetzt.
+
+Ein Nachteil der Varianzanalyse ist, dass sie in Abhängigkeit der Datenkonstellation negative Schätzwerte liefern kann. Da Varianzkomonenten als Quadrate definiert sind, und eine Erweiterung in die komplexe Zahlenmenge biologisch schwer interpretierbar ist, sind diese negativen Schätzwerte unbrauchbar. Als Ausweg hat man andere Schätzverfahren für Varianzkomponenten entwickelt, bei denen das Problem von negativen Schätzwerten nicht auftritt. Zwei von diesen Schätzverfahren wollen wir im folgenden noch etwas genauer anschauen.
 
 
 ## Likelihood basierte Verfahren
+Das __Maximum Likelihood__ (ML) Verfahren wurde anfangs des 20. Jahrhunderts von R.A. Fisher entwickelt. ML ist ein allgemeines Schätzverfahren um unbekannte Parameter aus Daten zu schätzen. Es wird also nicht nur für die Schätzung von Varianzkomponenten verwendet. Nehmen wir an, dass es sich bei den beobachteten Daten um kontinuierliche Grössen handelt. Das heisst, die beobachteten Werte sind im wesentlichen reelle Zahlen. Bei ML geht man davon aus, dass die beobachteten Daten einer bestimmten Dichteverteilung - zum Beispiel einer multivariaten Normalverteilung - folgen. Diese Dichteverteilung ist abhängig von unbekannten Parametern, welche aus den Daten geschätzt werden sollen. Sobald wir es mit diskreten Daten zu tun haben, dann können diese nur gewisse Werte annehmen und anstelle der Dichteverteilung der kontinuierlichen Daten, folgen die diskreten Daten einer Wahrscheinlichkeitsverteilung. In den folgenden Abschnitten nehmen wir für die Erklärung von ML kontinuierliche Daten an. Das Verfahren funktioniert aber auch für diskrete Daten.
+
+
+### Dichteverteilung von Beobachtungen
+Wir haben einem Vektor $y$ mit $n$ beobachteten Daten. Wir nehmen an, dass diese Daten einer bestimmten Dichteverteilung folgen. Als Beispiel für eine Verteilung können wir uns die multivariate oder multi-dimensionale Normalverteilung vorstellen. Der Begriff __multivariat__ bedeutet, dass die Normalverteilung sich über mehrere Dimensionen ausdehnt. Bei $n$ Beobachtungen im Datensatz dehnt sich die gewählte Normalverteilung für $y$ über exakt $n$ Dimensionen aus. Allgemein ist eine reelle $n$-dimensionale Zufallsvariable $Y$ normalverteilt, wenn sie eine Dichteverteilung 
+
+$$f_Y(y) =  \frac{1}{\sqrt{(2\pi)^n\ det(\Sigma)}}\ exp\left(-{1\over 2}(y-\mu)^T \Sigma^{-1} (y-\mu) \right)$$
+
+\begin{tabular}{lll}
+mit  &  $\mu$  &  Erwartungsvektor der Länge $n$ \\
+     &  $\Sigma$  &  Covarianzmatrix mit Dimension $n\times n$\\
+     &  $det()$   &  Determinante
+\end{tabular}
+
+besitzt. Abgekürzt schreibt man auch $Y \sim \mathcal{N}_n(\mu, \Sigma)$. 
+
+Eine graphische Darstellung für eine zweidimensionale Normalverteilung, das heisst hier wäre $n=2$, ist im nachfolgenden Plot gezeigt.
+
+```{r TwoDimNorm, fig.show=TRUE, fig.align='center'}
+### # the following code is copied from http://www.ejwagenmakers.com/misc/Plotting_3d_in_R.pdf
+mu1<-0 # setting the expected value of x1
+mu2<-0 # setting the expected value of x2
+s11<-10 # setting the variance of x1
+s12<-15 # setting the covariance between x1 and x2
+s22<-10 # setting the variance of x2
+rho<-0.5 # setting the correlation coefficient between x1 and x2
+x1<-seq(-10,10,length=41) # generating the vector series x1
+x2<-x1 # copying x1 to x2
+
+f<-function(x1,x2)
+{
+  term1<-1/(2*pi*sqrt(s11*s22*(1-rho^2)))
+  term2<--1/(2*(1-rho^2))
+  term3<-(x1-mu1)^2/s11
+  term4<-(x2-mu2)^2/s22
+  term5<--2*rho*((x1-mu1)*(x2-mu2))/(sqrt(s11)*sqrt(s22))
+  term1*exp(term2*(term3+term4-term5))
+} # setting up the function of the multivariate normal density
+#
+z<-outer(x1,x2,f) # calculating the density values
+#
+persp(x1, x2, z,
+      main="Two dimensional Normal Distribution",
+#      sub=expression(italic(f)~(bold(x)) ==
+#                      frac(1,2~pi~sqrt(sigma[11]~sigma[22]~(1-rho^2))) ~
+#                       phantom(0)^bold(.)~exp~bgroup("{",
+#                                                     list(-frac(1,2(1-rho^2)),
+#                                                      bgroup("[", frac((x[1]~-~mu[1])^2, sigma[11])~-~2~rho~frac(x[1]~-~mu[1],                                                                                                                                                                                 sqrt(sigma[11]))~ frac(x[2]~-~mu[2],sqrt(sigma[22]))~+~
+#                                                      frac((x[2]~-~mu[2])^2, sigma[22]),"]")),"}")),
+      col="lightgreen",
+      theta=30, phi=20,
+      r=50,
+      d=0.1,
+      expand=0.5,
+      ltheta=90, lphi=180,
+      shade=0.75,
+      ticktype="detailed",
+      nticks=5) # produces the 3-D plot
+#
+mtext(expression(list(mu[1]==0,
+                      mu[2]==0,
+                      sigma[11]==10,
+                      sigma[22]==10,
+                      sigma[12]==15,
+                      rho==0.5)),
+      side=3) # adding a text line to the graph
+
+```
+
+\vspace{2ex}
+Die für $y$ gewählte Dichteverteilung ist in der Regel von unbekannten Parametern abhängig. Bei der eindimensionalen Normalverteilung sind das der Erwartungswert $\mu$ und die Varianz $\sigma^2$. Wir definieren den Parametervektor $\theta$ als einen Vektor, der alle unbekannten Parameter einer gewissen Verteilung enthält. Bei der eindimensionalen Normalverteilung ist 
+
+$$\theta = \left[
+  \begin{array}{c}
+  \mu\\
+  \sigma^2
+  \end{array}
+\right]$$
+
+### Likelihood Funktion
+Die gewählte Dichteverteilung für die Beobachtungen $y$ bestimmt die gemeinsame Dichte $f(y | \theta)$ gegeben die unbekannten Parameter. Diese Funktion $f(y | \theta)$ liefert bei bekannten Werten von $\theta$ die Dichtewerte in Abhängigkeit der Beobachtungen $y$. Bevor die Daten beobachtet werden kann $f(y | \theta)$ als Funktion der unbekannten Daten behandelt werden und liefert `a priori` Information zur Dichte von möglichen Daten bei gegebenen Verteilungsparametern $\theta$. Sobald aber die Daten beobachtet sind, dann sind diese fix und können nicht mehr verändert werden. Dann macht es keinen Sinn mehr $f(y | \theta)$ als Funktion von $y$ anzuschauen. Da aber die Parameter unbekannt sind, liegt es auf der Hand $f(y | \theta)$ als Funktion der unbekannten Parameter $\theta$ zu betrachten. Wir definieren also die Funktion $L(\theta)$ als 
+
+\begin{equation}
+L(\theta) = f(y | \theta)
+\label{eq:LikelihoodDefinition}
+\end{equation}
+
+Die Funktion $L(\theta)$ heisst __Likelihood__. Aufgrund der Definition von $L(\theta)$ können wir sagen, dass je besser ein Dichteverteilung mit gegebenem Parametervektor $\theta$ die beobachteten Daten $y$ beschreibt desto grösser ist der entsprechende Likelihood-Wert. Aufgrund dieses Arguments scheint es vernünftig, die unbekannten Parameter $\theta$ so zu wählen, dass  $L(\theta)$ maximal wird. Genau das wird im ML-Schätzverfahren umgesetzt. Wir definieren für eine gewählte Dichteverteilung der Beobachtung die Likelihoodfunktion. Dann maximieren wir $L(\theta)$ im Bezug auf $\theta$ und wählen den Wert für $\theta$ als Schätzer, welcher $L(\theta)$ maximiert. Formal schreiben wir das als
+
+$$\hat{\theta}_{ML} = argmax_{\theta} \ L(\theta)$$
+
 
 
 ## Bayes'sche Ansätze
