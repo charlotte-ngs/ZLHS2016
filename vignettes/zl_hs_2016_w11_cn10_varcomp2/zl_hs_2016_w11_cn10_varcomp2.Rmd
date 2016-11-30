@@ -50,7 +50,7 @@ besitzt. Abgekürzt schreibt man auch $Y \sim \mathcal{N}_n(\mu, \Sigma)$.
 
 Eine graphische Darstellung für eine zweidimensionale Normalverteilung, das heisst hier wäre $n=2$, ist im nachfolgenden Plot gezeigt.
 
-```{r TwoDimNorm, fig.show=TRUE, fig.align='center'}
+```{r TwoDimNorm, eval=FALSE, fig.show=TRUE, fig.align='center'}
 ### # the following code is copied from http://www.ejwagenmakers.com/misc/Plotting_3d_in_R.pdf
 mu1<-0 # setting the expected value of x1
 mu2<-0 # setting the expected value of x2
@@ -123,6 +123,12 @@ Die Funktion $L(\theta)$ heisst __Likelihood__. Aufgrund der Definition von $L(\
 
 $$\hat{\theta}_{ML} = argmax_{\theta} \ L(\theta)$$
 
+
+### Beispiel für ein Regressionsmodell
+<!-- siehe: https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood -->
+
+
+### Beispiel für das gemischte lineare Modell
 
 
 ## Bayes'sche Ansätze
