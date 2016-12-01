@@ -50,7 +50,7 @@ besitzt. Abgekürzt schreibt man auch $Y \sim \mathcal{N}_n(\mu, \Sigma)$.
 
 Eine graphische Darstellung für eine zweidimensionale Normalverteilung, das heisst hier wäre $n=2$, ist im nachfolgenden Plot gezeigt.
 
-```{r TwoDimNorm, eval=FALSE, fig.show=TRUE, fig.align='center'}
+```{r TwoDimNorm, eval=TRUE, fig.show=TRUE, fig.align='center'}
 ### # the following code is copied from http://www.ejwagenmakers.com/misc/Plotting_3d_in_R.pdf
 mu1<-0 # setting the expected value of x1
 mu2<-0 # setting the expected value of x2
@@ -126,9 +126,116 @@ $$\hat{\theta}_{ML} = argmax_{\theta} \ L(\theta)$$
 
 ### Beispiel für ein Regressionsmodell
 <!-- siehe: https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood -->
+Als erstes Beispiel schauen wir uns an, wie wir die Restvarianz $\sigma^2$ in einem Regressionsmodell (\ref{eq:SimpleRegModel}) mit dem ML-Verfahren schätzen können.  
 
+\begin{equation}
+y = Xb + e
+\label{eq:SimpleRegModel}
+\end{equation}
+
+Unter der Annahme, dass die Beobachtungen $y$ einer multivariaten Normalverteilung folgen, können wir die bedingte Dichteverteilung aller Daten gegeben bekannte Parameter schreiben als
+
+\begin{equation}
+f_Y(y \lvert b, \sigma^2) = (2\pi \sigma^2)^{-n/2} exp\left(-{1\over 2\sigma^2} (y - Xb)^T\ (y - Xb)\right)
+\label{eq:SimpleRegCondDensityObs}
+\end{equation}
+
+Fassen wir die Dichteverteilung in (\ref{eq:SimpleRegCondDensityObs}) als Funktion der Parameter $b$ und $\sigma^2$ auf, so resultiert daraus die folgende Likelihoodfunktion
+
+\begin{equation}
+L(b, \sigma^2) = (2\pi \sigma^2)^{-n/2} exp\left(-{1\over 2\sigma^2} (y - Xb)^T\ (y - Xb)\right)
+\label{eq:SimpleRegLikelihood}
+\end{equation}
+
+Schätzwerte für die unbekannten Parameter $b$ und $\sigma^2$ erhalten wir indem wir $L(b, \sigma^2)$ mit Bezug auf $b$ und auf $\sigma^2$ maximieren. Allgemein finden wir das Maximum einer Funktion durch differenzieren und Nullsetzen der ersten Ableitung (Steigung). Die so erhaltenen Nullstellen der Steigung müssen mit höheren Ableitungen überprüft werden, ob sie tatsächlich ein Maximum darstellen. Für das Differenzieren verwenden wir nicht die Likelihoodfunktion $L(b, \sigma^2)$ direkt, sondern deren Logarithmus zur Basis $e$.
+
+$$l(b, \sigma^2) = \log(L(b, \sigma^2)) = -{n\over 2}\log(2\pi) - {n\over 2}\log(\sigma^2) - {1\over 2\sigma^2} (y - Xb)^T\ (y - Xb)$$
+
+Der Grund für diese Transformation ist, dass $l(b, \sigma^2)$ in der Regel viel einfacher zu differenzieren ist als $L(b, \sigma^2)$. Die Transformation auf die logarithmische Skala ändert nichts an der Position der auftretenden Extrema. Für uns heisst das, dass wo immer $l(b, \sigma^2)$ ein Maximum hat, hat auch $L(b, \sigma^2)$ ein Maximum.
+
+Obwohl wir eigentlich nur an der Schätzung für die Varianzkomponente $\sigma^2$ interessiert sind, bekommen wir mit dem ML-Verfahren auch eine Schätzung für den Vektor $b$. Wir berechnen die partielle Ableitung von $l(b, \sigma^2)$ nach $b$ und nach $\sigma^2$, setzen diese gleich Null und haben dann Kandidaten für mögliche Schätzwerte. 
+
+\begin{eqnarray}
+\frac{\partial l(b, \sigma^2)}{\partial b} &=& - {1\over 2\sigma^2} (-(y^TX)^T - X^Ty + 2X^TXb) \nonumber\\
+&=& - {1\over 2\sigma^2} (-2X^Ty  + 2X^TXb) 
+\label{eq:PartialLogLWrtB}
+\end{eqnarray}
+
+Das Maximum von $l(b, \sigma^2)$ kann dort auftreten, wo die Ableitung in (\ref{eq:PartialLogLWrtB}) gleich $0$ ist. Die Untersuchung höherer Ableitung würde ergeben, dass diese Nullstelle der Ableitung wirklich ein Maximum darstellt. Somit folgen die sogenannten Normalgleichungen
+
+$$X^Ty = X^TX\hat{b}$$
+
+Daraus folgt die ML-Schätzung für $b$ als
+
+
+\begin{equation}
+\hat{b} = (X^TX)^{-1}X^Ty
+\label{eq:MlEstB}
+\end{equation}
+
+Der ML-Schätzer für $b$ in (\ref{eq:MlEstB}) setzt voraus, dass die Matrix $X$ vollen Kolonnenrang $p$ hat. Das heisst, keine zwei oder mehr Kolonnen von $X$ sind linear abhängig voneinander. Der ML-Schätzer $\hat{b}$ für $b$ entspricht dem Schätzer, welcher wir schon mit Least Squares gefunden hatten. 
+
+Den ML-Schätzer für $\sigma^2$ finden wir analog zum Schätzer für $b$. Als erstes berechnen wir die partielle Ableitung von $l(b, \sigma^2)$ nach $\sigma^2$. Dann setzen wir diese gleich $0$ und erhalten so den ML-Schätzer für $\sigma^2$. 
+
+\begin{eqnarray}
+\frac{\partial l(b, \sigma^2)}{\partial \sigma^2} &=& - {n\over 2\sigma^2} + {1\over 2\sigma^4} (y - Xb)^T\ (y - Xb)
+\label{eq:PartialLogLWrtSigma2}
+\end{eqnarray}
+
+Vorausgesetzt, dass $\sigma^2 \ne 0$, gilt
+
+$${1\over \hat{\sigma}^2} (y - Xb)^T\ (y - Xb) - n = 0$$
+
+Dieser Ausdruck kann nur dann gleich $0$ sein, falls 
+
+\begin{equation}
+\hat{\sigma}^2 = {1\over n}  (y - Xb)^T\ (y - Xb)
+\label{eq:MlEstSigma2}
+\end{equation}
+
+Schreiben wir den Ausdruck in (\ref{eq:MlEstSigma2}) in der Summennotation, so erhalten wir
+
+\begin{equation}
+\hat{\sigma}^2 = {1\over n} \sum_{i=1}^n (y_i - x_i^Tb)^2
+\label{eq:MlEstSigma2Sum}
+\end{equation}
+
+Da in (\ref{eq:MlEstSigma2Sum}) der Vektor $b$ unbekannt ist, setzen wir den Schätzer $\hat{b}$ aus (\ref{eq:MlEstB}) ein und erhalten so den ML-Schätzer für $\sigma^2$
+
+\begin{equation}
+\hat{\sigma}^2 = {1\over n} \sum_{i=1}^n (y_i - x_i^T\hat{b})^2
+\label{eq:MlEstSigma2SumResult}
+\end{equation}
+
+Vergleichen wir den ML-Schätzer aus (\ref{eq:MlEstSigma2SumResult}) mit dem Schätzer, den wir bei Least Squares aufgrund der Residuen gefunden hatten, dann sind die beiden Schätzer nicht gleich. Der Schätzer für $\sigma^2$ aufgrund der Residuen ist definiert als 
+
+\begin{equation}
+\hat{\sigma}^2_{Res} = {1\over n-p} \sum_{i=1}^n r_i^2
+\label{eq:MlEstSigma2Residuals}
+\end{equation}
+
+wobei $r_i^2 = y_i - x_i^T\hat{b}$ und $p$ dem Kolonnenrang der Matrix $X$ entspricht. Wir hatten auch gesehen, dass $\hat{\sigma}^2_{Res}$ erwartungstreu ist. Somit ist der ML-Schätzer für $\sigma^2$ nicht erwartungstreu, d.h. $E\left[\hat{\sigma}^2_{ML}\right] \ne \sigma^2$. 
+
+
+\pagebreak
 
 ### Beispiel für das gemischte lineare Modell
+Im allgemeinen lineare gemischten Modell 
+
+\begin{equation}
+y = Xb + Zu + e
+\label{eq:GenLinMixedModel}
+\end{equation}
+
+gibt es mindestens zwei Varianzkomponenten, welche zu schätzen sind. Für die beiden zufälligen Effekte $u$ und $e$ haben wir angenommen, dass 
+
+$$var(e) = R = I * \sigma_e^2$$
+
+und 
+
+$$var(u) = G \text{.}$$
+
+Je nach Anwendung hat auch $G$ eine einfache Struktur. Als Beispiel entspricht $G$ im Tiermodell der Verwandtschaftsmatrix mal die additiv genetische Varianz, d.h. $G = A * \sigma_a^2$. 
 
 
 ## Bayes'sche Ansätze
