@@ -50,7 +50,7 @@ besitzt. Abgekürzt schreibt man auch $Y \sim \mathcal{N}_n(\mu, \Sigma)$.
 
 Eine graphische Darstellung für eine zweidimensionale Normalverteilung, das heisst hier wäre $n=2$, ist im nachfolgenden Plot gezeigt.
 
-```{r TwoDimNorm, eval=TRUE, fig.show=TRUE, fig.align='center'}
+```{r TwoDimNorm, eval=FALSE, fig.show=TRUE, fig.align='center'}
 ### # the following code is copied from http://www.ejwagenmakers.com/misc/Plotting_3d_in_R.pdf
 mu1<-0 # setting the expected value of x1
 mu2<-0 # setting the expected value of x2
@@ -136,7 +136,7 @@ y = Xb + e
 Unter der Annahme, dass die Beobachtungen $y$ einer multivariaten Normalverteilung folgen, können wir die bedingte Dichteverteilung aller Daten gegeben bekannte Parameter schreiben als
 
 \begin{equation}
-f_Y(y \lvert b, \sigma^2) = (2\pi \sigma^2)^{-n/2} exp\left(-{1\over 2\sigma^2} (y - Xb)^T\ (y - Xb)\right)
+f_Y(y | b, \sigma^2) = (2\pi \sigma^2)^{-n/2} exp\left(-{1\over 2\sigma^2} (y - Xb)^T\ (y - Xb)\right)
 \label{eq:SimpleRegCondDensityObs}
 \end{equation}
 
@@ -235,10 +235,70 @@ und
 
 $$var(u) = G \text{.}$$
 
-Je nach Anwendung hat auch $G$ eine einfache Struktur. Als Beispiel entspricht $G$ im Tiermodell der Verwandtschaftsmatrix mal die additiv genetische Varianz, d.h. $G = A * \sigma_a^2$. 
+Je nach Anwendung hat auch $G$ eine einfache Struktur, d.h. wir können $G$ zerlegen in eine bekannte Matrix $A$ mal eine Varianzkomponente $\sigma_u^2$. Als Beispiel entspricht $G$ im Tiermodell der Verwandtschaftsmatrix mal die additiv genetische Varianz, d.h. $G = A * \sigma_a^2$. Die Erwartungswerte der zufälligen Effekte $u$ und $e$ sind für beide gleich. Es gilt also 
+
+$$E\left[e\right] = 0 \text{ und } E\left[u\right] = 0$$
+
+Aus diese Eigenschaften für die Erwartungswerte und die Varianzen folgt, dass für die Beobachtungen $y$ gilt
+
+$$E\left[y\right] = Xb \text{ und } var(y) = V$$
+
+### Likelihood für das gemischte Modell
+Unter der Annahme, dass die Beobachtungen $y$ einer multivariaten Normalverteilung folgen, d.h. 
+
+$$y \sim \mathcal{N}(Xb, V)$$
+
+dann ist die entsprechende Likelihoodfunktion $L(b,V)$ definiert als 
+
+$$L(b,V) = (2\pi)^{n/2}\ det(V)^{1/2}\ exp\left\{-{1\over 2}(y - Xb)^T V^{-1} (y - Xb)\right\}$$
+
+Auch hier transformieren wir die Funktion $L$ wieder auf die logarithmische Skala und erhalten 
+
+$$l(b,V) = \log(L(b,V)) = -{n\over 2}\log(2\pi) - {1\over 2}\log(det(V)) - {1\over 2}(y - Xb)^T V^{-1} (y - Xb)$$
+
+Den ML-Schätzer für $b$ erhalten wir durch Nullsetzen der partiellen Ableitung von $l(b,V)$ nach $b$. Als Resultat erhalten wir den bekannten verallgemeinerten Least Squares Schätzer 
+
+\begin{equation}
+\hat{b} = \left(X^TV^{-1}X\right)X^TV^{-1}y
+\label{eq:MLEstHatB}
+\end{equation}
 
 
-## Bayes'sche Ansätze
+Die partielle Ableitung von $l(b,V)$ nach $\sigma^2$ entspricht
+
+\begin{equation}
+\frac{\partial l(b,V)}{\partial \sigma^2} 
+  = -{1\over 2}tr(V^{-1}\tilde{Z}\tilde{Z}^T) + {1\over 2}(y - Xb)^T V^{-1}\tilde{Z}\tilde{Z}^TV^{-1}(y - Xb)
+\label{eq:PartialLogLSigma2}
+\end{equation}
+  
+wobei $tr()$ die Spur (Summe der Diagonalelemente) einer Matrix bezeichnet. Die Varianzkomponente $\sigma^2$ entspricht der Kombination von $\sigma_e^2$ und $\sigma_u^2$ und $\tilde{Z}$ entspricht der Inzidenzmatrix aus der kombinierten Varianzkomponente.
+
+Setzt man die Ableitung in (\ref{eq:PartialLogLSigma2}) gleich Null und setzt für $b$ den Schätzer $\hat{b}$ aus (\ref{eq:MLEstHatB}), dann resultiert ein Gleichungssystem, dessen Lösung zum ML-Schätzer von $\sigma^2$ führt. 
+
+
+## Restricted (Residual) Maximum Likelihood (REML)
+<!-- siehe auch http://users.stat.umn.edu/~corbett/classes/5303/REML.pdf -->
+ML-Schätzer von Varianzkomponenten haben die Eigenschaft, dass sie die Anzahl Freiheitsgrade ($p$), welche zur Schätzung der fixen Effekte verwendet werden, nicht berücksichtigen. Sie sind somit nicht erwartungstreu, was wir beim ML-Schätzer der Restvarianz für das einfache Regressionsmodell gesehen hatten.
+
+Im Gegensatz zu ML berücksichtigen REML-Schätzungen von Varianzkomponenten die Anzahl Freiheitsgrade, welche für die Schätzung von fixen Effekten verwendet werden. Dies wird dadurch erreicht, dass die Likelihoodfunktion nicht als die Dichteverteilung von $y$ gegeben die Parameter aufgestellt werden, sondern von einer Transformation $\tilde{y} = Ky$. Dabei wird die Matrix $K$ so bestimmt, dass der Erwatungswert $E\left[\tilde{y}\right] = 0$ ist. Somit treten in der Likelihoodfunktion über $\tilde{y}$ keine fixen Effekte $b$ mehr auf, welche auch noch geschätzt werden müssen. 
+
+Der eigentliche Prozess, wie man zu den Schätzungen kommt ist analog zum Maximum-Likelihood Verfahren, nur wird anstelle von $y$ mit $\tilde{y}$ operiert.
+
+
+## Bayes'sche Ansätze (Ein Ausblick)
+In der Statistik gibt es zwei fundamentale Philosophien, wie Datenanalysen gemacht werden sollen. Auf der einen Seite gibt es den __frequentistischen__ Ansatz und auf der anderen Seite den __Bayes'schen__ Ansatz. Alles was wir bis jetzt behandelt haben stammt aus der frequentistischen Welt. 
+
+Bayes'sche Ansätze sind so benannt, weil sie auf dem Satz von Bayes begründet sind. Dieser Satz enthält eigentlich nur die Definition der bedingten Wahrscheinlichkeit. Eine Bayes'sche Schätzung eines unbekannten Parameters $\theta$ aufgrund von Daten $y$, basiert immer auf der sogenannten __a posteriori__ Verteilung ($P(\theta | \ y)$) des Parameters gegeben die Daten. Als eigentlicher Schätzwert wird dann meistens der Erwartungswert $E\left[\theta | y \right]$ verwendet.
+
+Die a posteriori Verteilung des Parameters gegeben die Daten lässt sich gemäss Satz von Bayes berechnen als
+
+$$P(\theta | y) = \frac{P(y | \theta) * P(\theta)}{P(y)}$$
+
+wobei $P(y | \theta)$ der Likelihood entspricht und $P(\theta)$ als __a priori__ Wahrscheinlichkeit des unbekannten Parameters bezeichnet wird. $P(y)$ steht für eine Normalisierungskonstante, welche keine weitere Bedeutung hat.
+
+Im nächsten Kapitel werden wir uns kurz die verwendeten statistischen Methoden in der genomischen Selektion anschauen. Da spielen die Bayes'schen Ansätze eine wichtige Rolle. Somit ist eine genauere Beschreibung auf ein späteres Kapitel verschoben.
+
 
 
 
