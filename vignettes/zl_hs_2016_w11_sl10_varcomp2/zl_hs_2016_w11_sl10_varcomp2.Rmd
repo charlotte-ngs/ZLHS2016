@@ -1,0 +1,26 @@
+---
+title: Züchtungslehre - Varianzkomponentenschätzung - Teil 2
+author: Peter von Rohr
+date: 2016-12-02
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Varianzanalyse
+
+- Erwartungswerte von Summenquadraten sind Funktionen von Varianzkomponenten
+- Negative Schätzwerte aufgrund von Datenkonstellationen
+- keine Konsistenz, d.h. bei steigenden Datenmengen keine Steigerung der Qualität
+- keine Berücksichtigung der Verteilung der Daten
+
+## Likelihood
+
+- Anpassung einer Verteilung an die Daten
+- Verteilungsparameter sollen so geschätzt werden, dass Verteilung "optimal" zu Daten passt
+- Als Kriterium dient die __Likelihood__ $L$
+- Definition
+
+$$L(\theta) = f(y | \theta)$$

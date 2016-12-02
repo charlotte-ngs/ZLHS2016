@@ -2,7 +2,9 @@
 title: Züchtungslehre - Eigenschaften von BLUP-Zuchtwerten
 author: Peter von Rohr
 date: 2016-11-18
-output: beamer_presentation
+output: 
+  beamer_presentation:
+    fig_caption: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -312,15 +314,22 @@ Lösen wir die Gleichung (\ref{eq:YiDecompEq}) nach $\hat{a}_i$ auf so folgt
 
 - Für Tier $i$ mit Eltern $s$ und $d$, 
     + addiere $\delta_i$ zum Element $(i,i)$, 
-    + addiere $-\delta_i/2$ zu den Elementen $(s,i)$, $(i,s)$, $(d,i)$ und $(i,d)$ und 
-    + addiere $\delta_i/4$ zu den Elementen $(s,s)$, $(s,d)$, $(d,s)$ und $(d,d)$
+    + addiere $-\delta_i/2$ zu  $(s,i)$, $(i,s)$, $(d,i)$ und $(i,d)$
+    + addiere $\delta_i/4$ zu  $(s,s)$, $(s,d)$, $(d,s)$ und $(d,d)$
 - Für Tier $i$ mit bekanntem Elternteil $d$,
     + addiere $\delta_i$ zum Element $(i,i)$, 
     + addiere $-\delta_i/2$ zu den Elementen $(d,i)$ und $(i,d)$ und 
     + addiere $\delta_i/4$ zu den Elementen $(d,d)$
 - Für Tier $i$ mit unbekannten Eltern
     + addiere $\delta_i$ zum Element $(i,i)$ 
-        
+- Ohne Inzucht ist 
+    $$\delta_i = \left\{\begin{array}{rl}
+                       2   &  \text{bei bekannten Eltern} \\
+                       4/3 &  \text{bei einem bekannten Elternteil} \\
+                       1   &  \text{bei unbekannten Eltern}\\
+                       \end{array}\right.
+    $$
+
 
 ## Ein Beispiel
 ```{r MmeSimpleModelDecomp}
@@ -374,15 +383,14 @@ cat(paste(sGetTexMatrix(pmatAMatrix = matAinvSmd, pnDigits = 2, pnAlign = rep("c
 cat("\\right]\n$$")
 ```
 
-$$\alpha = 2$$
 
-## Mischmodellgleichungen
+## Mischmodellgleichungen (MMG)
 ```{r MmeSmdNumeric, results='asis'}
 matCoeffSmd <- cbind(rbind(matXtXSmd,t(matXtZSmd)),rbind(matXtZSmd,matZtZSmd + matAinvSmd * alpha))
 cat("$$\\left[\n")
 cat(paste(sGetTexMatrix(pmatAMatrix = matCoeffSmd, pnDigits = 2, pnAlign = rep("c", nNrObsSmd+2)), collapse = "\n"))
 cat("\\right]\n")
-solVecSmd <- c("\\mu", vecGetVecElem(psBaseElement = "\\hat{a}", pnVecLen = nNrObsSmd))
+solVecSmd <- c("\\hat{\\mu}", vecGetVecElem(psBaseElement = "\\hat{a}", pnVecLen = nNrObsSmd))
 cat("\\left[\n")
 cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(solVecSmd, nrow = nNrObsSmd+1), pnAlign = rep("c", 2)), collapse = "\n"))
 cat("\\right]\n")
@@ -393,17 +401,66 @@ cat("\\right]\n")
 cat("$$")
 ```
 
-- Beispiel: Tier 4
+- Beispiel: Beobachtung für Tier 4
+
+## Gleichung der Beobachtung $y_4$ für Tier 4
+
+```{r MMGTier4, results='asis'}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "MMGTier4")
+```
+
 
 ## Zerlegung für Tier 4 
 
 - Eltern 1 und 2
 - Nachkomme 5
 - Paarungspartner 3
+- $\alpha = 2$
 
-$$y_4 = \mu + (-2)*\hat{a}_1 + (-2)*\hat{a}_2 + (1) * \hat{a}_3 + (6) * \hat{a}_4 + (-2) * \hat{a}_5$$
+
+$$y_4 = \hat{\mu} + (-2)*\hat{a}_1 + (-2)*\hat{a}_2 + (1) * \hat{a}_3 + (6) * \hat{a}_4 + (-2) * \hat{a}_5$$
 
 - nach $\hat{a}_4$ aufgelöst bekommen wir
 
-$$\hat{a}_4 = {1\over 6} \left[y_4 - \mu + 2*\hat{a}_1 + 2*\hat{a}_2 - \hat{a}_3 + 2 * \hat{a}_5\right]$$
+$$\hat{a}_4 = {1\over 6} \left[y_4 - \hat{\mu} + 2*\hat{a}_1 + 2*\hat{a}_2 - \hat{a}_3 + 2 * \hat{a}_5\right]$$
+
+
+## Komponenten der Zerlegung
+
+- Tier: $$\left[1 + \alpha \delta^{(i)} + {\alpha\over 4} \sum_{j=1}^n \delta^{(k_j)}\right]^{-1}
+         = \left[1 + 2*2 + 0.5 * 2\right]^{-1} = 1/6$$
+- Eltern: $${\alpha\over 2}\left\{\delta^{(i)}(\hat{a}_s + \hat{a}_d)\right\} = {2\over 2}\left\{2(\hat{a}_1 + \hat{a}_2)\right\}
+            = 2(\hat{a}_1 + \hat{a}_2)$$
+- Nachkommen:$${\alpha\over 2}\sum_{j=1}^n \delta^{(k_j)} \hat{a}_{k_j} = {2\over 2} * 2 * \hat{a}_5 = 2 * \hat{a}_5$$
+- Paarungspartner: $$-{\alpha\over 2} \sum_{j=1}^n \delta^{(k_j)}{1\over 2}\hat{a}_{l_j} = -{2\over 2} * 2 * {1\over 2}\hat{a}_3
+                     = - \hat{a}_3$$
+
+
+## Weshalb die Vergleiche?
+
+```{r CowShowImg, results='asis'}
+rmddochelper::insertOdgAsPdf(psOdgFileStem = "CowShowImg")
+```
+
+- Wie werden Tier ausgewählt?
+- Was wird berücksichtigt bei der Auswahl
+- Was geben die ausgewählten Tiere weiter an Nachkommen?
+
+
+## Zusammenfassung
+
+- Eigenleistung
+$$\hat{a}_i = h^2(y_i - \mu)$$
+
+- Nachkommen
+$$\hat{a}_i = \frac{2n}{n+k}(\bar{y}_i - \mu)$$
+
+- BLUP-Tiermodell
+\begin{eqnarray}
+\hat{a}_i &=& \left[1 + \alpha \delta^{(i)} + {\alpha\over 4} \sum_{j=1}^n \delta^{(k_j)}\right]^{-1}
+              \left[y_i - \hat{\mu} \right. \nonumber\\
+          & & \left.   + {\alpha\over 2}\left\{\delta^{(i)}(\hat{a}_s + \hat{a}_d) 
+              + \sum_{j=1}^n \delta^{(k_j)} (\hat{a}_{k_j} - {1\over 2}\hat{a}_{l_j}) \right\} \right]\nonumber
+\end{eqnarray}
+
 
