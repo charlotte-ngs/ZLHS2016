@@ -101,6 +101,36 @@ cat("$$")
 - Zeigen Sie alle Komponenten, welche in $\hat{a}_5$ enthalten sind
 
 
+__Lösung__
+
+- Zerlegung der phänotypischen Beobachtung $y_5$
+
+\begin{equation}
+y_5 = `r vecY[5]` = \hat{\mu} - 2(\hat{a}_1 + \hat{a}_2) + \hat{a}_3 + \hat{a}_4 + 7\hat{a}_5 - 2(\hat{a}_6 + \hat{a}_7)
+\label{eq:DecompPhenObs}
+\end{equation}
+
+- Auflösung von (\ref{eq:DecompPhenObs}) nach $\hat{a}_5$:
+
+\begin{equation}
+\hat{a}_5  = {1\over 7}(y_5 - \hat{\mu} + 2(\hat{a}_1 + \hat{a}_2) - \hat{a}_3 - \hat{a}_4 + 2(\hat{a}_6 + \hat{a}_7)) 
+\label{eq:SolveAhatAni5}
+\end{equation}
+
+- Komponenten, welche in $\hat{a}_5$ enthalten sind
+    + Tier: phänotypische Leistung $y_5$ korrigiert um fixe Effekte $\hat{\mu}$. Faktor des geschätzten Zuchtwertes entspricht 
+      $$\left(1 + \alpha \delta^{(i)} + {\alpha\over 4} \sum_{j=1}^n \delta^{(k_j)}\right)^{-1} 
+        = \left(1 + \alpha \delta^{(5)} + {\alpha\over 4} (\delta^{(6)} + \delta^{(7)}\right)^{-1}
+        = \left(1 + 2*2 + 0.5 *(2+2)\right)^{-1} = 1/7$$
+    + Eltern: Summe der geschätzten Elternzuchtwerte $(\hat{a}_1 + \hat{a}_2)$ gewichtet mit 
+      $${\alpha\over 2}\delta^{(i)} = {\alpha\over 2}\delta^{(5)} = 2/2 * 2 = 2$$    
+    + Nachkommen: Gewichtungsfaktor der geschätzten Zuchtwerte der Nachkommen
+      $${\alpha\over 2}\delta^{(k_j)} = {\alpha\over 2}\delta^{(6)} = {\alpha\over 2}\delta^{(7)} = 2/2*2 = 2$$
+    + Paarungspartner: Gewichtungsfaktor der geschätzten Zuchtwerte der Paarungspartner
+      $$-{\alpha\over 4}\delta^{(k_j)} = -{\alpha\over 4}\delta^{(6)} = -{\alpha\over 4}\delta^{(7)} 
+        = -0.5 * 2 = -1$$
+
+
 ## Aufgabe 2
 Die analoge Zerlegung einer phänotypischen Beobachtung soll jetzt für den Fall eines Vatermodells gemacht werden. Vergleichen Sie dabei die Komponenten eines Vatereffektes mit den Bestandteilen eines geschätzten Zuchtwertes aus dem Tiermodell in Aufgabe 1.
 
