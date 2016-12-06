@@ -32,7 +32,65 @@ Zuchtprogramme werden betrieben um die fundamentalen Probleme in der Tierzucht z
 Die Kriterien nach welchen die Tiere bewertet und anschliessend ausgewählt werden, sind relativ bezüglich zu einer gegebenen Umwelt. Sobald sich eine Organisation auf eine Auswahl von Bewertungskriterien geeinigt hat, werden diese zu einem __Zuchtziel__ zusammengefasst. Das Zuchtziel hat meistens die Form einer sprachlichen Beschreibung des idealen oder besten Zuchttieres. Für eine gezielte und systematische Auswahl von Elterntieren braucht es eine quantitative Bewertung von potenziellen Selektionskandidaten. Für eine solche quantitative Bewertung muss das Zuchtziel in eine mathematisch erfassbare Form verwandelt werden.
 
 ### Gesamtzuchtwert
-Die mathematische Formulierung des Zuchtziels wird als __Gesamtzuchtwert__ bezeichnet und meist mit $H$ abgekürzt. Die im Zuchtziel enthaltenen Bewertungskriterien müssen im Gesamtzuchtwert auf konkrete Merkmale von Tieren übertragen werden. Der Gesamtzuchtwert $H$ ist definiert als gewichtetes Mittel von wahren Zuchtwerten der berücksichtigten Merkmale. Die Gewichtungsfaktoren entsprechen den wirtschaftlichen Gewichten der einzelnen Merkmalen im Gesamtzuchtwert. Für ein Tier $i$ kann der Gesamtzuchtwert $H_i$  
+Die mathematische Formulierung des Zuchtziels wird als __Gesamtzuchtwert__ bezeichnet und meist mit $H$ abgekürzt. Die im Zuchtziel enthaltenen Bewertungskriterien müssen im Gesamtzuchtwert auf konkrete Merkmale von Tieren übertragen werden. Der Gesamtzuchtwert $H$ ist definiert als gewichtetes Mittel von wahren Zuchtwerten der berücksichtigten Merkmale. Die Gewichtungsfaktoren entsprechen den wirtschaftlichen Gewichten der einzelnen Merkmalen im Gesamtzuchtwert. Die wirtschaftlichen Gewichte für die Merkmale im Gesamtzuchtwert entsprechen der Veränderung des Gewinns bei einer kleinen Veränderung des Populationsmittels. Durch die Gewichtung der wahren Zuchtwerte mit den wirtschaftlichen Gewichten im Gesamtzuchtwert, ist die Einheit von $H$ eine monetäre Grösse. 
+
+Für ein Tier $i$ kann der Gesamtzuchtwert $H_i$ berechnet werden als
+
+\begin{equation}
+H_i = \sum_{j=1}^n v_{j} * a_{ij} = v^T * a_i
+\label{eq:TotalGeneticMerit}
+\end{equation}
+
+\begin{tabular}{lll}
+mit &  $n$       &  Anzahl Merkmale im Gesamtzuchtwert\\
+    &  $v_j$     &  Wirtschaftliches Gewicht vom Merkmal $j$ im Gesamtzuchtwert\\
+    &  $a_{ij}$  &  wahrer Zuchtwert von Tier $i$ für Merkmal $j$\\
+    &  $v$       &  Vektor der Länge $n$ mit wirtschaftlichen Gewichten aller Merkmale\\
+    &  $a_i$     &  Vektor der Länge $n$ mit wahren Zuchtwerten aller Merkmale für Tier $i$
+    
+\end{tabular}
+
+Werden die Tiere nach ihrem Gesamtzuchtwert $H_i$ beurteilt und rangiert und werden die Eltern der nachfolgenden Generation aufgrund dieser Rangierung ausgewählt, so wird der zu erwartende Selektionserfolg optimiert. 
+
+### Selektionsindex
+In der Praxis sind die wahren Zuchtwerte $a_{ij}$ unbekannt und müssen deshalb aus Daten geschätzt werden. Da die wahren Zuchtwerte unbekannt sind, ist auch der wahre Gesamtzuchtwert unbekannt. Der Gesamtzuchtwert kann aber geschätzt werden. Die Schätzung des Gesamtzuchtwertes $H$ wird als Selektionsindex $I$ bezeichnet. Die Schätzung $I = \hat{H}$ des Gesamtzuchtwertes $H$ soll so sein, dass die Abweichung zwischen $I$ und $H$ minimal ist, d.h. die Fehlervarianz $var(H-I)$ soll minimiert werden.
+
+Für einen Ansatz von $I$ ist es naheliegend, den Selektionsindex auch als gewichtete Summe anzunehmen. Da wir bei der BLUP-Zuchtwertschätzung gesehen habe, dass diese Voraussagen optimale Eigenschaften haben, werden wir diese anstelle der wahren unbekannten Zuchtwerte einsetzen. Somit ist unser Selektionsindex definiert als 
+
+\begin{equation}
+\hat{H}_i = I_i = \sum_{j=1}^m b_{j} * \hat{a}_{ij} = b^T * \hat{a}_i
+\label{eq:SelIndex}
+\end{equation}
+
+\begin{tabular}{lll}
+mit &  $m$             &  Anzahl Merkmale im Selektionsindex\\
+    &  $b_j$           &  Gewichtung vom Merkmal $j$ im Selektionsindex\\
+    &  $\hat{a}_{ij}$  &  geschätzter Zuchtwert von Tier $i$ für Merkmal $j$\\
+    &  $b$             &  Vektor der Länge $m$ mit Gewichtungsfaktoren der Merkmale im Index\\
+    &  $\hat{a}_i$     &  Vektor der Länge $m$ mit geschätzten Zuchtwerten aller Merkmale für Tier $i$
+\end{tabular}
+
+In der Definition des Selektionsindexes (\ref{eq:SelIndex}) sind die Gewichtungen im Vektor $b$ unbekannt. Diese können aufgrund der Anforderung der minimalen Fehlervarianz abgeleitet werden. Das Resultat dieser Ableitung sind die sogenannten Indexgleichungen aus welchen die Indexgewichte $b$ berechnet werden können.
+
+\begin{equation}
+Pb = Gv
+\label{eq:IndexEquations}
+\end{equation}
+
+\begin{tabular}{llp{13cm}}
+mit &  $P$             &  die Covarianzmatrix zwischen den Merkmalen im Selektionsindex ist\\
+    &  $G$             &  die Covarianzmatrix zwischen den Merkmalen im Gesamtzuchtwert und den Merkmalen im Selektionsindex ist\\
+\end{tabular}
+
+Aus (\ref{eq:IndexEquations}) folgt $b$ als
+
+\begin{equation}
+b = P^{-1}Gv
+\label{eq:IndexWeights}
+\end{equation}
+
+
+
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
