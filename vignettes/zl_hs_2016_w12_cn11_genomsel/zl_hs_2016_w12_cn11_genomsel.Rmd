@@ -1,0 +1,41 @@
+---
+title:  Züchtungslehre - Genomische Selektion
+author: Peter von Rohr
+date: 2016-12-09
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+```
+
+```{r DocumentStatus, eval=FALSE}
+r6obj_docstat <- rmddochelper::R6ClassDocuStatus$new()
+r6obj_docstat$set_current_status(psVersion = "0.0.901",
+                                 psStatus  = "Initialisation",
+                                 psProject = "[REPLACE_WITH_PROJECT]")
+r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
+```
+
+
+```{r TableAbbreviation}
+r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
+### # include table of abbreviations only, if there are any
+if (!r6ob_abbrtable$is_empty_abbr())
+  r6ob_abbrtable$include_abbr_table(psAbbrTitle = "## Abbreviations")
+```
+
+## Einleitung
+Zuchtprogramme werden betrieben um die fundamentalen Probleme in der Tierzucht zu lösen. Wir hatten in früheren Kapiteln gesehen, dass die Frage nach dem __besten Tier__ und nach der __Auswahl der Elterntiere__ einer zukünftigen Generation in der Tierzucht als fundamentale Probleme bezeichnet werden. 
+
+### Zuchtziel
+Die Kriterien nach welchen die Tiere bewertet und anschliessend ausgewählt werden, sind relativ bezüglich zu einer gegebenen Umwelt. Sobald sich eine Organisation auf eine Auswahl von Bewertungskriterien geeinigt hat, werden diese zu einem __Zuchtziel__ zusammengefasst. Das Zuchtziel hat meistens die Form einer sprachlichen Beschreibung des idealen oder besten Zuchttieres. Für eine gezielte und systematische Auswahl von Elterntieren braucht es eine quantitative Bewertung von potenziellen Selektionskandidaten. Für eine solche quantitative Bewertung muss das Zuchtziel in eine mathematisch erfassbare Form verwandelt werden.
+
+### Gesamtzuchtwert
+Die mathematische Formulierung des Zuchtziels wird als __Gesamtzuchtwert__ bezeichnet und meist mit $H$ abgekürzt. Die im Zuchtziel enthaltenen Bewertungskriterien müssen im Gesamtzuchtwert auf konkrete Merkmale von Tieren übertragen werden. Der Gesamtzuchtwert $H$ ist definiert als gewichtetes Mittel von wahren Zuchtwerten der berücksichtigten Merkmale. Die Gewichtungsfaktoren entsprechen den wirtschaftlichen Gewichten der einzelnen Merkmalen im Gesamtzuchtwert. Für ein Tier $i$ kann der Gesamtzuchtwert $H_i$  
+
+```{r WriteTableOfAbbreviations, results='hide'}
+r6ob_abbrtable$writeToTsvFile()
+```
+<!-- END of document                 -- 
+  -- Below this must not be anything --> 
