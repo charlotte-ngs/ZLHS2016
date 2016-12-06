@@ -1,5 +1,5 @@
 ---
-title:  Züchtungslehre - Lösung 10
+title:  Züchtungslehre - Übung 10
 author: Peter von Rohr
 date: 2016-12-09
 output: pdf_document
@@ -17,8 +17,6 @@ r6obj_docstat$set_current_status(psVersion = "0.0.901",
                                  psProject = "[REPLACE_WITH_PROJECT]")
 r6obj_docstat$include_doc_stat(psTitle = "## Document Status")
 ```
-
-
 ```{r TableAbbreviation}
 r6ob_abbrtable <- rmddochelper::R6ClassTableAbbrev$new()
 ### # include table of abbreviations only, if there are any
@@ -101,35 +99,7 @@ cat("$$")
 - Zeigen Sie alle Komponenten, welche in $\hat{a}_5$ enthalten sind
 
 
-__Lösung__
-
-- Zerlegung der phänotypischen Beobachtung $y_5$
-
-\begin{equation}
-y_5 = `r vecY[5]` = \hat{\mu} - 2(\hat{a}_1 + \hat{a}_2) + \hat{a}_3 + \hat{a}_4 + 7\hat{a}_5 - 2(\hat{a}_6 + \hat{a}_7)
-\label{eq:DecompPhenObs}
-\end{equation}
-
-- Auflösung von (\ref{eq:DecompPhenObs}) nach $\hat{a}_5$:
-
-\begin{equation}
-\hat{a}_5  = {1\over 7}(y_5 - \hat{\mu} + 2(\hat{a}_1 + \hat{a}_2) - \hat{a}_3 - \hat{a}_4 + 2(\hat{a}_6 + \hat{a}_7)) 
-\label{eq:SolveAhatAni5}
-\end{equation}
-
-- Komponenten, welche in $\hat{a}_5$ enthalten sind
-    + Tier: phänotypische Leistung $y_5$ korrigiert um fixe Effekte $\hat{\mu}$. Faktor des geschätzten Zuchtwertes entspricht 
-      $$\left(1 + \alpha \delta^{(i)} + {\alpha\over 4} \sum_{j=1}^n \delta^{(k_j)}\right)^{-1} 
-        = \left(1 + \alpha \delta^{(5)} + {\alpha\over 4} (\delta^{(6)} + \delta^{(7)}\right)^{-1}
-        = \left(1 + 2*2 + 0.5 *(2+2)\right)^{-1} = 1/7$$
-    + Eltern: Summe der geschätzten Elternzuchtwerte $(\hat{a}_1 + \hat{a}_2)$ gewichtet mit 
-      $${\alpha\over 2}\delta^{(i)} = {\alpha\over 2}\delta^{(5)} = 2/2 * 2 = 2$$    
-    + Nachkommen: Gewichtungsfaktor der geschätzten Zuchtwerte der Nachkommen
-      $${\alpha\over 2}\delta^{(k_j)} = {\alpha\over 2}\delta^{(6)} = {\alpha\over 2}\delta^{(7)} = 2/2*2 = 2$$
-    + Paarungspartner: Gewichtungsfaktor der geschätzten Zuchtwerte der Paarungspartner
-      $$-{\alpha\over 4}\delta^{(k_j)} = -{\alpha\over 4}\delta^{(6)} = -{\alpha\over 4}\delta^{(7)} 
-        = -0.5 * 2 = -1$$
-
+\pagebreak
 
 ## Aufgabe 2
 Die analoge Zerlegung einer phänotypischen Beobachtung soll jetzt für den Fall eines Vatermodells gemacht werden. Vergleichen Sie dabei die Komponenten eines Vatereffektes mit den Bestandteilen eines geschätzten Zuchtwertes aus dem Tiermodell in Aufgabe 1.
@@ -180,31 +150,12 @@ cat("$$")
 - Lösen Sie die Zerlegung nach dem geschätzten Zuchtwerte $\hat{s}_1$ auf
 - Zeigen Sie alle Komponenten, welche in $\hat{s}_1$ enthalten sind
 
-\pagebreak
 
-__Lösung__:
-
-- Zerlegung der phänotypischen Beobachtun:
-$$y_5 = \hat{\mu} + 15.67*\hat{s}_1 - 7.33 * \hat{s}_5 $$
-
-- Auflösung nach $\hat{s}_1$:
-$$\hat{s}_1 = (y_5 - \hat{\mu} + 7.33 * \hat{s}_5) / 15.67$$
-
-- Komponenten, welche in $\hat{s}_1$ enthalten sind
-    + phänotypische Leistung $y_5$ korrigiert um fixe Effekte. Faktor von $\hat{s}_1$ entspricht:
-      $$1 + \alpha * \delta^{(5)} = 1 + 11 * 4/3 = `r round(1 + 11 * 4/3, digits = 2)`$$
-    + geschätzter Zuchtwert $\hat{s}_5$ des Sohnes $5$ hat folgenden Faktor: 
-      $$\alpha * \delta^{(5)}/2 = 11 * 2/3 = `r round(11 * 2/3, digits = 2)`$$
-    
 
 ## Aufgabe 3
 Welches sind die Unterschiede zwischen den Zerlegungen der phänotypischen Beobachtungen und der Komponenten der geschätzten Zuchtwerte in den Aufgaben 1 und 2?
 
-__Lösung__:
 
-- Im Tiermodell ist der Zuchtwert des Tieres $i$ ein Bestandteil der phänotypischen Beobachtung vom gleichen Tier $i$. Beim Vatermodell ist der Zuchtwert des Vaters $s$ vom Tier $i$ Bestandteil der phänotypischen Beobachtung vom Tier $i$.
-- Im Tiermodell werden alle Verwandten unabhängig vom Geschlecht berücksichtigt. Das heisst die geschätzten Zuchtwerte beider Eltern und aller Nachkommen sind im geschätzten Zuchtwert vom Tier $i$ berücksichtigt. Im Vatermodell werden nur die männlichen Verwandten berücksichtigt, also nur der Vater und die männlichen Nachkommen kommen im Ausdruck für den geschätzten Zuchtwert vor.
-- Im Tiermodell wird der geschätzte Zuchtwert des Tieres $i$ um die geschätzten Zuchtwerte der Paarungspartner von $i$ korrigiert. Im Vatermodell spielen die Paarungspartner keine Rolle
 
 ```{r WriteTableOfAbbreviations, results='hide'}
 r6ob_abbrtable$writeToTsvFile()
