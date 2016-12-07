@@ -89,7 +89,7 @@ b = P^{-1}Gv
 \label{eq:IndexWeights}
 \end{equation}
 
-Aufgrund der Indexgleichungen (\ref{eq:IndexEquations}) wird klar, dass die Merkmale im Gesamtzuchtwert und im Selektionsindex nicht identisch sein müssen. Sind die gleichen Merkmale im Selektionsindex, wie im Gesamtzuchtwert, dann vereinfacht sich die Berechnung der Gewichte in (\refeq:IndexWeights}). In diesem Fall sind die Matrizen $P$ und $G$ gleich und somit ist $b = v$. Recht häufig finden wir im Gesamtzuchtwert Merkmale, welche nicht einfach und nicht kostengünstig zu erheben sind. Solche Merkmale werden häufig durch Hilfsmerkmale im Selektionsindex ersetzt. Ein Hilfsmerkal im Selektionsindex muss einfach zu erheben sein und sollte eine möglichst hohe Korrelation zum entsprechenden Originalmerkmal im Gesamtzuchtwert aufweisen.
+Aufgrund der Indexgleichungen (\ref{eq:IndexEquations}) wird klar, dass die Merkmale im Gesamtzuchtwert und im Selektionsindex nicht identisch sein müssen. Sind die gleichen Merkmale im Selektionsindex, wie im Gesamtzuchtwert, dann vereinfacht sich die Berechnung der Gewichte in (\ref{eq:IndexWeights}). In diesem Fall sind die Matrizen $P$ und $G$ gleich und somit ist $b = v$. Recht häufig finden wir im Gesamtzuchtwert Merkmale, welche nicht einfach und nicht kostengünstig zu erheben sind. Solche Merkmale werden häufig durch Hilfsmerkmale im Selektionsindex ersetzt. Ein Hilfsmerkal im Selektionsindex muss einfach zu erheben sein und sollte eine möglichst hohe Korrelation zum entsprechenden Originalmerkmal im Gesamtzuchtwert aufweisen.
 
 
 ## Genomische Selektion
@@ -100,6 +100,21 @@ Die genomische Selektion kann einen wichtigen Beitrag zum Erfolg von Zuchtprogra
 Die Vorhersage von Zuchtwerten aufgrund von genomischer Information setzt eine sogenannte __Referenzpopulation__ voraus. Diese muss möglichst gross sein und muss repräsentativ sein für die gesamte Zuchtpopulation. Die Genauigkeit der vorausgesagten genomischen Zuchtwerten ist abhängig von der Grösse der Referenzpopulation und von der Anzahl Verwandtschaftsbeziehungen eines Tieres zu anderen Tieren in der Referenzpopulation. Hat ein Tier $i$ viele Verwandtschaftsbeziehungen zu anderen Tieren in der Referenzpopulation, so werden die vorausgesagten genomischen Zuchtwerte von $i$ sehr genau sein.
 
 Bei der aktuell übliche Dichte an SNP-Markern (50K pro Genom) ist eine zuverlässige Voraussage von genomischen Zuchtwerten nur innerhalb einer Rasse möglich. Genomische Selektion über die Grenzen einer Rasse hinaus braucht noch dichtere Marker-Information und ist vielleicht erst bei der Verwendung der kompletten genomischen Sequenz als Informationsquelle möglich.
+
+
+## Schätzung des Selektionsfortschrittes in einem Zuchtprogramm
+In einem Zuchtprogramm werden praktisch immer mehrere Eigenschaften oder Merkmale von Zuchttieren gleichzeitig bearbeitet. Es kann gezeigt werden, dass eine Kombination der Merkmale mit einer individuellen Gewichtung der einzelnen Merkmale, wie dies im Gesamtzuchtwert gemacht wird, zu einem besseren Selektionsfortschritt führt, als das mit anderen Selektionstrategien der Fall wäre. Wie wir einen bestimmten Gesamtzuchtwert durch den Selektionsindex schätzen wird in der Selektionsindextheorie im nächsten Abschnitt besprochen.
+
+### Selektionsindextheorie
+Potentielle Gewinne durch die Berücksichtigung von genomischer Information bei den Selektionsentscheidungen können durch die Selektionsindextheorie abgeschätzt werden. Allgemein funktioniert die Selektionsindextheorie so, dass wir alle verfügbaren Informationsquellen wie zum Beispiel geschätzte Zuchtwerte oder genomische Informationen in einem Vektor $x$ zusammenfassen. Diese Informationen werden dann mit bestimmten Gewichtungsfaktoren versehen und zu einem gewichteten Mittel zusammengefasst. Dieses gewichtete Mittel dient dann zur Schätzung einer unbekannten Grösse, wie zum Beispiel dem Gesamtzuchtwert. 
+
+Als erstes definieren wir die Matrix $P$ als Covarianzmatrix zwischen den Informationsquellen im Vektor $x$. Es gilt also
+
+$$P = var(x)\text{.}$$
+Soll unser Selektionsindex den Gesamtzuchtwert schätzen, so definieren wir die Matrix $G$ als Covarianz zwischen den Merkmalen im Index und den Merkmalen im Gesamtzuchtwert. Somit haben wir 
+
+$$G = cov(x, a^T)$$
+wobei $a$ der Vektor der wahren Zuchtwerte der Merkmale im Gesamtzuchtwert darstellt.
 
 
 
