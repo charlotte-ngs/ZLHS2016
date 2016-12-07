@@ -53,7 +53,7 @@ mit &  $n$       &  Anzahl Merkmale im Gesamtzuchtwert\\
 Werden die Tiere nach ihrem Gesamtzuchtwert $H_i$ beurteilt und rangiert und werden die Eltern der nachfolgenden Generation aufgrund dieser Rangierung ausgewählt, so wird der zu erwartende Selektionserfolg optimiert. 
 
 ### Selektionsindex
-In der Praxis sind die wahren Zuchtwerte $a_{ij}$ unbekannt und müssen deshalb aus Daten geschätzt werden. Da die wahren Zuchtwerte unbekannt sind, ist auch der wahre Gesamtzuchtwert unbekannt. Der Gesamtzuchtwert kann aber geschätzt werden. Die Schätzung des Gesamtzuchtwertes $H$ wird als Selektionsindex $I$ bezeichnet. Die Schätzung $I = \hat{H}$ des Gesamtzuchtwertes $H$ soll so sein, dass die Abweichung zwischen $I$ und $H$ minimal ist, d.h. die Fehlervarianz $var(H-I)$ soll minimiert werden.
+In der Praxis sind die wahren Zuchtwerte $a_{i}$ unbekannt und müssen deshalb aus Daten geschätzt werden. Da die wahren Zuchtwerte unbekannt sind, ist auch der wahre Gesamtzuchtwert unbekannt. Der Gesamtzuchtwert kann aber geschätzt werden. Die Schätzung des Gesamtzuchtwertes $H$ wird als Selektionsindex $I$ bezeichnet. Die Schätzung $I = \hat{H}$ des Gesamtzuchtwertes $H$ soll so sein, dass die Abweichung zwischen $I$ und $H$ minimal ist, d.h. die Fehlervarianz $var(H-I)$ soll minimiert werden.
 
 Für einen Ansatz von $I$ ist es naheliegend, den Selektionsindex auch als gewichtete Summe anzunehmen. Da wir bei der BLUP-Zuchtwertschätzung gesehen habe, dass diese Voraussagen optimale Eigenschaften haben, werden wir diese anstelle der wahren unbekannten Zuchtwerte einsetzen. Somit ist unser Selektionsindex definiert als 
 
@@ -88,6 +88,18 @@ Aus (\ref{eq:IndexEquations}) folgt $b$ als
 b = P^{-1}Gv
 \label{eq:IndexWeights}
 \end{equation}
+
+Aufgrund der Indexgleichungen (\ref{eq:IndexEquations}) wird klar, dass die Merkmale im Gesamtzuchtwert und im Selektionsindex nicht identisch sein müssen. Sind die gleichen Merkmale im Selektionsindex, wie im Gesamtzuchtwert, dann vereinfacht sich die Berechnung der Gewichte in (\refeq:IndexWeights}). In diesem Fall sind die Matrizen $P$ und $G$ gleich und somit ist $b = v$. Recht häufig finden wir im Gesamtzuchtwert Merkmale, welche nicht einfach und nicht kostengünstig zu erheben sind. Solche Merkmale werden häufig durch Hilfsmerkmale im Selektionsindex ersetzt. Ein Hilfsmerkal im Selektionsindex muss einfach zu erheben sein und sollte eine möglichst hohe Korrelation zum entsprechenden Originalmerkmal im Gesamtzuchtwert aufweisen.
+
+
+## Genomische Selektion
+Durch die rasante Entwicklung von Technologien in der Molekularbiologie wurde es möglich eine grosse Anzahl an Selektionskandidaten typisieren zu lassen. Der Begriff __Typisierung__ bedeutet die Ermittlung von Genotypen an einer grossen Anzahl an Genorten. Diese Genorte werden auch als __Marker__ bezeichnet, da diese wie Vermessungspunkte auf der Landkarte des gesamten Genoms betrachtet werden können. An den ermittelten Genorte werden sogenannte SNP (Single Nucleotide Polymorphisms) beobachtet. Standardmässig werden die Genotypen an rund 50000 (50K) SNP-Markern ermittelt. Wird diese genomische Information an einer genügend grossen Anzahl von Tieren mit ausreichender Diversität erhoben, können gewisse Varianten an bestimmten Genorten mit erwünschten Ausprägungen von phänotypischen Merkmalen assoziiert werden. 
+
+Die genomische Selektion kann einen wichtigen Beitrag zum Erfolg von Zuchtprogrammen leisten, vor allem wenn gewisse Merkmale im Zuchtziel schwer zu erheben sind. Genomische Selektion liefert genauere Zuchtwerte zu einem sehr frühen Zeitpunkt im Leben eines Tieres. Vor allem in der Milchviehzucht, wo wichtige Merkmale nur bei den weiblichen Tieren nach deren Reproduktionsleistung beobachtet werden können. Da hat die genomische Selektion ein grosses Potential den Selektionsfortschritt erheblich zu steigern. 
+
+Die Vorhersage von Zuchtwerten aufgrund von genomischer Information setzt eine sogenannte __Referenzpopulation__ voraus. Diese muss möglichst gross sein und muss repräsentativ sein für die gesamte Zuchtpopulation. Die Genauigkeit der vorausgesagten genomischen Zuchtwerten ist abhängig von der Grösse der Referenzpopulation und von der Anzahl Verwandtschaftsbeziehungen eines Tieres zu anderen Tieren in der Referenzpopulation. Hat ein Tier $i$ viele Verwandtschaftsbeziehungen zu anderen Tieren in der Referenzpopulation, so werden die vorausgesagten genomischen Zuchtwerte von $i$ sehr genau sein.
+
+Bei der aktuell übliche Dichte an SNP-Markern (50K pro Genom) ist eine zuverlässige Voraussage von genomischen Zuchtwerten nur innerhalb einer Rasse möglich. Genomische Selektion über die Grenzen einer Rasse hinaus braucht noch dichtere Marker-Information und ist vielleicht erst bei der Verwendung der kompletten genomischen Sequenz als Informationsquelle möglich.
 
 
 
