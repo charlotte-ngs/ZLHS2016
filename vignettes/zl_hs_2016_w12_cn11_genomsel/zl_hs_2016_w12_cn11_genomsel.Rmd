@@ -7,6 +7,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, results = 'asis')
+devtools::load_all()
 ```
 
 ```{r DocumentStatus, eval=FALSE}
@@ -144,8 +145,88 @@ $$cov(q_m,x) = a_{ij}\rho\sigma_{am}^2$$
 wobei $a_{ij}$ dem Verwandschaftsgrad zwischen Individuum $j$, zu welchem die entsprechende Information im Vektor $x$ gehört und dem Selektionskandidaten $i$, für welchem der genomische Zuchtwert $q_m$ geschätzt wurde.
 
 ### Ein Beispiel
-Nehmen wir an, dass wir nur ein Merkmal im Selektionsindex und im Gesamtzuchtwert haben. Die Varianzen betragen
+```{r GenomicExampleSetup, results='hide'}
+sigmap2 <- 1
+sigmaa2 <- 0.25
+rho <- 0.3
+sigmaq2 <- rho * sigmaa2
+vecBSimple <- sigmaa2 / sigmap2
+nRhiSimple <- sqrt(vecBSimple^2 / sigmaa2)
+```
 
+Nehmen wir an, dass wir nur ein Merkmal im Selektionsindex und im Gesamtzuchtwert haben. Die Covarianzmatrizen reduzieren sich in diesem Fall zu einfachen Zahlen und betragen $P = \sigma_p^2 = `r sigmap2`$ und $G = \sigma_a^2 = `r sigmaa2`$. Der Anteil $\rho = `r rho`$, was bedeutet, dass $`r 100*rho`\%$ der genetisch additiven Varianz durch den Effekt des genomischen Zuchtwerts erklärt wird.
+
+Ein Selektionsindex, welcher als einzige Informationsquelle eine phänotypische Beobachtung beinhaltet, führt zu einem Indexgewicht von 
+
+$$b = \frac{\sigma_a^2}{\sigma_p^2} = `r vecBSimple`\text{,}$$
+
+was der Heritabilität $h^2$ entspricht. Die Genauigkeit des Indexes wird berechnet als,
+
+$$r_{IH} = \sqrt{\frac{b^TPb}{\sigma_a^2}} = `r nRhiSimple`$$
+
+\pagebreak
+
+Berücksichtigen wir nun zusätzlich zur phänotypischen Beobachtung auch noch den genomischen Zuchtwert, so können wir den Selektionsindex erweitern. Die Bestandteile des erweiterten Indexes lauten:
+
+```{r GenomicExtendedExample, results='asis'}
+nNrInfoSrc <- 2
+matP <- matrix(c(1,sigmaq2,sigmaq2,sigmaq2), ncol = nNrInfoSrc)
+vecG <- c(sigmaa2,sigmaq2)
+vecBExt <- solve(matP, vecG)
+vecMatPVecb <- crossprod(matP, vecBExt)
+nVecBtMatPVecb <- crossprod(vecBExt, vecMatPVecb)
+nRhiExt <- sqrt(nVecBtMatPVecb/sigmaa2)
+### # Anzeige
+cat("$$P = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matP, pnDigits = 3), collapse = "\n"))
+cat("\\right]\n$$\n")
+cat("$$Gv = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecG, nrow=nNrInfoSrc), pnDigits = 3), collapse = "\n"))
+cat("\\right]\n$$\n")
+```
+
+Der Vektor der Indexgewichte bestimmen wir mit 
+
+$$b = P^{-1}Gv\text{.}$$
+Setzen wir die Zahlen ein, dann erhalten wir als Resultat
+
+```{r GenomicExtendedExampleResult, results='asis'}
+cat("$$b = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecBExt, nrow=nNrInfoSrc), pnDigits = 3), collapse = "\n"))
+cat("\\right]\n$$\n")
+```
+
+Die Genauigkeit des erweiterten Selektionsindexes ist 
+
+
+$$r_{IH} = `r round(nRhiExt, digits = 3)`$$
+
+Somit hat die zusätzliche Berücksichtigung des genomischen Zuchtwertes im Selektionsindex eine Erhöhung der Genauigkeit um `r round(100*(nRhiExt - nRhiSimple)/nRhiSimple, digits = 1)`\% gebracht.
+
+
+## Schätzung genomischer Zuchtwerte
+Das Problem bei der Schätzung genomischer Zuchtwerte liegt, darin, dass die Anzahl der SNP-Effekte $k$ viel grösser ist als die Anzahl Beobachtungen $n$. Obwohl von der Datenstruktur ein einfaches Regressionsmodell ausreichend wäre, können die Effekte nicht mit Least Squares geschätzt werden, da $n << k$. 
+
+In der Tierzucht werden die folgenden zwei Möglichkeiten berücksichtigt, um das Problem von $n << k$ zu lösen. 
+
+1. BLUP von zufälligen Effekten in einem gemischten linearen Modell
+2. Bayes'scher Ansatz für die Effektschätzung.
+
+Der Ausgangspunkt für beide Ansätze bildet das gemischte lineare Modell
+
+\begin{equation}
+y = X\beta + Z\alpha + e
+\label{eq:MmeGenomSel}
+\end{equation}
+
+\begin{tabular}{lll}
+mit  &  $y$  &  Vektor der Länge $n$ mit Beobachtungen\\
+     &  $\beta$  &  Vektor der Länge $p$ mit fixen Effekten\\
+     &  $X$      &  $n\times p$ Inzidenzmatrix der fixen Effekte $\beta$\\
+     &  $\alpha$ &  Vektor der Länge $k$ mit zufälligen Alleleeffekten\\
+     &  $Z$      &  $n\times k$ Inzidenzmatrix für $\alpha$\\
+     &  $e$      &  Vektor der Resteffekte
+\end{tabular}
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
