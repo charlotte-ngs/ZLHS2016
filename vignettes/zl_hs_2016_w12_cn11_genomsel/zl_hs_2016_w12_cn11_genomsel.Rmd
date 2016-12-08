@@ -116,6 +116,35 @@ Soll unser Selektionsindex den Gesamtzuchtwert schätzen, so definieren wir die 
 $$G = cov(x, a^T)$$
 wobei $a$ der Vektor der wahren Zuchtwerte der Merkmale im Gesamtzuchtwert darstellt.
 
+Zur Herleitung der Indexgleichungen verwenden wir die Bedingung, dass die Fehlervarianz $var(H-I)$ minimal sein soll. Daraus folgt dann, dass 
+
+\begin{equation}
+Pb = Gv
+\label{eq:IndexEqGenomSel}
+\end{equation}
+
+Lösen wir (\ref{eq:IndexEqGenomSel}) nach $b$ auf, erhalten wir die unbekannten Indexgewichte. Der erwartete Selektion pro Standardabweichung $\sigma_I$ des Selektionsindexes beträgt
+
+$$\Delta G = b^TG / \sigma_I$$
+
+wobei die Standardabweichung des Indexes $\sigma_I = \sqrt{b^TPb}$. Die Genauigkeit des Indexes ist definiert als
+
+$$\frac{\sigma_I}{\sigma_H} = \sqrt{\frac{b^TPb}{v^TCv}}$$
+
+wobei $\sigma_H = \sqrt{v^TCv}$ die Standardabweichung des Gesamtzuchtwertes darstellt und die Matrix $C$ die Covarianz der wahren Zuchtwerte beinhaltet. Der Selektionsfortschritt $\Delta G_i$ für ein bestimmtes Merkmal $i$ entspricht
+
+$$\Delta G_i = b^TG_i / \sigma_I$$
+
+
+### Berücksichtigung von genomischen Zuchtwerten
+Für ein bestimmtes Merkmal $m$ kann genomische Information in Form eines geschätzten genomischen Zuchtwertes $q_m$ als weitere Informationsquelle zum Vektor $x$ hinzugefügt werden. Wir nehmen an, dass der Effekt $q_m$ ein Anteil $\rho$ der genetisch additiven Varianz $\sigma_{am}^2$ beim Merkmal $m$ erklärt. Der Varianzanteil $V_{am}$ erklärt durch $q_m$ ist $V_{am} = \rho\sigma_{am}^2$. Die Diagonalelemente von $P$ entsprechen somit $V_{am}$ und Offdiagonalelemente von $P$ enthalten die Covarianzen zwischen dem genomischen Zuchtwert $q_m$ und den übrigen Informationsquellen im Vektor $x$, somit gilt
+
+$$cov(q_m,x) = a_{ij}\rho\sigma_{am}^2$$
+
+wobei $a_{ij}$ dem Verwandschaftsgrad zwischen Individuum $j$, zu welchem die entsprechende Information im Vektor $x$ gehört und dem Selektionskandidaten $i$, für welchem der genomische Zuchtwert $q_m$ geschätzt wurde.
+
+### Ein Beispiel
+Nehmen wir an, dass wir nur ein Merkmal im Selektionsindex und im Gesamtzuchtwert haben. Die Varianzen betragen
 
 
 
