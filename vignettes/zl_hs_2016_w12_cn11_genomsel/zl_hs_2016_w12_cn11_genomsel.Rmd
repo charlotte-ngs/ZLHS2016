@@ -27,7 +27,7 @@ if (!r6ob_abbrtable$is_empty_abbr())
 ```
 
 ## Einleitung
-Zuchtprogramme werden betrieben um die fundamentalen Probleme in der Tierzucht zu lösen. Wir hatten in früheren Kapiteln gesehen, dass die Frage nach dem __besten Tier__ und nach der __Auswahl der Elterntiere__ einer zukünftigen Generation in der Tierzucht als fundamentale Probleme bezeichnet werden. 
+Zuchtprogramme werden betrieben um die fundamentalen Probleme in der Tierzucht zu lösen. Wir hatten in früheren Kapiteln gesehen, dass die __Auswahl der Elterntiere__ einer zukünftigen Generation in der Tierzucht als ein fundamentales Problem bezeichnet werden. 
 
 ### Zuchtziel
 Die Kriterien nach welchen die Tiere bewertet und anschliessend ausgewählt werden, sind relativ bezüglich zu einer gegebenen Umwelt. Sobald sich eine Organisation auf eine Auswahl von Bewertungskriterien geeinigt hat, werden diese zu einem __Zuchtziel__ zusammengefasst. Das Zuchtziel hat meistens die Form einer sprachlichen Beschreibung des idealen oder besten Zuchttieres. Für eine gezielte und systematische Auswahl von Elterntieren braucht es eine quantitative Bewertung von potenziellen Selektionskandidaten. Für eine solche quantitative Bewertung muss das Zuchtziel in eine mathematisch erfassbare Form verwandelt werden.
@@ -209,8 +209,8 @@ Das Problem bei der Schätzung genomischer Zuchtwerte liegt, darin, dass die Anz
 
 In der Tierzucht werden die folgenden zwei Möglichkeiten berücksichtigt, um das Problem von $n << k$ zu lösen. 
 
-1. BLUP von zufälligen Effekten in einem gemischten linearen Modell
-2. Bayes'scher Ansatz für die Effektschätzung.
+1. BLUP von zufälligen Effekten in einem gemischten linearen Modell (gBLUP)
+2. Bayes'sche Ansätze für die Effektschätzung.
 
 Der Ausgangspunkt für beide Ansätze bildet das gemischte lineare Modell
 
@@ -227,6 +227,33 @@ mit  &  $y$  &  Vektor der Länge $n$ mit Beobachtungen\\
      &  $Z$      &  $n\times k$ Inzidenzmatrix für $\alpha$\\
      &  $e$      &  Vektor der Resteffekte
 \end{tabular}
+
+
+### Genomisches BLUP (gBLUP)
+Basierend auf dem linearen gemischten Modell (\ref{eq:MmeGenomSel}) werden in gBLUP die genomischen Zuchtwerte als zufällige Effekte modelliert. Analog zum BLUP-Tiermodell können wir die genomischen Zuchtwerte als Lösungen der zufälligen Effekte vorhersagen. Schon im BLUP-Tiermodell war die Anzahl vorherzusagender Zuchtwerte grösser als die Anzahl Beobachtungen. Tiere, welche keine Beobachtung haben, erhalten ihren Zuchtwert über die Verknüpfungen, welche durch die bekannte Covarianzstruktur über die Verwandtschaft gegeben ist. Somit erzielen wir eine Regularisierung des Problems $n<<k$ durch den Einbezug der Covarianz für die Voraussage der zufälligen Effekte.
+
+Im Gegensatz zum Pedigree-basierten Tiermodell, welche die Covarianzen zwischen den Individuen über die Verwandtschaft definiert, ist in gBLUP die Covarianzstruktur der zufälligen Effekte $\alpha$ über die sogenannte __Genomische Verwandtschaftsmatrix__ festgelegt. Die Covarianzmatrix für $\alpha$ entspricht also $var(\alpha) = G\sigma_g^2$, wobei $G$ die genomische Verwandtschaftsmatrix ist und $\sigma_g^2$ der genetischen Varianz entspricht.
+
+Im Gegensatz zur Pedigree-basierten Verwandtschaftsmatrix $A$ basiert die genomische Verwandtschaftsmatrix $G$ auf den beobachteten SNP-Markerinformationen.
+
+
+### Bayes'sche Ansätze
+Bayes'sche Ansätze zur Schätzung von unbekannten Grössen, wie in unserem Falle die genomischen Zuchtwerte, verwenden die A-Posteriori Verteilung der unbekannten Grössen gegeben die beobachteten Daten. Als Schätzungen oder Voraussagen werden häufig die Erwartungswerte der A-Posteriori Verteilungen angegeben. 
+
+Für eine bestimmte unbekannte Grösse - für unsere Anwendungen sind das meistens die unbekannten Parameter - wird die A-Posteriori-Verteilung aufgrund des Satzes von Bayes aus der A-Priori-Verteilung des unbekannten Parameters und der Likelihood der Daten gegeben der Parameter errechnet. Für einen unbekannten Parameter $\theta$, welcher wir aus einem Datensatz $y$ schätzen wollen, entspricht die A-Posteriori-Verteilung nach dem Satz von Bayes dem folgenden Ausdruck:
+
+$$P(\theta | y) = \frac{P(\theta)P(y | \theta)}{P(y)}$$
+
+\begin{tabular}{lll}
+mit  &  $P(\theta)$  &  A-Priori-Verteilung des unbekannten Parameters\\
+     &  $P(y | \theta)$  &  Likelihood\\
+     &  $P(y)$           &  konstante Normalisierungskonstante
+\end{tabular}
+
+Die Regularisierung des Problems $n<<k$ bei den Bayes'schen Ansätzen erfolgt über die Verwendung der A-Priori-Information. Spezifisch in der Vorhersage der genomischen Zuchtwerte können wir über die Wahl der geeigneten A-Priori-Verteilung die vorhergesagten genomischen Zuchtwerte so modellieren, dass nur eine kleine Anzahl Genorte einen Einfluss auf den Zuchtwert haben, oder dass wir eine bestimmte Varianzstruktur zwischen den Genorten vorgeben. 
+
+Analog wird auch hier die Regularisierung über die Vorgabe von bestimmten Strukturen erreicht.
+
 
 
 ```{r WriteTableOfAbbreviations, results='hide'}
