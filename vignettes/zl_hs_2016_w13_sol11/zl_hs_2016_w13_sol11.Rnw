@@ -12,16 +12,15 @@
 <<PointsQ1, echo=FALSE>>=
 # Assign Points for Q1
 lPointsQ1 <- list(TaskA = 2,
-                  TaskB = 0,
-                  TaskC = 0)
+                  TaskB = 5,
+                  TaskC = 5)
 nPointQ1Total <- sum(unlist(lPointsQ1))
 @
 <<PointsQ2, echo=FALSE>>=
 # Assign Points for Q2
-lPointsQ2 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0,
-                  TaskD = 0)
+lPointsQ2 <- list(TaskA = 18,
+                  TaskB = 4,
+                  TaskC = 2)
 nPointQ2Total <- sum(unlist(lPointsQ2))
 @
 <<PointsQ3, echo=FALSE>>=
@@ -75,7 +74,7 @@ nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4To
   \begin{tabular}{lr}
   \textsc{Datum}  & \textsc{\emph{16. Dezember 2016}} \\
   \textsc{Beginn} & \textsc{\emph{09:15 Uhr}}\\
-  \textsc{Ende}  & \textsc{\emph{ca 11:15 Uhr}}\vspace{3ex}
+  \textsc{Ende}   & \vspace{3ex}
 \end{tabular}}
 \maketitle
 
@@ -132,7 +131,7 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 
 \begin{enumerate}
 \item[b)] Die Vermehrung in Wildpopulationen verl\"auft etwas anders als in Nutztierpopulationen.
-\points{\Sexpr{lPointsQ1$TaskA}}
+\points{\Sexpr{lPointsQ1$TaskB}}
 \end{enumerate}
 
 \begin{center}
@@ -154,7 +153,7 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \hline
   & nat\"urliche Selektion  &  k\"unstliche Selektion \\
 \hline
-  & zufällige Paarungen     &  gezielte Paarung \\
+  & zuf\"allige Paarungen     &  gezielte Paarung \\
 \hline
   & Vermehrung              &  gerichtete Selektion \\
 \hline
@@ -166,8 +165,84 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \clearpage
 \pagebreak
 
+\begin{enumerate}
+\item[b)] Was ist im nachfolgenden Diagramm dargestellt. Was bedeuten die Punkte 1-4?
+\points{\Sexpr{lPointsQ1$TaskC}}
+\end{enumerate}
 
-\section*{Aufgabe 2:  (\Sexpr{nPointQ2Total})}
+\begin{center}
+\includegraphics[width=12cm]{"pdf/GerichteteSelektionElternNk"}
+\end{center}
+
+\sol
+
+Es zeigt die Verschiebung der Verteilung von der Elterngeneration zur Nachkommengeneration bei gerichteter Selektion. Dabei bedeuten die Punkte:
+
+\begin{enumerate}
+\item Elterndurchschnitt
+\item Selektionsgrenze
+\item Remontendurchschnitt
+\item Nachkommendurchschnitt
+\end{enumerate}
+
+
+\clearpage
+\pagebreak
+
+
+\section*{Aufgabe 2: Verwandtschaft und Inzucht (\Sexpr{nPointQ2Total})}
+
+Gegeben ist folgendes Pedigree
+\begin{center}
+<<ExamPed, echo=FALSE>>=
+library(pedigreemm)
+nNrAni <- 6
+ped <- pedigree(sire = c(NA,NA,1,1,3,1), dam = c(NA,NA,2,2,4,4), label = 1:nNrAni)
+print(ped)
+@
+\end{center}
+
+
+\begin{enumerate}
+\item[a)] Stellen Sie die additive genetische Verwandtschaftsmatrix f\"ur das oben dargestellte Pedigree auf.
+\points{\Sexpr{lPointsQ2$TaskA}}
+\end{enumerate}
+
+\sol
+
+Die Verwandtschaftsmatrix f\"ur das gezeigte Pedigree lautet
+<<SolToQ1>>=
+matA <- as.matrix(getA(ped = ped))
+print(matA)
+@
+
+\clearpage
+\pagebreak
+
+
+\begin{enumerate}
+\item[b)] Welche der Tiere 1-6 im anfangs gezeigten Pedigree sind ingez\"uchtet und wie gross ist deren Inzuchtkoeffizient?.
+\points{\Sexpr{lPointsQ2$TaskB}}
+\end{enumerate}
+
+\sol
+\begin{itemize}
+\item Tiere $5$ und $6$ sind ingez\"uchtet
+\item Der Inzuchtkoeffizient f\"ur Tier $5$ betr\"agt \Sexpr{matA[5,5]-1} und f\"ur Tier $6$ betr\"agt er \Sexpr{matA[6,6]-1}.
+\end{itemize}
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] Angenommen die Tiere $5$ und $6$ sind ingezüchtet. Nach wievielen Berechnungsschritten in der rekursiven Berechnungsart der Verwandtschaftsmatrix kann der Inzuchtgrad der Tiere $5$ und $6$ aus der Matrix bestimmt werden? (Hinweis: Das \"Ubertragen der Elemente von einer Zeile in die entsprechende Kolonne soll nicht als Berechnungsschritte gez\"ahlt werden.)
+\points{\Sexpr{lPointsQ2$TaskC}}
+\end{enumerate}
+
+\sol
+
+Generell kann der Inzuchtgrad eines Tieres aus der Verwandtschaft der Eltern bestimmt werden. Tier $6$ hat Eltern $1$ und $4$, der Inzuchtgrad ist als nach $4$ Berechnungsschritten ablesbar. Tier $5$ hat Eltern $3$ und $4$. Der Inzuchtgrad ist dann erst nach $13$ Schritten ablesbar.
+
 
 \clearpage
 \pagebreak
