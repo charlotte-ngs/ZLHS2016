@@ -33,10 +33,14 @@ aovWwgSire <- aov(formula = WWG ~ Vater,
 summary(aovWwgSire)
 
 nNrObs <- length(dfWwgSire)
+### # allgemeines Mittel
 nMeanObs <- mean(dfWwgSire$WWG)
+### # Beobachtungen korrigiert um Mittelwert
 vecWwgSireCorrected <- dfWwgSire$WWG - nMeanObs
+### # Summenquadrate der Residuen
 nSsqRes <- crossprod(residuals(aovWwgSire))
 nResVarEst <- nSsqRes / aovWwgSire$df.residual
+### # Summenquadrate der Vaeter
 nSsqVater <- crossprod(vecWwgSireCorrected) - nSsqRes
 ndfVater <- nNrObs - aovWwgSire$df.residual - 1 ### -1 comes due to intercept in model
 nMsqVater <- nSsqVater / ndfVater

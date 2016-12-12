@@ -108,10 +108,10 @@ $$F = MSQ_b / MSQ_R$$
 
 - "zufälliges" Modell: Beispiel Vater-Effekte
 
-$$y = Zu + e$$
+$$y = 1\mu + Zu + e$$
 
 - Eigenschaften von $u$:
-    + keine fixen Faktorstufen sondern 
+    + nur ein allgemeines Mittel als fixe Faktorstufe 
     + Zufallsvariable mit vorgegebener Verteilung
     + unabhängig mit konstanter Varianz $\sigma_u^2$ und Erwartungswert $E\left[u\right] = 0$
 

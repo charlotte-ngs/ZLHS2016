@@ -1,0 +1,193 @@
+\documentclass{scrartcl}
+
+%\usepackage{fancyhdr}
+
+\newcommand{\points}[1]
+{\begin{flushright}\textbf{#1}\end{flushright}}
+\newcommand{\sol}
+{\textbf{L\"osung}:}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+<<PointsQ1, echo=FALSE>>=
+# Assign Points for Q1
+lPointsQ1 <- list(TaskA = 2,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ1Total <- sum(unlist(lPointsQ1))
+@
+<<PointsQ2, echo=FALSE>>=
+# Assign Points for Q2
+lPointsQ2 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0,
+                  TaskD = 0)
+nPointQ2Total <- sum(unlist(lPointsQ2))
+@
+<<PointsQ3, echo=FALSE>>=
+# Assign Points for Q3
+lPointsQ3 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ3Total <- sum(unlist(lPointsQ3))
+@
+<<PointsQ4, echo=FALSE>>=
+# Assign Points for Q4
+lPointsQ4 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ4Total <- sum(unlist(lPointsQ4))
+@
+<<PointsQ5, echo=FALSE>>=
+# Assign Points for Q5
+lPointsQ5 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ5Total <- sum(unlist(lPointsQ5))
+@
+<<PointsQ6, echo=FALSE>>=
+# Assign Points for Q6
+lPointsQ6 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ6Total <- sum(unlist(lPointsQ6))
+@
+<<PointsTotal, echo=FALSE>>=
+nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4Total + nPointQ5Total + nPointQ6Total
+@
+
+
+\thispagestyle{empty}
+
+\titlehead
+{
+	ETH Z\"urich\\%
+	D-USYS\\%
+	Institut f\"ur Agrarwissenschaften
+}
+
+\title{\vspace{5ex} L\"osungen \"Ubung 11\\
+       Probepr\"ufung \\
+       Z\"uchtungslehre\\
+       HS 2016 \vspace{3ex}}
+\author{Peter von Rohr \vspace{3ex}}
+\date{
+  \begin{tabular}{lr}
+  \textsc{Datum}  & \textsc{\emph{16. Dezember 2016}} \\
+  \textsc{Beginn} & \textsc{\emph{09:15 Uhr}}\\
+  \textsc{Ende}  & \textsc{\emph{ca 11:15 Uhr}}\vspace{3ex}
+\end{tabular}}
+\maketitle
+
+% Table with Name
+\begin{tabular}{p{3cm}p{6cm}}
+Name:     &  \\
+         &  \\
+Legi-Nr:  & \\
+\end{tabular}
+
+% Table with Points
+
+\vspace{3ex}
+\begin{center}
+\begin{tabular}{|p{3cm}|c|c|}
+\hline
+Aufgabe  &  Maximale Punktzahl     &  Erreichte Punktzahl\\
+\hline
+1        &  \Sexpr{nPointQ1Total}  & \\
+\hline
+2        &  \Sexpr{nPointQ2Total}  & \\
+\hline
+3        &  \Sexpr{nPointQ3Total}  & \\
+\hline
+4        & \Sexpr{nPointQ4Total}   & \\
+\hline
+5        & \Sexpr{nPointQ5Total}   & \\
+\hline
+6        & \Sexpr{nPointQ6Total}   & \\
+\hline
+Total    &  \Sexpr{nPointOverallTotal} & \\
+\hline
+\end{tabular}
+\end{center}
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 1: Tierzucht (\Sexpr{nPointQ1Total})}
+\begin{enumerate}
+\item[a)] Nennen Sie die zwei Werkzeuge, welche in der Tierzucht bei der Auswahl potentieller Elterntiere verwendet werden.
+\points{\Sexpr{lPointsQ1$TaskA}}
+\end{enumerate}
+
+\sol
+
+\begin{enumerate}
+\item Selektion
+\item gezielte Paarung
+\end{enumerate}
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)] Die Vermehrung in Wildpopulationen verl\"auft etwas anders als in Nutztierpopulationen.
+\points{\Sexpr{lPointsQ1$TaskA}}
+\end{enumerate}
+
+\begin{center}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+  &  Wildpopulation  &  Nutztierpopulation \\
+\hline
+  &                  & \\
+\hline
+\end{tabular}
+\end{center}
+
+\sol
+
+\begin{center}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+  &  Wildpopulation         &  Nutztierpopulation \\
+\hline
+  & nat\"urliche Selektion  &  k\"unstliche Selektion \\
+\hline
+  & zufällige Paarungen     &  gezielte Paarung \\
+\hline
+  & Vermehrung              &  gerichtete Selektion \\
+\hline
+  & optimale Anpassung an Umwelt  &  Optimierung des vom Menschen geschaffenen Zuchtsystems\\
+\hline
+\end{tabular}
+\end{center}
+
+\clearpage
+\pagebreak
+
+
+\section*{Aufgabe 2:  (\Sexpr{nPointQ2Total})}
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 3:  (\Sexpr{nPointQ3Total})}
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 4:  (\Sexpr{nPointQ4Total})}
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 5:  (\Sexpr{nPointQ5Total})}
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 6:  (\Sexpr{nPointQ6Total})}
+
+
+\end{document}
