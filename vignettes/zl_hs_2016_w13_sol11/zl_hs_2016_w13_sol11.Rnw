@@ -38,7 +38,7 @@ nPointQ3Total <- sum(unlist(lPointsQ3))
 <<PointsQ4, echo=FALSE>>=
 # Assign Points for Q4
 lPointsQ4 <- list(TaskA = 14,
-                  TaskB = 0,
+                  TaskB = 6,
                   TaskC = 0)
 nPointQ4Total <- sum(unlist(lPointsQ4))
 @
@@ -418,7 +418,39 @@ cat(paste(sGetTexMatrix(pmatAMatrix = matX, pnDigits = 0), collapse = "\n"))
 cat("\\right]\n$$\n")
 @
 
-Diese Definition setzt aber voraus, dass wir die zwei Herden als fixe Effekte betrachten und der Vektor $b$ der fixen Effekte
+Diese Definition setzt aber voraus, dass wir die zwei Herden als fixe Effekte betrachten und der Vektor $b$ der fixen Effekte, wie folgt aussieht
+
+$$b = \left[
+        \begin{array}{c}
+        b_{Herde1}\\
+        b_{Herde2}
+        \end{array}
+      \right]
+$$
+
+Die Matrix $Z$ verkn\"upft Beobachtungen und Zuchtwerte.
+
+<<DefineDesignMatZ, echo=FALSE, results=tex>>=
+matZ <- matrix(data = c(0,0,0,1,0,0,
+                        0,0,0,0,1,0,
+                        0,0,0,0,0,1), nrow = nNrRecords, byrow = TRUE)
+
+cat("$$Z = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZ, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$\n")
+@
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] Stellen Sie die Mischmodellgleichungen f\"ur das BLUP-Tiermodell auf.
+\points{\Sexpr{lPointsQ4$TaskC}}
+\end{enumerate}
+
+\sol
+
+
 
 \clearpage
 \pagebreak
