@@ -1,6 +1,7 @@
 \documentclass{scrartcl}
 
 %\usepackage{fancyhdr}
+\usepackage{amsmath}
 
 \newcommand{\points}[1]
 {\begin{flushright}\textbf{#1}\end{flushright}}
@@ -9,6 +10,10 @@
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
+<<Setup, echo=FALSE, results=hide>>=
+devtools::load_all()
+@
+
 <<PointsQ1, echo=FALSE>>=
 # Assign Points for Q1
 lPointsQ1 <- list(TaskA = 2,
@@ -25,14 +30,14 @@ nPointQ2Total <- sum(unlist(lPointsQ2))
 @
 <<PointsQ3, echo=FALSE>>=
 # Assign Points for Q3
-lPointsQ3 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0)
+lPointsQ3 <- list(TaskA = 16,
+                  TaskB = 7,
+                  TaskC = 6)
 nPointQ3Total <- sum(unlist(lPointsQ3))
 @
 <<PointsQ4, echo=FALSE>>=
 # Assign Points for Q4
-lPointsQ4 <- list(TaskA = 0,
+lPointsQ4 <- list(TaskA = 14,
                   TaskB = 0,
                   TaskC = 0)
 nPointQ4Total <- sum(unlist(lPointsQ4))
@@ -235,7 +240,7 @@ print(matA)
 \pagebreak
 
 \begin{enumerate}
-\item[c)] Angenommen die Tiere $5$ und $6$ sind ingezüchtet. Nach wievielen Berechnungsschritten in der rekursiven Berechnungsart der Verwandtschaftsmatrix kann der Inzuchtgrad der Tiere $5$ und $6$ aus der Matrix bestimmt werden? (Hinweis: Das \"Ubertragen der Elemente von einer Zeile in die entsprechende Kolonne soll nicht als Berechnungsschritte gez\"ahlt werden.)
+\item[c)] Angenommen die Tiere $5$ und $6$ sind ingez\"uchtet. Nach wievielen Berechnungsschritten in der rekursiven Berechnungsart der Verwandtschaftsmatrix kann der Inzuchtgrad der Tiere $5$ und $6$ aus der Matrix bestimmt werden? (Hinweis: Das \"Ubertragen der Elemente von einer Zeile in die entsprechende Kolonne soll nicht als Berechnungsschritte gez\"ahlt werden.)
 \points{\Sexpr{lPointsQ2$TaskC}}
 \end{enumerate}
 
@@ -247,12 +252,173 @@ Generell kann der Inzuchtgrad eines Tieres aus der Verwandtschaft der Eltern bes
 \clearpage
 \pagebreak
 
-\section*{Aufgabe 3:  (\Sexpr{nPointQ3Total})}
+\section*{Aufgabe 3:  Inverse der Verwandtschaftsmatrix (\Sexpr{nPointQ3Total})}
+
+Gegeben ist folgendes Pedigree
+\begin{center}
+<<SmallExamPed, echo=FALSE>>=
+library(pedigreemm)
+nNrAni <- 5
+ped <- pedigree(sire = c(NA,NA,1,1,3), dam = c(NA,NA,2,2,NA), label = 1:nNrAni)
+print(ped)
+@
+\end{center}
+
+\begin{enumerate}
+\item[a)] Berechnen Sie die Inverse $A^{-1}$ der additiv genetischen Verwandtschaftsmatrix f\"ur das oben dargestellte Pedigree.
+\points{\Sexpr{lPointsQ3$TaskA}}
+\end{enumerate}
+
+\sol
+
+Die Inverse $A^{-1}$ ist
+
+<<SmallAinv>>=
+matAInv <- as.matrix(getAInv(ped = ped))
+print(matAInv)
+@
+
 
 \clearpage
 \pagebreak
 
-\section*{Aufgabe 4:  (\Sexpr{nPointQ4Total})}
+\begin{enumerate}
+\item[b)] Wie lauten die Regeln zur Berechnung der Inversen $A^{-1}$
+\points{\Sexpr{lPointsQ3$TaskB}}
+\end{enumerate}
+
+\sol
+
+\begin{itemize}
+\item Initialisiere alle Elemente der Matrix $A^{-1}$ mit $0$
+\item F\"ur Tier $i$ mit Eltern $s$ und $d$,
+  \begin{itemize}
+  \item addiere $\delta_i$ zum Element $(i,i)$,
+  \item addiere $-\delta_i/2$ zu den Elementen $(s,i)$, $(i,s)$, $(d,i)$ und $(i,d)$ und
+  \item addiere $\delta_i/4$ zu den Elementen $(s,s)$, $(s,d)$, $(d,s)$ und $(d,d)$
+  \end{itemize}
+\item F\"ur Tier $i$ mit bekanntem Elternteil $d$,
+  \begin{itemize}
+  \item addiere $\delta_i$ zum Element $(i,i)$,
+  \item addiere $-\delta_i/2$ zu den Elementen $(d,i)$ und $(i,d)$ und
+  \item addiere $\delta_i/4$ zu den Elementen $(d,d)$
+  \end{itemize}
+\item F\"ur Tier $i$ mit unbekannten Eltern
+  \begin{itemize}
+  \item addiere $\delta_i$ zum Element $(i,i)$
+  \end{itemize}
+\end{itemize}
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] Auf welchem Prinzip basiert die Berechnung der Inversen Verwandtschaftsmatrix und weshalb ist das verwendete Prinzip einfacher als die direkte Invertierung der Verwandtschaftsmatrix?
+\points{\Sexpr{lPointsQ3$TaskC}}
+\end{enumerate}
+
+\sol
+
+\begin{itemize}
+\item Die Berechnung der Inversen der Verwandtschaftsmatrix basiert auf der LDL-Zerlegung der Verwandtschaftsmatrix $A$. Diese Zerlegung erlaubt es die Matrix $A$ als Produkt von drei Matrizen $L$, $D$ and $L^T$ zu schreiben. Dabei gilt zu beachten, dass die Matrizen $L$ und $D$ eine einfache Struktur haben. $L$ ist eine linke untere Dreiecksmatrix, welche die Pfade von den Tieren zu den Foundertieren enthält. Die Matrix $D$ ist eine Diagnoalmatrix, welche ein Bestandteil der Covarianzmatrix der Mendelian-Sampling Effekte darstellt. Somit gilt
+
+\begin{equation}
+A = L * D * L^T
+\label{eq:MatAldlDecomp}
+\end{equation}
+
+\item Die Inverse Verwandtschaftsmatrix kann aus den Inversen dieser drei Matrizen geschrieben werden. Aus (\ref{eq:MatAldlDecomp}) folgt
+
+\begin{equation}
+A^{-1} = (L^{-1})^T * D^{-1} * L^{-1}
+\label{eq:MatAinvldlDecomp}
+\end{equation}
+
+\item Die Inversen $L^{-1}$ und $D^{-1}$ sind einfach zu berechnen. $D^{-1}$ ist auch eine Diagonalmatrix, deren Elemente den inversen Elementen aus $D$ entsprechen. Die Matrix $L^{-1} = I-P$, wobei $I$ die Einheitsmatrix ist und $P$ die Matrix aus der Zerlegung Zuchtwerte in die Zuchtwerte der Eltern plus die Mendelian Sampling Effekte $a = P*a + m$ entspricht.
+\end{itemize}
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 4: BLUP-Tiermodell (\Sexpr{nPointQ4Total})}
+Gegeben ist der folgende Datensatz
+
+<<ShowDataSet, echo=FALSE, results=tex>>=
+nNrRecords <- 3
+nNrSire <- 3
+dfMlrData <- data.frame(Tochter = as.character(c(1:nNrRecords) + nNrSire),
+                        Herde   = c("1","1","2"),
+                        Vater   = c("C","A","B"),
+                        Mutter  = c("NA","4","5"),
+                        Leistung = c(110,100,110))
+nNrHerde <- length(unique(dfMlrData$Herde))
+#knitr::kable(dfMlrData)
+xtable::xtable(dfMlrData)
+@
+
+\begin{enumerate}
+\item[a)] Wie lautet das BLUP-Tiermodell in Matrix-Vektor-Schreibweise? Beschreiben Sie die einzelnen Modellkomponenten und geben Sie auch die Erwartungswerte und die Varianzen der Modellkomponenten an.
+\points{\Sexpr{lPointsQ4$TaskA}}
+\end{enumerate}
+
+\sol
+
+Das BLUP-Tiermodell lautet:
+
+\begin{equation}
+y = Xb + Za + e
+\label{eq:BlupTierModell}
+\end{equation}
+
+\begin{tabular}{lll}
+mit  &  $y$  &  Vektor der ph\"anotypischen Leistungen, entspricht der Kolonne Leistung im Datensatz \\
+     &  $b$  &  Vektor der fixen Herden-Effekte\\
+     &  $X$  &  Inzidenzmatrix verkn\"upft $b$ mit $y$\\
+     &  $a$  &  Vektor der Zuchtwerte\\
+     &  $Z$  &  Inzidenzmatrix verkn\"upft $a$ mit $y$ \\
+     &  $e$  &  Vektor der Resteffekte
+\end{tabular}
+
+Die Erwartungswerte und die Varianzen f\"ur die zuf\"alligen Teile des Modells lauten:
+
+%%% $$E\left[ a \right] = 0 \text{ und } E\left[ e \right] = 0$$
+
+\begin{equation*}
+E \left[ a \right] = 0 \quad \text{und} \quad E\left[ e \right] = 0
+\end{equation*}
+
+Somit ist $$E\left[ y \right] = Xb$$.
+
+Die Varianzen von $e$ und $a$ sind definiert als
+
+\begin{equation*}
+var(a) = A * \sigma_a^2 \quad \text{und} \quad var(e) = I * \sigma_e^2
+\end{equation*}
+
+Die Covarianzen zwischen $a$ und $e$ werden auf $0$ gesetzt. Daraus k\"onnen wir die Covarianzmatrix von $y$ berechnen als
+
+$$var(y) = ZGZ^T + R$$
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)] Welche Inzidenzmatrizen gibt es im BLUP-Tiermodell und welche Funktion haben sie? Stellen Sie die Inzidenzmatrizen f\"ur das BLUP-Tiermodell f\"ur den gegebenen Datensatz auf.
+\points{\Sexpr{lPointsQ4$TaskB}}
+\end{enumerate}
+
+\sol
+
+Im BLUP-Tiermodell gibt es die Inzidenzmatrizen $X$ und $Z$. Die Matrix $X$ verkn\"upft die fixen Effekte $b$ und die Beobachtungen $y$. Die Matrix $Z$ verkn\"upft die Zuchtwerte $a$ und die Beobachtungen $y$. F\"ur unseren Datensatz sind die Matrizen $X$ und $Z$ wie folgt definiert:
+
+<<DefineDesignMatX, echo=FALSE, results=tex>>=
+matX <- matrix(data = c(1,0,1,0,0,1), nrow = nNrRecords, byrow = TRUE)
+cat("$$X = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matX, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$\n")
+@
+
+Diese Definition setzt aber voraus, dass wir die zwei Herden als fixe Effekte betrachten und der Vektor $b$ der fixen Effekte
 
 \clearpage
 \pagebreak
