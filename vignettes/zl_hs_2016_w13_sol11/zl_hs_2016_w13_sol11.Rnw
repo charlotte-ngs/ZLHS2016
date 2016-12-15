@@ -6,7 +6,7 @@
 \newcommand{\points}[1]
 {\begin{flushright}\textbf{#1}\end{flushright}}
 \newcommand{\sol}
-{\textbf{L\"osung}:}
+{\vspace{2ex}\textbf{L\"osung}:}
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -39,21 +39,20 @@ nPointQ3Total <- sum(unlist(lPointsQ3))
 # Assign Points for Q4
 lPointsQ4 <- list(TaskA = 14,
                   TaskB = 6,
-                  TaskC = 0)
+                  TaskC = 16)
 nPointQ4Total <- sum(unlist(lPointsQ4))
 @
 <<PointsQ5, echo=FALSE>>=
 # Assign Points for Q5
-lPointsQ5 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0)
+lPointsQ5 <- list(TaskA = 2,
+                  TaskB = 4,
+                  TaskC = 6)
 nPointQ5Total <- sum(unlist(lPointsQ5))
 @
 <<PointsQ6, echo=FALSE>>=
 # Assign Points for Q6
-lPointsQ6 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0)
+lPointsQ6 <- list(TaskA = 8,
+                  TaskB = 8)
 nPointQ6Total <- sum(unlist(lPointsQ6))
 @
 <<PointsTotal, echo=FALSE>>=
@@ -344,6 +343,9 @@ A^{-1} = (L^{-1})^T * D^{-1} * L^{-1}
 Gegeben ist der folgende Datensatz
 
 <<ShowDataSet, echo=FALSE, results=tex>>=
+sigmaa2 <- 12.5
+sigmae2 <- 50
+alpha <- sigmae2/sigmaa2
 nNrRecords <- 3
 nNrSire <- 3
 dfMlrData <- data.frame(Tochter = as.character(c(1:nNrRecords) + nNrSire),
@@ -356,6 +358,7 @@ nNrHerde <- length(unique(dfMlrData$Herde))
 xtable::xtable(dfMlrData)
 @
 
+Die genetisch-additive Varianz betr\"agt $\sigma_a^2 = \Sexpr{sigmaa2}$ und die Restvarianz ist gegeben als $\sigma_e^2 = \Sexpr{sigmae2}$
 \begin{enumerate}
 \item[a)] Wie lautet das BLUP-Tiermodell in Matrix-Vektor-Schreibweise? Beschreiben Sie die einzelnen Modellkomponenten und geben Sie auch die Erwartungswerte und die Varianzen der Modellkomponenten an.
 \points{\Sexpr{lPointsQ4$TaskA}}
@@ -444,23 +447,370 @@ cat("\\right]\n$$\n")
 \pagebreak
 
 \begin{enumerate}
-\item[c)] Stellen Sie die Mischmodellgleichungen f\"ur das BLUP-Tiermodell auf.
+\item[c)] Stellen Sie die Mischmodellgleichungen f\"ur das BLUP-Tiermodell zuerst allgemein und dann f\"ur das gegebene Zahlbeispiel auf.
 \points{\Sexpr{lPointsQ4$TaskC}}
 \end{enumerate}
 
 \sol
 
+Allgemein lauten die Mischmodellgleichungen f\"ur das BLUP-Tiermodell
+
+$$\left[
+    \begin{array}{cc}
+    X^TX  &  X^TZ \\
+    Z^TX  &  Z^TZ + A^{-1} * \alpha
+    \end{array}
+  \right]
+  \left[
+    \begin{array}{c}
+    \hat{b}\\
+    \hat{a}
+    \end{array}
+  \right]
+    =
+  \left[
+    \begin{array}{c}
+    \hat{X^Ty}\\
+    \hat{Z^Ty}
+    \end{array}
+  \right]
+$$
+
+
+F\"ur unser Zahlenbeispiel
+
+<<SetupMME, echo=FALSE, results=tex>>=
+matXtX <- crossprod(matX)
+matXtZ <- crossprod(matX, matZ)
+matZtZ <- crossprod(matZ)
+
+### # pedigree
+suppressPackageStartupMessages(require(pedigreemm))
+nNrAniInPed <- nNrSire + nNrRecords
+ped <- pedigree(sire = c(NA,NA,NA,3,1,2), dam = c(NA,NA,NA,NA,4,5), label = as.character(1:nNrAniInPed))
+matAInv <- as.matrix(getAInv(ped = ped))
+
+### # rhs
+vecY <- dfMlrData$Leistung
+vecXtY <- crossprod(matX,vecY)
+vecZtY <- crossprod(matZ,vecY)
+
+### # mme
+matCoeff <- cbind(rbind(matXtX,t(matXtZ)),rbind(matXtZ,matZtZ + matAInv * alpha))
+vecRhs <- c(vecXtY,vecZtY)
+vecSol <- c("\\hat{b_{Herde1}}","\\hat{b_{Herde2}}",
+            "\\hat{a_1}", "\\hat{a_2}", "\\hat{a_3}", "\\hat{a_4}", "\\hat{a_5}", "\\hat{a_6}")
+### # output
+cat("$$\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matCoeff, pnDigits = 2), collapse = "\n"))
+cat("\\right]\n")
+cat("\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSol)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhs), pnDigits = 0), collapse = "\n"))
+cat("\\right]\n")
+cat("$$\n")
+@
 
 
 \clearpage
 \pagebreak
 
-\section*{Aufgabe 5:  (\Sexpr{nPointQ5Total})}
+\section*{Aufgabe 5: Selektionsindex (\Sexpr{nPointQ5Total})}
+In der Schweinezucht sind Merkmale der Fleischqualit\"at ein wichtiger Bestandteil des Zuchtziels. Nehmen wir an, wir definieren einen Selektionsindex f\"ur die Fleischqualit\"at, welcher die Fleischqualit\"atsmerkmale im Zuchtziel charakterisieren soll. Als Fleischqualit\"atsmerkmale im Gesamtzuchtwert sollen die Merkmale
+\begin{itemize}
+\item Saftverlust beim Kochen und
+\item sensorischer Geschmack
+\end{itemize}
+ber\"ucksichtigt werden.
+
+Da diese Merkmale nicht einfach routinem\"assig messbar sind, verwenden wir im Selektionsindex die zwei Hilfsmerkmale
+
+\begin{enumerate}
+\item pH-Wert des Fleisches eine Stunde nach der Schlachtung (pH1)
+\item intra-muskul\"arer Fettgehalt (ImF)
+\end{enumerate}
+
+\noindent Die Merkmale im Gesamtzuchtwert (Zuchtziel) und die verf\"ugbaren Informationsquellen sind in folgender Tabelle aufgelistet
+
+\vspace{2ex}
+\begin{tabular}{|l|l|l|}
+\hline
+  &  Merkmale im Gesamtzuchtwert  &  Merkmale als Informationsquellen \\
+\hline
+1 & Saftverlust (SV) & pH1 \\
+\hline
+2 & Geschmack   (GS) & ImF\\
+\hline
+\end{tabular}
+
+\vspace{3ex}
+\noindent F\"ur die Merkmale im Gesamtzuchtwert wurden folgende Populationsparameter gesch\"atzt:
+
+<<PopParGzw, echo=FALSE, results=hide>>=
+vSdGzw <- c(2,4)
+rGzw <- 0.4
+@
+
+\vspace{2ex}
+\begin{tabular}{|p{8cm}|p{3cm}|}
+\hline
+Parameter  &  Wert \\
+\hline
+Standardabweichung Saftverlust  &  \Sexpr{vSdGzw[1]} \\
+\hline
+Standardabweichung Geschmack    &  \Sexpr{vSdGzw[2]} \\
+\hline
+Korrelation zwischen Saftverlust und Geschmack  &  \Sexpr{rGzw}\\
+\hline
+\end{tabular}
+
+\vspace{3ex}
+\noindent F\"ur die Merkmale im Selektionsindex wurden folgende Populationsparameter gesch\"atzt:
+
+<<PopParSi, echo=FALSE, results=hide>>=
+vSdSi <- c(5,4)
+rSi <- 0
+@
+
+\vspace{2ex}
+\begin{tabular}{|p{8cm}|p{3cm}|}
+\hline
+Parameter  &  Wert \\
+\hline
+Standardabweichung pH1  &  \Sexpr{vSdSi[1]} \\
+\hline
+Standardabweichung ImF    &  \Sexpr{vSdSi[2]} \\
+\hline
+Korrelation zwischen pH1 und ImF  & \Sexpr{rSi} \\
+\hline
+\end{tabular}
+
+\vspace{3ex}
+\noindent Die Korrelationen zwischen den Merkmalen im Selektionsindex und im Gesamtzuchtwert sind in folgender Tabelle zusammengefasst.
+
+<<CorSiGzw, echo=FALSE, results=hide>>=
+matCorSiGzw <- matrix(data = c(0.7,0.1,0.2,0.6), nrow = 2)
+@
+
+\vspace{2ex}
+\begin{tabular}{|l|c|c|}
+\hline
+     &   Saftverlust  &  Geschmack\\
+\hline
+pH1  &   \Sexpr{matCorSiGzw[1,1]}   &  \Sexpr{matCorSiGzw[1,2]}  \\
+\hline
+ImF  &   \Sexpr{matCorSiGzw[2,1]}   &  \Sexpr{matCorSiGzw[2,2]}  \\
+\hline
+\end{tabular}
 
 \clearpage
 \pagebreak
 
-\section*{Aufgabe 6:  (\Sexpr{nPointQ6Total})}
+Die wirtschaftlichen Gewichte der Merkmale im Gesamtzuchtwert betragen
 
+<<EcoVal, echo=FALSE, results=hide>>=
+vEcoVal <- c(1,2)
+@
+
+\vspace{2ex}
+\begin{tabular}{|l|c|}
+\hline
+Merkmal  &  Wirtschaftliches Gewicht \\
+\hline
+Saftverlust  &  \Sexpr{vEcoVal[1]} \\
+\hline
+Geschmack    &  \Sexpr{vEcoVal[2]} \\
+\hline
+\end{tabular}
+
+
+\subsection*{Ihre Aufgaben}
+\begin{enumerate}
+\item[a)] Stellen Sie die Indexgleichungen f\"ur die Berechnung der Gewichtung der Merkmale im Selektionsindex auf. Verwenden Sie dazu die Matrix-Vektor-Schreibweise.
+\points{\Sexpr{lPointsQ5$TaskA}}
+
+\sol
+
+Die Indexgleichungen lauten
+$$ \mathbf{P}\mathbf{b} = \mathbf{G}\mathbf{v}$$
+\noindent wobei $\mathbf{P}$ die Covarianzmatrix zwischen den Merkmalen im Selektionsindex ist, $\mathbf{b}$ der Vektor der unbekannten Indexgewichte ist, $\mathbf{G}$ die Matrix der Covarianzen zwischen den Merkmalen im Index und im Gesamtzuchtwert und $\mathbf{v}$ der Vektor der wirtschaftlichen Gewicht ist.
+
+
+\item[b)] Stellen Sie die folgenden beiden Covarianz-Matrizen auf:
+\points{\Sexpr{lPointsQ5$TaskB}}
+  \begin{enumerate}
+  \item[1)] die Matrix $G$ als Covarianz-Matrix zwischen den Merkmalen im Selektionsindex und im Gesamtzuchtwert
+
+
+  \item[2)] Matrix $P$ als Covarianzmatrix zwischen den Merkmalen im Selektionsindex
+  \end{enumerate}
+\end{enumerate}
+
+\sol
+
+    Die Covarianz-Matrix zwischen den Merkmalen im Selektionsindex und den Merkmalen im Gesamtzuchtwert wird mit $\mathbf{G}$ bezeichnet und wird wie folgt berechnet
+    $$\mathbf{G} = \left[\begin{array}{cc}
+                       Cov(pH1, SV)  &  Cov(pH1, GS)\\
+                       Cov(ImF, SV)  &  Cov(ImF, GS)
+                       \end{array}\right]
+    $$
+    Die einzelnen Komponenten werden berechnet als $Cov(M1,M2) = Cor(M1,M2) * SD(M1) * SD(M2)$. Somit lautet diese Matrix
+
+    $$\mathbf{G} = \left[\begin{array}{cc}
+                       \Sexpr{matCorSiGzw[1,1]} * \Sexpr{vSdSi[1]} * \Sexpr{vSdGzw[1]}  &   \Sexpr{matCorSiGzw[1,2]} * \Sexpr{vSdSi[1]} * \Sexpr{vSdGzw[2]}\\
+                       \Sexpr{matCorSiGzw[2,1]} * \Sexpr{vSdSi[2]} * \Sexpr{vSdGzw[1]}  &   \Sexpr{matCorSiGzw[2,2]} * \Sexpr{vSdSi[2]} * \Sexpr{vSdGzw[2]}
+                       \end{array}\right]
+               = \left[\begin{array}{cc}
+                       \Sexpr{matCorSiGzw[1,1] * vSdSi[1] * vSdGzw[1]}  &   \Sexpr{matCorSiGzw[1,2] * vSdSi[1] * vSdGzw[2]}\\
+                       \Sexpr{matCorSiGzw[2,1] * vSdSi[2] * vSdGzw[1]}  &   \Sexpr{matCorSiGzw[2,2] * vSdSi[2] * vSdGzw[2]}
+                       \end{array}\right]
+    $$
+<<matG, echo=FALSE>>=
+matG <- matrix(c(matCorSiGzw[1,1] * vSdSi[1] * vSdGzw[1],
+                 matCorSiGzw[2,1] * vSdSi[2] * vSdGzw[1],
+                 matCorSiGzw[1,2] * vSdSi[1] * vSdGzw[2],
+                 matCorSiGzw[2,2] * vSdSi[2] * vSdGzw[2]), nrow = 2)
+#cat(" * matG:\n")
+#print(matG)
+@
+
+
+    Die Covarianz zwischen den Merkmalen im Selektionsindex
+    $$\mathbf{P} = \left[\begin{array}{cc}
+                           Var(pH1)      &  Cov(pH1,ImF)\\
+                           Cov(pH1,ImF)  &  Var(ImF)
+                         \end{array}
+    \right]
+    $$
+    Setzen wir hier die Zahlen ein, dann folgt daraus
+    $$\mathbf{P} = \left[\begin{array}{cc}
+                           \Sexpr{vSdSi[1]} * \Sexpr{vSdSi[1]}  &  \Sexpr{rSi} * \Sexpr{vSdSi[1]} * \Sexpr{vSdSi[2]}\\
+                           \Sexpr{rSi} * \Sexpr{vSdSi[1]} * \Sexpr{vSdSi[2]}  &  \Sexpr{vSdSi[2]} * \Sexpr{vSdSi[2]}
+                         \end{array}
+    \right] = \left[\begin{array}{cc}
+                           \Sexpr{vSdSi[1] * vSdSi[1]}  &  \Sexpr{rSi * vSdSi[1] * vSdSi[2]}\\
+                           \Sexpr{rSi * vSdSi[1] * vSdSi[2]}  &  \Sexpr{vSdSi[2] * vSdSi[2]}
+                         \end{array}
+    \right]
+    $$
+<<matP, echo=FALSE>>=
+matP <- matrix(c(vSdSi[1] * vSdSi[1],
+                 rSi * vSdSi[1] * vSdSi[2],
+                 rSi * vSdSi[1] * vSdSi[2],
+                 vSdSi[2] * vSdSi[2]), nrow = 2)
+#print(matP)
+@
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)] Berechnen Sie die Gewichte der Merkmale im Selektionsindex aufgrund der unter Teilaufgabe a) aufgestellten Indexgleichungen und den unter b) berechneten Covarianzmatrizen
+\points{\Sexpr{lPointsQ5$TaskC}}
+\end{enumerate}
+
+\sol
+
+Die Gewichte berechnen sich als
+
+$$ \mathbf{b} = \mathbf{P}^{-1} * \mathbf{G} * \mathbf{v}$$
+
+<<vecIndexB>>=
+(vecB = solve(matP) %*% matG %*% vEcoVal)
+@
+
+Checks
+<<Check>>=
+matP %*% vecB - matG %*% vEcoVal
+@
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 6: Varianzkomponentensch\"atzung (\Sexpr{nPointQ6Total})}
+Gegeben ist der folgende Datensatz.
+
+<<ShowData, echo=FALSE, results=tex>>=
+nNrRecords <- 9
+nNrSire <- 3
+dfMlrData <- data.frame(Tochter = as.character(c(1:nNrRecords)),
+                        Herde   = c("1","1","2","2","2","3","3","3","3"),
+                        Vater   = c("C","A","B","A","C","C","C","A","B"),
+                        Leistung = c(110,127,110,101,200,170,110,100,150))
+nNrHerde <- length(unique(dfMlrData$Herde))
+print(xtable::xtable(dfMlrData), include.rownames = FALSE)
+@
+
+\begin{enumerate}
+\item[a)] Um den Einfluss der Herde auf die Leistung der T\"ochter absch\"atzen zu k\"onnen, verwenden wir das folgende fixe Modell.
+\points{\Sexpr{lPointsQ6$TaskA}}
+\end{enumerate}
+
+$$y = Xb + e$$
+
+\begin{tabular}{lll}
+mit  &  $y$  &  Vektor der Leistungen\\
+     &  $b$  &  Vektor der fixen Herdeneffekte\\
+     &  $X$  &  Inzidenzmatrix von $b$\\
+     &  $e$  &  Vektor der Reste
+\end{tabular}
+
+Aus der folgenden Regressionsanalyse kennen wir die gesch\"atzten Herdeneffekte
+
+<<RegHerde>>=
+lmRegHerde <- lm(Leistung ~ -1 + Herde, data = dfMlrData)
+coefficients(lmRegHerde)
+@
+
+\subsection*{Ihre Aufgaben}
+Wir nehmen an, dass die Resteffekte $e$ unkorreliert sind und somit gilt, dass $var(e) = I*\sigma_e^2$, wobei $I$ die Einheitsmatrix darstellt. Sch\"atzen Sie die Restvarianz $\sigma_e^2$ aufgrund der Residuen des oben gezeigten Regressionsmodells.
+
+\sol
+
+<<CompVarRes>>=
+### # Vektor der Residuen
+(vecRes <- as.vector(residuals(lmRegHerde)))
+### # Restvarianz
+nResVarEst <- crossprod(vecRes) / (nrow(dfMlrData) - nNrHerde)
+cat("Restvarianz: ", nResVarEst, "\n")
+@
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)] Den Einfluss der V\"ater auf die Leistungen der T\"ochter analysieren wir mit einem Modell, in welchem die Vatereffekte als zuf\"allig betrachtet werden.
+\points{\Sexpr{lPointsQ6$TaskB}}
+\end{enumerate}
+
+Das Modell mit den zuf\"alligen Vatereffekten sieht, wie folgt aus
+
+$$y = 1\mu + Zu + e$$
+
+\begin{tabular}{lll}
+mit  &  $y$    &  Vektor der Leistungen\\
+     &  $\mu$  &  allgemeiner Mittelwert\\
+     &  $1$    &  Vektor, deren Komponenten alle gleich $1$\\
+     &  $u$    &  Vektor der zuf\"alligen Vatereffekte\\
+     &  $Z$    &  Inzidenzmatrix f\"ur $u$\\
+     &  $e$    &  Vektor der Reste
+\end{tabular}
+
+Die Varianzen f\"ur die zuf\"alligen Effekte $u$ und $e$ sind bestimmt durch
+
+$$var(u) = I * \sigma_u^2 \quad \text{und} \quad var(e) = I*\sigma_e^2$$
+
+Die ANOVA-Tabelle des obigen Modells ist nachfolgend gegeben.
+
+<<AnovaTable>>=
+tabAovVater <- aov(formula = Leistung ~ Vater, data = dfMlrData)
+summary(tabAovVater)
+@
+
+\subsection*{Ihre Aufgaben}
+Sch\"atzen Sie aufgrund der gegebenen ANOVA-Tabelle die Varianz ($\sigma_u^2$) der zuf\"alligen Vatereffekte und die Varianz ($\sigma_e^2$) der Resteffekte.
 
 \end{document}
