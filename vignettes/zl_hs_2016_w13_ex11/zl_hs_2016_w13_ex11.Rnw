@@ -69,7 +69,7 @@ nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4To
 	Institut f\"ur Agrarwissenschaften
 }
 
-\title{\vspace{5ex} L\"osungen 11\\
+\title{\vspace{5ex} \"Ubung 11\\
        Probepr\"ufung \\
        Z\"uchtungslehre\\
        HS 2016 \vspace{3ex}}
@@ -123,18 +123,12 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \points{\Sexpr{lPointsQ1$TaskA}}
 \end{enumerate}
 
-\sol
-
-\begin{enumerate}
-\item Selektion
-\item gezielte Paarung
-\end{enumerate}
 
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[b)] Die Vermehrung in Wildpopulationen verl\"auft etwas anders als in Nutztierpopulationen.
+\item[b)] Die Vermehrung in Wildpopulationen verl\"auft etwas anders als in Nutztierpopulationen. Nennen Sie die wichtigsten Unterschiede
 \points{\Sexpr{lPointsQ1$TaskB}}
 \end{enumerate}
 
@@ -143,28 +137,19 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \hline
   &  Wildpopulation  &  Nutztierpopulation \\
 \hline
-  &                  & \\
+  &                  & \\[10ex]
+\hline
+  &                  & \\[10ex]
+\hline
+  &                  & \\[10ex]
+\hline
+  &                  & \\[10ex]
+\hline
+  &                  & \\[10ex]
 \hline
 \end{tabular}
 \end{center}
 
-\sol
-
-\begin{center}
-\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
-\hline
-  &  Wildpopulation         &  Nutztierpopulation \\
-\hline
-  & nat\"urliche Selektion  &  k\"unstliche Selektion \\
-\hline
-  & zuf\"allige Paarungen     &  gezielte Paarung \\
-\hline
-  & Vermehrung              &  gerichtete Selektion \\
-\hline
-  & optimale Anpassung an Umwelt  &  Optimierung des vom Menschen geschaffenen Zuchtsystems\\
-\hline
-\end{tabular}
-\end{center}
 
 \clearpage
 \pagebreak
@@ -177,17 +162,6 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \begin{center}
 \includegraphics[width=12cm]{"pdf/GerichteteSelektionElternNk"}
 \end{center}
-
-\sol
-
-Es zeigt die Verschiebung der Verteilung von der Elterngeneration zur Nachkommengeneration bei gerichteter Selektion. Dabei bedeuten die Punkte:
-
-\begin{enumerate}
-\item Elterndurchschnitt
-\item Selektionsgrenze
-\item Remontendurchschnitt
-\item Nachkommendurchschnitt
-\end{enumerate}
 
 
 \clearpage
@@ -212,28 +186,16 @@ print(ped)
 \points{\Sexpr{lPointsQ2$TaskA}}
 \end{enumerate}
 
-\sol
-
-Die Verwandtschaftsmatrix f\"ur das gezeigte Pedigree lautet
-<<SolToQ1>>=
-matA <- as.matrix(getA(ped = ped))
-print(matA)
-@
 
 \clearpage
 \pagebreak
 
 
 \begin{enumerate}
-\item[b)] Welche der Tiere 1-6 im anfangs gezeigten Pedigree sind ingez\"uchtet und wie gross ist deren Inzuchtkoeffizient?.
+\item[b)] Welche der Tiere 1-6 im anfangs gezeigten Pedigree sind ingez\"uchtet und wie gross ist deren Inzuchtkoeffizient?
 \points{\Sexpr{lPointsQ2$TaskB}}
 \end{enumerate}
 
-\sol
-\begin{itemize}
-\item Tiere $5$ und $6$ sind ingez\"uchtet
-\item Der Inzuchtkoeffizient f\"ur Tier $5$ betr\"agt \Sexpr{matA[5,5]-1} und f\"ur Tier $6$ betr\"agt er \Sexpr{matA[6,6]-1}.
-\end{itemize}
 
 \clearpage
 \pagebreak
@@ -242,10 +204,6 @@ print(matA)
 \item[c)] Angenommen die Tiere $5$ und $6$ sind ingez\"uchtet. Nach wievielen Berechnungsschritten in der rekursiven Berechnungsart der Verwandtschaftsmatrix kann der Inzuchtgrad der Tiere $5$ und $6$ aus der Matrix bestimmt werden? (Hinweis: Das \"Ubertragen der Elemente von einer Zeile in die entsprechende Kolonne soll nicht als Berechnungsschritte gez\"ahlt werden.)
 \points{\Sexpr{lPointsQ2$TaskC}}
 \end{enumerate}
-
-\sol
-
-Generell kann der Inzuchtgrad eines Tieres aus der Verwandtschaft der Eltern bestimmt werden. Tier $6$ hat Eltern $1$ und $4$, der Inzuchtgrad ist als nach $4$ Berechnungsschritten ablesbar. Tier $5$ hat Eltern $3$ und $4$. Der Inzuchtgrad ist dann erst nach $13$ Schritten ablesbar.
 
 
 \clearpage
@@ -268,15 +226,6 @@ print(ped)
 \points{\Sexpr{lPointsQ3$TaskA}}
 \end{enumerate}
 
-\sol
-
-Die Inverse $A^{-1}$ ist
-
-<<SmallAinv>>=
-matAInv <- as.matrix(getAInv(ped = ped))
-print(matAInv)
-@
-
 
 \clearpage
 \pagebreak
@@ -285,28 +234,6 @@ print(matAInv)
 \item[b)] Wie lauten die Regeln zur Berechnung der Inversen $A^{-1}$
 \points{\Sexpr{lPointsQ3$TaskB}}
 \end{enumerate}
-
-\sol
-
-\begin{itemize}
-\item Initialisiere alle Elemente der Matrix $A^{-1}$ mit $0$
-\item F\"ur Tier $i$ mit Eltern $s$ und $d$,
-  \begin{itemize}
-  \item addiere $\delta_i$ zum Element $(i,i)$,
-  \item addiere $-\delta_i/2$ zu den Elementen $(s,i)$, $(i,s)$, $(d,i)$ und $(i,d)$ und
-  \item addiere $\delta_i/4$ zu den Elementen $(s,s)$, $(s,d)$, $(d,s)$ und $(d,d)$
-  \end{itemize}
-\item F\"ur Tier $i$ mit bekanntem Elternteil $d$,
-  \begin{itemize}
-  \item addiere $\delta_i$ zum Element $(i,i)$,
-  \item addiere $-\delta_i/2$ zu den Elementen $(d,i)$ und $(i,d)$ und
-  \item addiere $\delta_i/4$ zu den Elementen $(d,d)$
-  \end{itemize}
-\item F\"ur Tier $i$ mit unbekannten Eltern
-  \begin{itemize}
-  \item addiere $\delta_i$ zum Element $(i,i)$
-  \end{itemize}
-\end{itemize}
 
 
 \clearpage
@@ -317,25 +244,7 @@ print(matAInv)
 \points{\Sexpr{lPointsQ3$TaskC}}
 \end{enumerate}
 
-\sol
 
-\begin{itemize}
-\item Die Berechnung der Inversen der Verwandtschaftsmatrix basiert auf der LDL-Zerlegung der Verwandtschaftsmatrix $A$. Diese Zerlegung erlaubt es die Matrix $A$ als Produkt von drei Matrizen $L$, $D$ and $L^T$ zu schreiben. Dabei gilt zu beachten, dass die Matrizen $L$ und $D$ eine einfache Struktur haben. $L$ ist eine linke untere Dreiecksmatrix, welche die Pfade von den Tieren zu den Foundertieren enthält. Die Matrix $D$ ist eine Diagnoalmatrix, welche ein Bestandteil der Covarianzmatrix der Mendelian-Sampling Effekte darstellt. Somit gilt
-
-\begin{equation}
-A = L * D * L^T
-\label{eq:MatAldlDecomp}
-\end{equation}
-
-\item Die Inverse Verwandtschaftsmatrix kann aus den Inversen dieser drei Matrizen geschrieben werden. Aus (\ref{eq:MatAldlDecomp}) folgt
-
-\begin{equation}
-A^{-1} = (L^{-1})^T * D^{-1} * L^{-1}
-\label{eq:MatAinvldlDecomp}
-\end{equation}
-
-\item Die Inversen $L^{-1}$ und $D^{-1}$ sind einfach zu berechnen. $D^{-1}$ ist auch eine Diagonalmatrix, deren Elemente den inversen Elementen aus $D$ entsprechen. Die Matrix $L^{-1} = I-P$, wobei $I$ die Einheitsmatrix ist und $P$ die Matrix aus der Zerlegung Zuchtwerte in die Zuchtwerte der Eltern plus die Mendelian Sampling Effekte $a = P*a + m$ entspricht.
-\end{itemize}
 \clearpage
 \pagebreak
 
@@ -364,44 +273,6 @@ Die genetisch-additive Varianz betr\"agt $\sigma_a^2 = \Sexpr{sigmaa2}$ und die 
 \points{\Sexpr{lPointsQ4$TaskA}}
 \end{enumerate}
 
-\sol
-
-Das BLUP-Tiermodell lautet:
-
-\begin{equation}
-y = Xb + Za + e
-\label{eq:BlupTierModell}
-\end{equation}
-
-\begin{tabular}{lll}
-mit  &  $y$  &  Vektor der ph\"anotypischen Leistungen, entspricht der Kolonne Leistung im Datensatz \\
-     &  $b$  &  Vektor der fixen Herden-Effekte\\
-     &  $X$  &  Inzidenzmatrix verkn\"upft $b$ mit $y$\\
-     &  $a$  &  Vektor der Zuchtwerte\\
-     &  $Z$  &  Inzidenzmatrix verkn\"upft $a$ mit $y$ \\
-     &  $e$  &  Vektor der Resteffekte
-\end{tabular}
-
-Die Erwartungswerte und die Varianzen f\"ur die zuf\"alligen Teile des Modells lauten:
-
-%%% $$E\left[ a \right] = 0 \text{ und } E\left[ e \right] = 0$$
-
-\begin{equation*}
-E \left[ a \right] = 0 \quad \text{und} \quad E\left[ e \right] = 0
-\end{equation*}
-
-Somit ist $$E\left[ y \right] = Xb$$.
-
-Die Varianzen von $e$ und $a$ sind definiert als
-
-\begin{equation*}
-var(a) = A * \sigma_a^2 \quad \text{und} \quad var(e) = I * \sigma_e^2
-\end{equation*}
-
-Die Covarianzen zwischen $a$ und $e$ werden auf $0$ gesetzt. Daraus k\"onnen wir die Covarianzmatrix von $y$ berechnen als
-
-$$var(y) = ZGZ^T + R$$
-
 \clearpage
 \pagebreak
 
@@ -410,38 +281,6 @@ $$var(y) = ZGZ^T + R$$
 \points{\Sexpr{lPointsQ4$TaskB}}
 \end{enumerate}
 
-\sol
-
-Im BLUP-Tiermodell gibt es die Inzidenzmatrizen $X$ und $Z$. Die Matrix $X$ verkn\"upft die fixen Effekte $b$ und die Beobachtungen $y$. Die Matrix $Z$ verkn\"upft die Zuchtwerte $a$ und die Beobachtungen $y$. F\"ur unseren Datensatz sind die Matrizen $X$ und $Z$ wie folgt definiert:
-
-<<DefineDesignMatX, echo=FALSE, results=tex>>=
-matX <- matrix(data = c(1,0,1,0,0,1), nrow = nNrRecords, byrow = TRUE)
-cat("$$X = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = matX, pnDigits = 0), collapse = "\n"))
-cat("\\right]\n$$\n")
-@
-
-Diese Definition setzt aber voraus, dass wir die zwei Herden als fixe Effekte betrachten und der Vektor $b$ der fixen Effekte, wie folgt aussieht
-
-$$b = \left[
-        \begin{array}{c}
-        b_{Herde1}\\
-        b_{Herde2}
-        \end{array}
-      \right]
-$$
-
-Die Matrix $Z$ verkn\"upft Beobachtungen und Zuchtwerte.
-
-<<DefineDesignMatZ, echo=FALSE, results=tex>>=
-matZ <- matrix(data = c(0,0,0,1,0,0,
-                        0,0,0,0,1,0,
-                        0,0,0,0,0,1), nrow = nNrRecords, byrow = TRUE)
-
-cat("$$Z = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = matZ, pnDigits = 0), collapse = "\n"))
-cat("\\right]\n$$\n")
-@
 
 \clearpage
 \pagebreak
@@ -450,68 +289,6 @@ cat("\\right]\n$$\n")
 \item[c)] Stellen Sie die Mischmodellgleichungen f\"ur das BLUP-Tiermodell zuerst allgemein und dann f\"ur das gegebene Zahlbeispiel auf.
 \points{\Sexpr{lPointsQ4$TaskC}}
 \end{enumerate}
-
-\sol
-
-Allgemein lauten die Mischmodellgleichungen f\"ur das BLUP-Tiermodell
-
-$$\left[
-    \begin{array}{cc}
-    X^TX  &  X^TZ \\
-    Z^TX  &  Z^TZ + A^{-1} * \alpha
-    \end{array}
-  \right]
-  \left[
-    \begin{array}{c}
-    \hat{b}\\
-    \hat{a}
-    \end{array}
-  \right]
-    =
-  \left[
-    \begin{array}{c}
-    \hat{X^Ty}\\
-    \hat{Z^Ty}
-    \end{array}
-  \right]
-$$
-
-
-F\"ur unser Zahlenbeispiel
-
-<<SetupMME, echo=FALSE, results=tex>>=
-matXtX <- crossprod(matX)
-matXtZ <- crossprod(matX, matZ)
-matZtZ <- crossprod(matZ)
-
-### # pedigree
-suppressPackageStartupMessages(require(pedigreemm))
-nNrAniInPed <- nNrSire + nNrRecords
-ped <- pedigree(sire = c(NA,NA,NA,3,1,2), dam = c(NA,NA,NA,NA,4,5), label = as.character(1:nNrAniInPed))
-matAInv <- as.matrix(getAInv(ped = ped))
-
-### # rhs
-vecY <- dfMlrData$Leistung
-vecXtY <- crossprod(matX,vecY)
-vecZtY <- crossprod(matZ,vecY)
-
-### # mme
-matCoeff <- cbind(rbind(matXtX,t(matXtZ)),rbind(matXtZ,matZtZ + matAInv * alpha))
-vecRhs <- c(vecXtY,vecZtY)
-vecSol <- c("\\hat{b_{Herde1}}","\\hat{b_{Herde2}}",
-            "\\hat{a_1}", "\\hat{a_2}", "\\hat{a_3}", "\\hat{a_4}", "\\hat{a_5}", "\\hat{a_6}")
-### # output
-cat("$$\\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = matCoeff, pnDigits = 2), collapse = "\n"))
-cat("\\right]\n")
-cat("\\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSol)), collapse = "\n"))
-cat("\\right]\n")
-cat(" = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhs), pnDigits = 0), collapse = "\n"))
-cat("\\right]\n")
-cat("$$\n")
-@
 
 
 \clearpage
@@ -631,11 +408,8 @@ Geschmack    &  \Sexpr{vEcoVal[2]} \\
 \item[a)] Stellen Sie die Indexgleichungen f\"ur die Berechnung der Gewichtung der Merkmale im Selektionsindex auf. Verwenden Sie dazu die Matrix-Vektor-Schreibweise.
 \points{\Sexpr{lPointsQ5$TaskA}}
 
-\sol
-
-Die Indexgleichungen lauten
-$$ \mathbf{P}\mathbf{b} = \mathbf{G}\mathbf{v}$$
-\noindent wobei $\mathbf{P}$ die Covarianzmatrix zwischen den Merkmalen im Selektionsindex ist, $\mathbf{b}$ der Vektor der unbekannten Indexgewichte ist, $\mathbf{G}$ die Matrix der Covarianzen zwischen den Merkmalen im Index und im Gesamtzuchtwert und $\mathbf{v}$ der Vektor der wirtschaftlichen Gewicht ist.
+\clearpage
+\pagebreak
 
 
 \item[b)] Stellen Sie die folgenden beiden Covarianz-Matrizen auf:
@@ -648,60 +422,6 @@ $$ \mathbf{P}\mathbf{b} = \mathbf{G}\mathbf{v}$$
   \end{enumerate}
 \end{enumerate}
 
-\sol
-
-    Die Covarianz-Matrix zwischen den Merkmalen im Selektionsindex und den Merkmalen im Gesamtzuchtwert wird mit $\mathbf{G}$ bezeichnet und wird wie folgt berechnet
-    $$\mathbf{G} = \left[\begin{array}{cc}
-                       Cov(pH1, SV)  &  Cov(pH1, GS)\\
-                       Cov(ImF, SV)  &  Cov(ImF, GS)
-                       \end{array}\right]
-    $$
-    Die einzelnen Komponenten werden berechnet als $Cov(M1,M2) = Cor(M1,M2) * SD(M1) * SD(M2)$. Somit lautet diese Matrix
-
-    $$\mathbf{G} = \left[\begin{array}{cc}
-                       \Sexpr{matCorSiGzw[1,1]} * \Sexpr{vSdSi[1]} * \Sexpr{vSdGzw[1]}  &   \Sexpr{matCorSiGzw[1,2]} * \Sexpr{vSdSi[1]} * \Sexpr{vSdGzw[2]}\\
-                       \Sexpr{matCorSiGzw[2,1]} * \Sexpr{vSdSi[2]} * \Sexpr{vSdGzw[1]}  &   \Sexpr{matCorSiGzw[2,2]} * \Sexpr{vSdSi[2]} * \Sexpr{vSdGzw[2]}
-                       \end{array}\right]
-               = \left[\begin{array}{cc}
-                       \Sexpr{matCorSiGzw[1,1] * vSdSi[1] * vSdGzw[1]}  &   \Sexpr{matCorSiGzw[1,2] * vSdSi[1] * vSdGzw[2]}\\
-                       \Sexpr{matCorSiGzw[2,1] * vSdSi[2] * vSdGzw[1]}  &   \Sexpr{matCorSiGzw[2,2] * vSdSi[2] * vSdGzw[2]}
-                       \end{array}\right]
-    $$
-<<matG, echo=FALSE>>=
-matG <- matrix(c(matCorSiGzw[1,1] * vSdSi[1] * vSdGzw[1],
-                 matCorSiGzw[2,1] * vSdSi[2] * vSdGzw[1],
-                 matCorSiGzw[1,2] * vSdSi[1] * vSdGzw[2],
-                 matCorSiGzw[2,2] * vSdSi[2] * vSdGzw[2]), nrow = 2)
-#cat(" * matG:\n")
-#print(matG)
-@
-
-
-    Die Covarianz zwischen den Merkmalen im Selektionsindex
-    $$\mathbf{P} = \left[\begin{array}{cc}
-                           Var(pH1)      &  Cov(pH1,ImF)\\
-                           Cov(pH1,ImF)  &  Var(ImF)
-                         \end{array}
-    \right]
-    $$
-    Setzen wir hier die Zahlen ein, dann folgt daraus
-    $$\mathbf{P} = \left[\begin{array}{cc}
-                           \Sexpr{vSdSi[1]} * \Sexpr{vSdSi[1]}  &  \Sexpr{rSi} * \Sexpr{vSdSi[1]} * \Sexpr{vSdSi[2]}\\
-                           \Sexpr{rSi} * \Sexpr{vSdSi[1]} * \Sexpr{vSdSi[2]}  &  \Sexpr{vSdSi[2]} * \Sexpr{vSdSi[2]}
-                         \end{array}
-    \right] = \left[\begin{array}{cc}
-                           \Sexpr{vSdSi[1] * vSdSi[1]}  &  \Sexpr{rSi * vSdSi[1] * vSdSi[2]}\\
-                           \Sexpr{rSi * vSdSi[1] * vSdSi[2]}  &  \Sexpr{vSdSi[2] * vSdSi[2]}
-                         \end{array}
-    \right]
-    $$
-<<matP, echo=FALSE>>=
-matP <- matrix(c(vSdSi[1] * vSdSi[1],
-                 rSi * vSdSi[1] * vSdSi[2],
-                 rSi * vSdSi[1] * vSdSi[2],
-                 vSdSi[2] * vSdSi[2]), nrow = 2)
-#print(matP)
-@
 
 \clearpage
 \pagebreak
@@ -711,20 +431,6 @@ matP <- matrix(c(vSdSi[1] * vSdSi[1],
 \points{\Sexpr{lPointsQ5$TaskC}}
 \end{enumerate}
 
-\sol
-
-Die Gewichte berechnen sich als
-
-$$ \mathbf{b} = \mathbf{P}^{-1} * \mathbf{G} * \mathbf{v}$$
-
-<<vecIndexB>>=
-(vecB = solve(matP) %*% matG %*% vEcoVal)
-@
-
-Checks
-<<Check>>=
-matP %*% vecB - matG %*% vEcoVal
-@
 
 \clearpage
 \pagebreak
@@ -767,15 +473,6 @@ coefficients(lmRegHerde)
 \subsection*{Ihre Aufgaben}
 Wir nehmen an, dass die Resteffekte $e$ unkorreliert sind und somit gilt, dass $var(e) = I*\sigma_e^2$, wobei $I$ die Einheitsmatrix darstellt. Sch\"atzen Sie die Restvarianz $\sigma_e^2$ aufgrund der Residuen des oben gezeigten Regressionsmodells.
 
-\sol
-
-<<CompVarRes>>=
-### # Vektor der Residuen
-(vecRes <- as.vector(residuals(lmRegHerde)))
-### # Restvarianz
-nResVarEst <- crossprod(vecRes) / (nrow(dfMlrData) - nNrHerde)
-cat("Restvarianz: ", nResVarEst, "\n")
-@
 
 
 \clearpage
@@ -812,16 +509,5 @@ summary(tabAovVater)
 
 \subsection*{Ihre Aufgaben}
 Sch\"atzen Sie aufgrund der gegebenen ANOVA-Tabelle die Varianz ($\sigma_u^2$) der zuf\"alligen Vatereffekte und die Varianz ($\sigma_e^2$) der Resteffekte.
-
-
-\sol
-
-Die Sch\"atzung der Restvarianz $\hat{\sigma_e^2}$ betr\"agt:
-
-$$\hat{\sigma_e^2} = 1224$$
-
-Die Sch\"atzung der Varianz $\hat{\sigma_u^2}$ der Vatereffekte betr\"agt:
-
-$$\hat{\sigma_u^2} = \frac{1250 - 1224}{\Sexpr{nNrRecords}} = \Sexpr{round((1250 - 1224)/nNrRecords, digits = 2)}$$
 
 \end{document}
