@@ -134,7 +134,7 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \pagebreak
 
 \begin{enumerate}
-\item[b)] Die Vermehrung in Wildpopulationen verl\"auft etwas anders als in Nutztierpopulationen.
+\item[b)] Die Vermehrung in Wildpopulationen verl\"auft etwas anders als in Nutztierpopulationen. Nennen Sie die wichtigsten Unterschiede.
 \points{\Sexpr{lPointsQ1$TaskB}}
 \end{enumerate}
 
@@ -170,7 +170,7 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \pagebreak
 
 \begin{enumerate}
-\item[b)] Was ist im nachfolgenden Diagramm dargestellt. Was bedeuten die Punkte 1-4?
+\item[c)] Was ist im nachfolgenden Diagramm dargestellt. Was bedeuten die Punkte 1-4?
 \points{\Sexpr{lPointsQ1$TaskC}}
 \end{enumerate}
 
@@ -214,6 +214,26 @@ print(ped)
 
 \sol
 
+Die Berechnung erfolgt mit der Matrixmethode. Diese umfasst die folgenden Schritte:
+
+\begin{enumerate}
+\item Die Tiere werden dem Alter nach von links nach rechts (und von oben nach unten) in einer symmetrischen Matrix angeordnet. Als erstes Tier wird das unbekannte Tier `NA` eingetragen.
+\item Oberhalb jedes Tieres werden seine Eltern eingetragen
+\item Die erste Zeile und die erste Kolonnen werden mit lauter Nullen aufgef\"ullt.
+\item Als Diagonalelement f\"ur Tier $x$ tragen wir $1+F_x$ ein
+\item Die Offdiagonalelemente auf der Zeile f\"ur Tier $x$ werden mit den Verwandtschaftsgraden $a_{x,y}$ zwischen Tier $x$ und Tier $y$  aufgef\"ullt. Dabei gilt, dass
+
+\begin{equation}
+a_{xy} = {1\over 2}(a_{x,m(y)} + a_{x,v(y)})
+\label{eq:RelCoeffRecursive}
+\end{equation}
+
+\item Damit die Matrix symmetrisch wird, werden die berechneten Werte aus der Zeile f\"ur Tier $x$ in die Kolonnen f\"ur Tier $x$ \"ubertragen.
+\end{enumerate}
+
+\clearpage
+\pagebreak
+
 Die Verwandtschaftsmatrix f\"ur das gezeigte Pedigree lautet
 <<SolToQ1>>=
 matA <- as.matrix(getA(ped = ped))
@@ -225,7 +245,7 @@ print(matA)
 
 
 \begin{enumerate}
-\item[b)] Welche der Tiere 1-6 im anfangs gezeigten Pedigree sind ingez\"uchtet und wie gross ist deren Inzuchtkoeffizient?.
+\item[b)] Welche der Tiere 1-6 im anfangs gezeigten Pedigree sind ingez\"uchtet und wie gross ist deren Inzuchtkoeffizient?
 \points{\Sexpr{lPointsQ2$TaskB}}
 \end{enumerate}
 
@@ -270,7 +290,9 @@ print(ped)
 
 \sol
 
-Die Inverse $A^{-1}$ ist
+Die Regeln zur Berechnung von $A^{-1}$ sind in der L\"osung von Aufgabe b) beschrieben. Die Regeln basieren auf der LDL-Zerlegung der Matrix $A$ und diese ist in der L\"osung von Aufgabe c) hergeleitet.
+
+Die Inverse $A^{-1}$ lautet
 
 <<SmallAinv>>=
 matAInv <- as.matrix(getAInv(ped = ped))
@@ -308,6 +330,19 @@ print(matAInv)
   \end{itemize}
 \end{itemize}
 
+Die Elemente $\delta_i$ sind die Diagonalelemente der Matrix $D^{-1}$ aus der LDL-Zerlegung der Verwandtschaftsmatrix $A$. In einem Pedigree ohne Inzucht k\"onnen die Elemente $\delta_i$ nur die folgenden drei Werte annehmen
+
+\begin{equation*}
+\delta_i =
+  \left\{
+    \begin{array}{ll}
+    2    &  \text{, falls beide Eltern bekannt}\\
+    4/3  &  \text{, falls nur ein Elternteil bekannt}\\
+    1    &  \text{, falls beide Eltern unbekannt}
+    \end{array}
+  \right.
+\end{equation*}
+
 
 \clearpage
 \pagebreak
@@ -320,7 +355,7 @@ print(matAInv)
 \sol
 
 \begin{itemize}
-\item Die Berechnung der Inversen der Verwandtschaftsmatrix basiert auf der LDL-Zerlegung der Verwandtschaftsmatrix $A$. Diese Zerlegung erlaubt es die Matrix $A$ als Produkt von drei Matrizen $L$, $D$ and $L^T$ zu schreiben. Dabei gilt zu beachten, dass die Matrizen $L$ und $D$ eine einfache Struktur haben. $L$ ist eine linke untere Dreiecksmatrix, welche die Pfade von den Tieren zu den Foundertieren enthält. Die Matrix $D$ ist eine Diagnoalmatrix, welche ein Bestandteil der Covarianzmatrix der Mendelian-Sampling Effekte darstellt. Somit gilt
+\item Die Berechnung der Inversen der Verwandtschaftsmatrix basiert auf der LDL-Zerlegung der Verwandtschaftsmatrix $A$. Diese Zerlegung erlaubt es die Matrix $A$ als Produkt von drei Matrizen $L$, $D$ and $L^T$ zu schreiben. Dabei gilt zu beachten, dass die Matrizen $L$ und $D$ eine einfache Struktur haben. $L$ ist eine linke untere Dreiecksmatrix, welche die Pfade von den Tieren zu den Foundertieren enth\"alt. Die Matrix $D$ ist eine Diagnoalmatrix, welche ein Bestandteil der Covarianzmatrix der Mendelian-Sampling Effekte ($m$) darstellt. Somit gilt
 
 \begin{equation}
 A = L * D * L^T
@@ -355,7 +390,7 @@ dfMlrData <- data.frame(Tochter = as.character(c(1:nNrRecords) + nNrSire),
                         Leistung = c(110,100,110))
 nNrHerde <- length(unique(dfMlrData$Herde))
 #knitr::kable(dfMlrData)
-xtable::xtable(dfMlrData)
+print(xtable::xtable(dfMlrData), include.rownames = FALSE)
 @
 
 Die genetisch-additive Varianz betr\"agt $\sigma_a^2 = \Sexpr{sigmaa2}$ und die Restvarianz ist gegeben als $\sigma_e^2 = \Sexpr{sigmae2}$
@@ -381,6 +416,8 @@ mit  &  $y$  &  Vektor der ph\"anotypischen Leistungen, entspricht der Kolonne L
      &  $Z$  &  Inzidenzmatrix verkn\"upft $a$ mit $y$ \\
      &  $e$  &  Vektor der Resteffekte
 \end{tabular}
+
+Der Erwartungswert $E \left[ b \right]$ f\"ur die fixen Effekte $b$ ist $b$ selber. Die Varianz eines fixen Effektes k\"onnen wir als $0$ angeben.
 
 Die Erwartungswerte und die Varianzen f\"ur die zuf\"alligen Teile des Modells lauten:
 
@@ -637,6 +674,8 @@ Die Indexgleichungen lauten
 $$ \mathbf{P}\mathbf{b} = \mathbf{G}\mathbf{v}$$
 \noindent wobei $\mathbf{P}$ die Covarianzmatrix zwischen den Merkmalen im Selektionsindex ist, $\mathbf{b}$ der Vektor der unbekannten Indexgewichte ist, $\mathbf{G}$ die Matrix der Covarianzen zwischen den Merkmalen im Index und im Gesamtzuchtwert und $\mathbf{v}$ der Vektor der wirtschaftlichen Gewicht ist.
 
+\clearpage
+\pagebreak
 
 \item[b)] Stellen Sie die folgenden beiden Covarianz-Matrizen auf:
 \points{\Sexpr{lPointsQ5$TaskB}}
@@ -769,9 +808,23 @@ Wir nehmen an, dass die Resteffekte $e$ unkorreliert sind und somit gilt, dass $
 
 \sol
 
-<<CompVarRes>>=
+Die Residuen $r_i$ erhalten wir durch Subtraktion der Beobachtungen $y_i$ minus die gefitteten Werte $\hat{y}_i = x_i^T\hat{b}$. F\"ur unser Zahlenbeispiel heisst das konkret, dass wir von jedem Beobachtungswert $y_i$ einfach den entsprechenden Herdeneffekt abziehen m\"ussen. Die Herdeneffekte sind oben gegeben. Also ziehen wir von den Beobachtungen $y_1$ und $y_2$ den Effekt der Herde 1 ab, von den Beobachtungen $y_3$ bis $y_5$ den Effekt der Herde 2 usw. Als Resultat erhalten wir den Vektor der Residuen, der f\"ur unser Beispiel wie folgt aussieht.
+
+<<CompResid>>=
 ### # Vektor der Residuen
 (vecRes <- as.vector(residuals(lmRegHerde)))
+@
+
+Daraus l\"asst sich der Vektor der quadrierten Residuen berechnen.
+
+<<CompQuadResid>>=
+### # Vektor der quadrierten Residuen
+(vecRes2 <- vecRes^2)
+@
+
+Summieren wir \"uber die quadrierten Residuen und teilen die Summe durch die Anzahl Freiheitsgrade, dann erhalten wir die gefragte Sch\"atzung der Restvarianz. Die Anzahl Freiheitsgrade hier entspricht den Anzahl Beobachtungen minus die Anzahl Herden.
+
+<<CompVarRes>>=
 ### # Restvarianz
 nResVarEst <- crossprod(vecRes) / (nrow(dfMlrData) - nNrHerde)
 cat("Restvarianz: ", nResVarEst, "\n")

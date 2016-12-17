@@ -174,6 +174,8 @@ cat(paste(sGetTexMatrix(pmatAMatrix = matZSire, pnDigits = 0), collapse = "\n"))
 cat("\\right]\n$$")
 ```
 
+\pagebreak
+
 - __Schritt 3__: Mischmodellgleichungen
 
 ```{r CoeffMatSire}
@@ -187,14 +189,17 @@ cat("$$X^TZ = \\left[")
 cat(paste(sGetTexMatrix(pmatAMatrix = matXtZSire, pnDigits = 0), collapse = "\n"))
 cat("\\right]\n$$")
 
-alphaSire <- sigmae2/sigmaa2
+#alphaSire <- sigmae2/sigmaa2
+sigmas2 <- sigmaa2/4
+sigmae2Sire <- (sigmap2-sigmas2)
+alphaSire <- sigmae2Sire / sigmas2
 matZtZAinvSire <- crossprod(matZSire) + diag(alphaSire, nrow = nNrSire)
 cat("$$Z^TZ + A^{-1} \\cdot \\alpha = \\left[")
 cat(paste(sGetTexMatrix(pmatAMatrix = matZtZAinvSire, pnDigits = 0), collapse = "\n"))
 cat("\\right]\n$$")
 ```
 
-wobei $\alpha = \sigma_e^2 / \sigma_a^2$ und $A$ die Verwandtschaftsmatrix zwischen den Vätern. Da die Väter nicht verwandt sind untereinander, ist $A = I$. Der Vektor der rechten Handseite besteht aus
+wobei $\alpha = \sigma_e^2 / \sigma_s^2 = `r sigmae2Sire` / `r sigmas2` = `r sigmae2Sire/sigmas2`$ und $A$ die Verwandtschaftsmatrix zwischen den Vätern. Hier wird angenommen, dass totale phänotypische Varianz $\sigma_p^2 = `r sigmap2`$ konstant bleibt. Im Vatermodell entspricht die Varianz der Vatereffekte ($\sigma_s^2$) einem Viertel der genetisch additiven Varianz ($\sigma_a^2$). Die Restvarianz im Vatermodell ist dann die phänotypische Varianz minus die Varianz der Vatereffekte. Da die Väter nicht verwandt sind untereinander, ist $A = I$. Der Vektor der rechten Handseite besteht aus
 
 ```{r VecRhsSire}
 vecXtYSire <- crossprod(matXSire,vecYMlr)
@@ -227,6 +232,7 @@ cat("\\right]\n$$")
 
 - __Schritt 4__: Lösung der Mischmodellgleichungen
 
+
 ```{r MmeSireSolution}
 vecSolSireNum <- solve(matCoefSire,vecRhsSire)
 cat("$$\\left[")
@@ -242,6 +248,8 @@ cat(" = \\left[")
 cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolSireNum, ncol = 1), pnDigits = 1), collapse = "\n"))
 cat("\\right]\n$$")
 ```
+
+\pagebreak
 
 - __Schritt 5__: Identifikation der fixen und zufälligen Effekte
 
@@ -342,6 +350,7 @@ cat("\\right]\n$$")
 
 - __Schritt 4__: Lösungen
 
+\tiny
 ```{r SolMmeAni, warning=FALSE}
 vecSolNumAni <- solve(matCoeffAni, vecRhsAni)
 cat("$$\\left[")
@@ -357,6 +366,8 @@ cat(" = \\left[")
 cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSolNumAni, ncol = 1), pnDigits = 1), collapse = "\n"))
 cat("\\right]\n$$")
 ```
+
+\normalsize
 
 - __Schritt 5__: Identifikation der Effekte
 

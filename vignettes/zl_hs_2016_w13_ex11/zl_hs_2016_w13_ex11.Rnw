@@ -155,7 +155,7 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \pagebreak
 
 \begin{enumerate}
-\item[b)] Was ist im nachfolgenden Diagramm dargestellt. Was bedeuten die Punkte 1-4?
+\item[c)] Was ist im nachfolgenden Diagramm dargestellt. Was bedeuten die Punkte 1-4?
 \points{\Sexpr{lPointsQ1$TaskC}}
 \end{enumerate}
 
