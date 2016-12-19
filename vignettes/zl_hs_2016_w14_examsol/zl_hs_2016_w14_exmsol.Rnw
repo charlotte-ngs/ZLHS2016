@@ -16,9 +16,9 @@ devtools::load_all()
 
 <<PointsQ1, echo=FALSE>>=
 # Assign Points for Q1
-lPointsQ1 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0)
+lPointsQ1 <- list(TaskA = 21,
+                  TaskB = 12,
+                  TaskC = 4)
 nPointQ1Total <- sum(unlist(lPointsQ1))
 @
 <<PointsQ2, echo=FALSE>>=
@@ -69,7 +69,7 @@ nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4To
 \author{Peter von Rohr \vspace{3ex}}
 \date{
   \begin{tabular}{lr}
-  \textsc{Datum}  & \textsc{\emph{16. Dezember 2016}} \\
+  \textsc{Datum}  & \textsc{\emph{23. Dezember 2016}} \\
   \textsc{Beginn} & \textsc{\emph{09:15 Uhr}}\\
   \textsc{Ende}   & \textsc{\emph{11:15 Uhr}}\vspace{3ex}
 \end{tabular}}
@@ -108,41 +108,113 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \clearpage
 \pagebreak
 
-\section*{Aufgabe 1:  (\Sexpr{nPointQ1Total})}
+\section*{Aufgabe 1: Verwandtschaft und Inzucht (\Sexpr{nPointQ1Total})}
+Gegeben ist das folgende Pedigree.
+
+\begin{center}
+<<SetupPed, echo=FALSE>>=
+library(pedigreemm)
+nNrAni <- 6
+ped <- pedigree(sire = c(NA,NA,NA,1,1,1), dam = c(NA,NA,NA,2,4,4), label = 1:nNrAni)
+print(ped)
+@
+\end{center}
+
 \begin{enumerate}
-\item[a)]
+\item[a)] Stellen Sie die additiv genetische Verwandtschaftsmatrix $A$ auf
 \points{\Sexpr{lPointsQ1$TaskA}}
 \end{enumerate}
 
 \sol
 
+<<ComputePed, echo=FALSE, results=tex>>=
+matA <- as.matrix(getA(ped = ped))
+cat("$$A = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matA, pnDigits = 3), collapse = "\n"))
+cat("\\right]\n$$")
+@
+
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[b)]
+\item[b)] Welches der f\"unf Tiere im gezeigten Pedigree ist ingez\"uchtet und wie gross ist der Inzuchtkoeffizient $F_X$?
+(Bitte auch f\"ur nicht ingez\"uchtete Tiere den Inzuchtkoeffizienten angeben)
 \points{\Sexpr{lPointsQ1$TaskB}}
 \end{enumerate}
 
+{\renewcommand{\arraystretch}{1.7}
+ \renewcommand{\tabcolsep}{0.2cm}
+ \begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+Tier ID  &  ingez\"uchtet (ja/nein)  &  Inzuchtkoeffizient $F_X$ \\
+\hline
+1        &                           &  \\
+\hline
+2        &                           &  \\
+\hline
+3        &                           &  \\
+\hline
+4        &                           &  \\
+\hline
+5        &                           &  \\
+\hline
+6        &                           &  \\
+\hline
+\end{tabular}}
 
 \sol
+
+<<SolQ1bPrepare, echo=FALSE, results=hide>>=
+TierId <- 1:nNrAni
+vecInzCoeff <- diag(matA)-1
+igz <- unlist(lapply(TierId, function(x) ifelse(vecInzCoeff[x]>0,"ja","nein")))
+dfSolQ1b <- data.frame(TierId,igz,vecInzCoeff, row.names = NULL)
+names(dfSolQ1b) <- c("Tier Id", "ingezuechtet (ja/nein)", "Inzuchtkoeffizient")
+xSolQ1b <- xtable::xtable(dfSolQ1b, align = c("l","r","c","r"))
+@
+
+{\renewcommand{\arraystretch}{1.7}
+ \renewcommand{\tabcolsep}{0.2cm}
+<<SolQ1bPrint, echo=FALSE, results=tex>>=
+print(xSolQ1b, include.rownames = FALSE, hline.after = 1:nNrAni)
+@
+}
+
 
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[c)]
+\item[c)] In der Paarungsplanung geht es oft darum Inzucht zu verhindern oder zu begrenzen. Wenn wir einen Paarungspartner f\"ur Kuh $6$ im oben gezeigten Pedigree suchen, kommen die Stiere $1$, $3$ oder $5$ in Frage. W\"ahlen Sie den Paarungspartner so aus, dass der Nachkomme aus der Paarung nicht ingez\"uchtet ist. Begr\"unden Sie Ihre Auswahl des Paarungspartners.
 \points{\Sexpr{lPointsQ1$TaskC}}
 \end{enumerate}
 
-
 \sol
+
+Der Paarungspartner muss so gew\"ahlt werden, dass er nicht mit Kuh $4$ verwandt ist. Dies ist nur f\"ur den Paarungspartner $3$ der Fall. Als Kontrolle k\"onnen wir die das Pedigree erweitern und die Inzuchtkoeffizienten nochmals rechnen.
+
+<<ExtendPed, echo=FALSE>>=
+nNrAni <- 7
+pedExt <- pedigree(sire = c(NA,NA,NA,1,1,1,3), dam = c(NA,NA,NA,2,4,4,6), label = 1:nNrAni)
+print(pedExt)
+@
+
+Die Inzuchtkoeffizienten der Tiere lauten:
+
+<<InbreedingPedExt, echo=FALSE>>=
+nAniInterest <- 7
+vecInbr <- inbreeding(ped = pedExt)
+print(vecInbr)
+@
+
+Wobei der Inzuchtkoeffizient von Tier $\Sexpr{nAniInterest}$ ist gleich: $\Sexpr{vecInbr[nAniInterest]}$
 
 \clearpage
 \pagebreak
 
 
-\section*{Aufgabe 2:  (\Sexpr{nPointQ2Total})}
+\section*{Aufgabe 2: Selektion und Selektionsindex (\Sexpr{nPointQ2Total})}
 
 
 \begin{enumerate}
@@ -252,6 +324,7 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \begin{enumerate}
 \item[a)]
 \points{\Sexpr{lPointsQ5$TaskA}}
+\end{enumerate}
 
 \sol
 
@@ -259,8 +332,10 @@ Total    &  \Sexpr{nPointOverallTotal} & \\
 \clearpage
 \pagebreak
 
+\begin{enumerate}
 \item[b)]
 \points{\Sexpr{lPointsQ5$TaskB}}
+\end{enumerate}
 
 \sol
 
