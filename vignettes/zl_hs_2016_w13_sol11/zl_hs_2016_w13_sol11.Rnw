@@ -514,24 +514,64 @@ $$\left[
 $$
 
 
-F\"ur unser Zahlenbeispiel
+F\"ur unser Zahlenbeispiel sehen die einzelnen Komponenten wie folgt aus:
 
-<<SetupMME, echo=FALSE, results=tex>>=
+<<SetUpLhs, echo=FALSE, results=tex>>=
 matXtX <- crossprod(matX)
 matXtZ <- crossprod(matX, matZ)
 matZtZ <- crossprod(matZ)
+### # output
+cat("$$X^TX = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtX, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+cat("$$X^TZ = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtZ, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+cat("$$Z^TZ = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZtZ, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+@
 
+Bei der Inversen $A^{-1}$ wurde angenommen, dass die V\"ater "A", "B" und "C" auf die Positionen 1, 2 und 3 in der Matrize gesetzt wurden. Die Verwandtschaftsmatrix sieht dann wie folgt aus.
+
+<<RelMat, echo=FALSE, results=tex>>=
 ### # pedigree
 suppressPackageStartupMessages(require(pedigreemm))
 nNrAniInPed <- nNrSire + nNrRecords
 ped <- pedigree(sire = c(NA,NA,NA,3,1,2), dam = c(NA,NA,NA,NA,4,5), label = as.character(1:nNrAniInPed))
-matAInv <- as.matrix(getAInv(ped = ped))
+matA <- as.matrix(getA(ped = ped))
+cat("$$A = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matA, pnDigits = 3), collapse = "\n"))
+cat("\\right]\n$$")
+@
 
+Die Inverse $A^{-1}$ kann mit den Regeln aus Aufgabe 3b) direkt aufgestellt werden. Aufgrund der Matrix $A$ sehen wir, dass kein Tier ingez\"uchtet ist.
+
+<<MatAInv, echo=FALSE, results=tex>>=
+matAInv <- as.matrix(getAInv(ped = ped))
+cat("$$A^{-1} = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matAInv, pnDigits = 2), collapse = "\n"))
+cat("\\right]\n$$")
+@
+
+Die linke Handseite der Mischmodellgleichungen sehen wie folgt aus.
+
+<<SetupLhs, echo=FALSE, results=tex>>=
 ### # rhs
 vecY <- dfMlrData$Leistung
 vecXtY <- crossprod(matX,vecY)
 vecZtY <- crossprod(matZ,vecY)
+cat("$$X^Ty = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = vecXtY, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+cat("$$Z^Ty = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = vecZtY, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$")
+@
 
+Nun k\"onnen wir alle Komponenten zusammensetzen. Dabei m\"ussen wir ber\"ucksichtigen, dass das Varianzverh\"altnis $\alpha = \sigma_e^2 / \sigma_a^2 = \Sexpr{sigmae2/sigmaa2}$ ist.
+
+<<SetupMME, echo=FALSE, results=tex>>=
 ### # mme
 matCoeff <- cbind(rbind(matXtX,t(matXtZ)),rbind(matXtZ,matZtZ + matAInv * alpha))
 vecRhs <- c(vecXtY,vecZtY)

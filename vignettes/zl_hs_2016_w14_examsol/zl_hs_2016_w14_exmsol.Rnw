@@ -1,0 +1,279 @@
+\documentclass{scrartcl}
+
+%\usepackage{fancyhdr}
+\usepackage{amsmath}
+
+\newcommand{\points}[1]
+{\begin{flushright}\textbf{#1}\end{flushright}}
+\newcommand{\sol}
+{\vspace{2ex}\textbf{L\"osung}:}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+<<Setup, echo=FALSE, results=hide>>=
+devtools::load_all()
+@
+
+<<PointsQ1, echo=FALSE>>=
+# Assign Points for Q1
+lPointsQ1 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ1Total <- sum(unlist(lPointsQ1))
+@
+<<PointsQ2, echo=FALSE>>=
+# Assign Points for Q2
+lPointsQ2 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ2Total <- sum(unlist(lPointsQ2))
+@
+<<PointsQ3, echo=FALSE>>=
+# Assign Points for Q3
+lPointsQ3 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ3Total <- sum(unlist(lPointsQ3))
+@
+<<PointsQ4, echo=FALSE>>=
+# Assign Points for Q4
+lPointsQ4 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ4Total <- sum(unlist(lPointsQ4))
+@
+<<PointsQ5, echo=FALSE>>=
+# Assign Points for Q5
+lPointsQ5 <- list(TaskA = 0,
+                  TaskB = 0,
+                  TaskC = 0)
+nPointQ5Total <- sum(unlist(lPointsQ5))
+@
+<<PointsTotal, echo=FALSE>>=
+nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4Total + nPointQ5Total
+@
+
+
+\thispagestyle{empty}
+
+\titlehead
+{
+	ETH Z\"urich\\%
+	D-USYS\\%
+	Institut f\"ur Agrarwissenschaften
+}
+
+\title{\vspace{5ex} Pr\"ufung \\
+       Z\"uchtungslehre\\
+       HS 2016 \vspace{3ex}}
+\author{Peter von Rohr \vspace{3ex}}
+\date{
+  \begin{tabular}{lr}
+  \textsc{Datum}  & \textsc{\emph{16. Dezember 2016}} \\
+  \textsc{Beginn} & \textsc{\emph{09:15 Uhr}}\\
+  \textsc{Ende}   & \textsc{\emph{11:15 Uhr}}\vspace{3ex}
+\end{tabular}}
+\maketitle
+
+% Table with Name
+\begin{tabular}{p{3cm}p{6cm}}
+Name:     &  \\
+         &  \\
+Legi-Nr:  & \\
+\end{tabular}
+
+% Table with Points
+
+\vspace{3ex}
+\begin{center}
+\begin{tabular}{|p{3cm}|c|c|}
+\hline
+Aufgabe  &  Maximale Punktzahl     &  Erreichte Punktzahl\\
+\hline
+1        &  \Sexpr{nPointQ1Total}  & \\
+\hline
+2        &  \Sexpr{nPointQ2Total}  & \\
+\hline
+3        &  \Sexpr{nPointQ3Total}  & \\
+\hline
+4        & \Sexpr{nPointQ4Total}   & \\
+\hline
+5        & \Sexpr{nPointQ5Total}   & \\
+\hline
+Total    &  \Sexpr{nPointOverallTotal} & \\
+\hline
+\end{tabular}
+\end{center}
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 1:  (\Sexpr{nPointQ1Total})}
+\begin{enumerate}
+\item[a)]
+\points{\Sexpr{lPointsQ1$TaskA}}
+\end{enumerate}
+
+\sol
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)]
+\points{\Sexpr{lPointsQ1$TaskB}}
+\end{enumerate}
+
+
+\sol
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)]
+\points{\Sexpr{lPointsQ1$TaskC}}
+\end{enumerate}
+
+
+\sol
+
+\clearpage
+\pagebreak
+
+
+\section*{Aufgabe 2:  (\Sexpr{nPointQ2Total})}
+
+
+\begin{enumerate}
+\item[a)]
+\points{\Sexpr{lPointsQ2$TaskA}}
+\end{enumerate}
+
+\sol
+
+
+\clearpage
+\pagebreak
+
+
+\begin{enumerate}
+\item[b)]
+\points{\Sexpr{lPointsQ2$TaskB}}
+\end{enumerate}
+
+\sol
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)]
+\points{\Sexpr{lPointsQ2$TaskC}}
+\end{enumerate}
+
+\sol
+
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 3:  (\Sexpr{nPointQ3Total})}
+
+
+\begin{enumerate}
+\item[a)]
+\points{\Sexpr{lPointsQ3$TaskA}}
+\end{enumerate}
+
+\sol
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)]
+\points{\Sexpr{lPointsQ3$TaskB}}
+\end{enumerate}
+
+\sol
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)]
+\points{\Sexpr{lPointsQ3$TaskC}}
+\end{enumerate}
+
+\sol
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 4:  (\Sexpr{nPointQ4Total})}
+
+\begin{enumerate}
+\item[a)]
+\points{\Sexpr{lPointsQ4$TaskA}}
+\end{enumerate}
+
+\sol
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[b)]
+\points{\Sexpr{lPointsQ4$TaskB}}
+\end{enumerate}
+
+\sol
+
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)]
+\points{\Sexpr{lPointsQ4$TaskC}}
+\end{enumerate}
+
+\sol
+
+
+\clearpage
+\pagebreak
+
+\section*{Aufgabe 5:  (\Sexpr{nPointQ5Total})}
+
+\begin{enumerate}
+\item[a)]
+\points{\Sexpr{lPointsQ5$TaskA}}
+
+\sol
+
+
+\clearpage
+\pagebreak
+
+\item[b)]
+\points{\Sexpr{lPointsQ5$TaskB}}
+
+\sol
+
+\clearpage
+\pagebreak
+
+\begin{enumerate}
+\item[c)]
+\points{\Sexpr{lPointsQ5$TaskC}}
+\end{enumerate}
+
+\sol
+
+
+
+\end{document}
