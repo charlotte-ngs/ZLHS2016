@@ -16,22 +16,22 @@ devtools::load_all()
 
 <<PointsQ1, echo=FALSE>>=
 # Assign Points for Q1
-lPointsQ1 <- list(TaskA = 21,
+lPointsQ1 <- list(TaskA = 36,
                   TaskB = 12,
                   TaskC = 4)
 nPointQ1Total <- sum(unlist(lPointsQ1))
 @
 <<PointsQ2, echo=FALSE>>=
 # Assign Points for Q2
-lPointsQ2 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0)
+lPointsQ2 <- list(TaskA = 8,
+                  TaskB = 5,
+                  TaskC = 4)
 nPointQ2Total <- sum(unlist(lPointsQ2))
 @
 <<PointsQ3, echo=FALSE>>=
 # Assign Points for Q3
-lPointsQ3 <- list(TaskA = 0,
-                  TaskB = 0,
+lPointsQ3 <- list(TaskA = 10,
+                  TaskB = 4,
                   TaskC = 0)
 nPointQ3Total <- sum(unlist(lPointsQ3))
 @
@@ -218,58 +218,144 @@ Wobei der Inzuchtkoeffizient von Tier $\Sexpr{nAniInterest}$ ist gleich: $\Sexpr
 
 
 \begin{enumerate}
-\item[a)]
+\item[a)] Was veranschaulichen die zwei folgenden Diagramme. Benennen Sie die Punkte $1$ bis $4$
 \points{\Sexpr{lPointsQ2$TaskA}}
 \end{enumerate}
 
+\begin{center}
+\includegraphics[width=7cm]{"pdf/VermehrungElternNachkommen"}
+\includegraphics[width=7cm]{"pdf/ZuechtungElternNachkommen"}
+\end{center}
+
 \sol
 
+In den beiden Diagrammen wird der Unterschied zwischen gerichteter Selektion in Zuchtpopulationen und Vermehrung in Wildtier oder Produktions-  und Vermehrungspopulationen dargestellt.
+
+Die vier Punkte bedeuten
+
+\begin{enumerate}
+\item Nachkommendurchschnitt
+\item Elterndurchschnitt
+\item Eltern
+\item Nachkommen
+\end{enumerate}
 
 \clearpage
 \pagebreak
 
 
 \begin{enumerate}
-\item[b)]
+\item[b)] Die Theorie des Selektionsindexes zeigt auf, wie der Geamtzuchtwert $H$ aufgrund von verf\"ugbaren Informationsquellen gesch\"atztwerden k\"onnen. Dabei werden die Informationsquellen durch einem Vektor $x$ repr\"asentiert und mit einem Vektor $b$ von unbekannten Indexgewichten zu einem Indexwert $I$ zusammengefasst. Das Ziel ist nun den Vektor $b$ so zu bestimmen, dass $I$ den Gesamtzuchtwert $H$ m\"oglichst genau sch\"atzt. Das heisst die Fehlervarianz $var(H-I)$ soll minimal sein.
+
+Wie lauten die Indexgleichungen zur Bestimmung der Indexgewichte, aufgrund der Anforderung der minimalen Fehlervarianz? Benennen Sie die Komponenten in den Indexgleichungen.
 \points{\Sexpr{lPointsQ2$TaskB}}
 \end{enumerate}
 
 \sol
 
+Die Indexgleichungen lauten $$Pb = Gv$$
+
+\begin{tabular}{llp{12cm}}
+mit  &  $P$  &  Covarianzmatrix zwischen den Informationsquellen $x$\\
+     &  $b$  &  Vektor der unbekannten Indexgewichte\\
+     &  $G$  &  Covarianzmatrix zwischen Informationsquellen und Merkmalen im Gesamtzuchtwert\\
+     &  $v$  &  Vektor der wirtschaftlichen Gewichte
+\end{tabular}
+
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[c)]
+\item[c)] Eine Fleischrinderzuchtorganisation entwirft ein neues Zuchtziel mit den zwei Merkmalen Geburtsgewicht (\texttt{GBG}) und Absetzgewicht (\texttt{ABG}). Die gleichen Merkmale, wie sie im Zuchtziel sind, werden bei den Selektionskandidaten erhoben und stehen in Form von gesch\"atzten Zuchtwerten als Informationsquellen zur Verf\"ugung. Die wirtschaftlichen Gewichte der beiden Merkmale im Zuchtziel betragen $3.00$ Fr/kg f\"ur \texttt{GBG} und $2.50$ Fr/kg f\"ur \texttt{ABG}. Wie lauten die Gewichtungsfaktoren f\"ur einen Index aus den Informationsquellen \texttt{GBG} und \texttt{ABG}?
 \points{\Sexpr{lPointsQ2$TaskC}}
 \end{enumerate}
 
 \sol
 
+Da die gleichen Merkmale im Zuchtziel und im Index sind, dann gilt $b=v$ und somit ist
+
+<<IndexWeight, echo=FALSE, results=tex>>=
+cat("$$b = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(c(3.00,2.50), ncol = 1), pnDigits = 1), collapse = "\n"))
+cat("\\right]\n$$\n")
+
+@
+
 
 \clearpage
 \pagebreak
 
-\section*{Aufgabe 3:  (\Sexpr{nPointQ3Total})}
+\section*{Aufgabe 3: Varianzanalyse (\Sexpr{nPointQ3Total})}
 
+Aufgrund des folgenden Datensatzes aus der Pflanzenzucht f\"ur das Merkmal \texttt{Stengell\"ange} sollen Varianzkomponenten gesch\"atzt werden.
+
+<<ShowData, echo=FALSE, results=tex>>=
+nNrRecords <- 10
+dfMlrData <- data.frame(Pflanze       = as.character(c(1:nNrRecords)),
+                        Sorte         = c("S1","S1","S1","S2","S2","S2","S3","S3","S3","S3"),
+                        Messperson    = c("A","A","B","A","C","C","C","A","B","A"),
+                        Stengellaenge = c(13,11.3,12.2,10.9,20.7,21.2,13.8,19,12.4,17.4))
+nNrSorte <- length(unique(dfMlrData$Sorte))
+print(xtable::xtable(dfMlrData), include.rownames = FALSE)
+@
 
 \begin{enumerate}
-\item[a)]
+\item[a)] In einer ersten Analyse soll nur der Einfluss der Sorte auf die Stengell\"ange betrachtet werden. Dabei soll Sorte als fixer Effekt modelliert werden. Sch\"atzen Sie die Restvarianz $\sigma_e^2$ aufgrund der Residuen f\"ur das folgende Modell.
 \points{\Sexpr{lPointsQ3$TaskA}}
 \end{enumerate}
 
+Das Modell mit der Sorte als fixen Effekt.
+
+$$y = Xb + e$$
+
+\begin{tabular}{lll}
+mit  &  $y$  &  Vektor der gemessenen Stengell\"angen\\
+     &  $b$  &  Vektor der fixen Sorteneffekte\\
+     &  $X$  &  Inzidenzmatrix f\"ur $b$\\
+     &  $e$  &  Resteffekte
+\end{tabular}
+
+\noindent Wir nehmen an, dass die Reste unabh\"angig sind und somit gilt, dass $var(e) = I * \sigma_e^2$ ist. Die gesch\"atzten Sorteneffekte aus dem oben gezeigten Regressionsmodell lauten
+
+<<RegSorte>>=
+lmRegModelSorte <- lm(Stengellaenge ~ -1 + Sorte, data = dfMlrData)
+round(coefficients(lmRegModelSorte), digits = 2)
+@
+
 \sol
+
+Der Residuenvektor lautet
+
+<<VectorResiduals>>=
+(vecRes <- round(residuals(lmRegModelSorte), digits = 2))
+@
+
+Die gesch\"atzte Restvarianz betr\"agt somit
+
+<<EstResVar>>=
+nRestVarEst <- crossprod(vecRes)/(nrow(dfMlrData) - nNrSorte)
+cat("Restvarianz: ", round(nRestVarEst, digits = 2))
+cat("Reststandardabweichung: ", round(sqrt(nRestVarEst), digits = 2))
+@
+
+Als Vergleich dazu, was \texttt{lm()} liefert
+
+<<SummaryLm>>=
+summary(lmRegModelSorte)
+@
+
 
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[b)]
+\item[b)] Sch\"atzen Sie f\"ur den gegebenen Datensatz die Restvarianz mit Maximum Likelihood. Wo liegt der Unterschied zur Sch\"atzung aus Aufgabe a)? Weshalb wird die Sch\"atzung der Restvarianz aufgrund der Residuen als ``glaubw\"urdiger'' betrachtet?
 \points{\Sexpr{lPointsQ3$TaskB}}
 \end{enumerate}
 
 \sol
 
+Die Maximum Likelihood Sch\"atzung der Restvarianz ist gleich, wie die Sch\"atzung aufgrund der Residuen bis auf den Faktor vor der Summe der quadrierten Residuen. Dieser lautet bei Maximum Likelihood $1/n$
 
 \clearpage
 \pagebreak
