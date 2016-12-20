@@ -31,7 +31,7 @@ nPointQ2Total <- sum(unlist(lPointsQ2))
 <<PointsQ3, echo=FALSE>>=
 # Assign Points for Q3
 lPointsQ3 <- list(TaskA = 10,
-                  TaskB = 4,
+                  TaskB = 6,
                   TaskC = 0)
 nPointQ3Total <- sum(unlist(lPointsQ3))
 @
@@ -327,7 +327,8 @@ round(coefficients(lmRegModelSorte), digits = 2)
 Der Residuenvektor lautet
 
 <<VectorResiduals>>=
-(vecRes <- round(residuals(lmRegModelSorte), digits = 2))
+vecRes <- residuals(lmRegModelSorte)
+print(round(vecRes, digits = 2))
 @
 
 Die gesch\"atzte Restvarianz betr\"agt somit
@@ -355,13 +356,24 @@ summary(lmRegModelSorte)
 
 \sol
 
-Die Maximum Likelihood Sch\"atzung der Restvarianz ist gleich, wie die Sch\"atzung aufgrund der Residuen bis auf den Faktor vor der Summe der quadrierten Residuen. Dieser lautet bei Maximum Likelihood $1/n$
+Die Maximum Likelihood Sch\"atzung der Restvarianz ist gleich, wie die Sch\"atzung aufgrund der Residuen bis auf den Faktor vor der Summe der quadrierten Residuen. Dieser lautet bei Maximum Likelihood $1/n$ und bei der Residuen-Methode $1/(n-p)$. Da der Faktor bei ML immer kleiner ist als bei der Residuen-Methode wird die Restvarianz mit ML tendenziell immer untersch\"atzt.
+
+Somit betr\"agt der ML-Sch\"atzwert f\"ur die Restvarianz
+
+<<EstResVarML>>=
+nRestVarEstML <- crossprod(vecRes)/nrow(dfMlrData)
+cat("ML-Schaetzung der Restvarianz: ", round(nRestVarEstML, digits = 2))
+cat("ML-Schaetzung der Reststandardabweichung: ",
+    round(sqrt(nRestVarEstML), digits = 2))
+@
+
+Die Sch\"atzung der Restvarianz mit der Residuen-Methode wird als glaubw\"urdiger betrachtet, da diese erwartungstreu ist.
 
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[c)]
+\item[c)] Der Einfluss der Messperson soll in einer separaten Analyse untersucht werden, wobei die Messperson als zuf\"alliger Effekt ins Modell einfliessen soll.
 \points{\Sexpr{lPointsQ3$TaskC}}
 \end{enumerate}
 
