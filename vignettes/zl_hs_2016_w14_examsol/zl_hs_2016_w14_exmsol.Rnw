@@ -37,9 +37,9 @@ nPointQ3Total <- sum(unlist(lPointsQ3))
 @
 <<PointsQ4, echo=FALSE>>=
 # Assign Points for Q4
-lPointsQ4 <- list(TaskA = 0,
-                  TaskB = 0,
-                  TaskC = 0)
+lPointsQ4 <- list(TaskA = 6,
+                  TaskB = 12,
+                  TaskC = 12)
 nPointQ4Total <- sum(unlist(lPointsQ4))
 @
 <<PointsQ5, echo=FALSE>>=
@@ -483,13 +483,26 @@ $$\hat{a}_s = \frac{2n}{n+k}(\tilde{y}_s - \mu)$$
 
 \noindent wobei $n$ f\"ur die Anzahl Beobachtungen steht und $k = \frac{4-h^2}{h^2} = \Sexpr{k}$ ist.
 
-Somit sind die Zuchtwerte der drei V\"ater:
 
-<<BvSireProgMean>>=
-(nCorFact <- 2*nNrRecords/(nNrRecords + k))
-(vecSirIds <- LETTERS[1:nNrSire])
-(vecCorAvSire <- sapply(vecSirIds, function(x) mean(as.vector(dfMlrData$Leistung[which(dfMlrData$Vater == x)]))))
+<<BvSireProgMean, echo=FALSE>>=
+nCorFact <- 2*nNrRecords/(nNrRecords + k)
+#cat("Correction factor: ", nCorFact, "\n")
+vecSirIds <- LETTERS[1:nNrSire]
+vecCorAvSire <- sapply(vecSirIds, function(x) mean(as.vector(dfMlrData$Leistung[which(dfMlrData$Vater == x)])))
+#cat("Sire averages:\n")
+#print(vecCorAvSire)
+@
 
+\noindent Der Faktor vor der Differenz zwischen $\tilde{y}_s$ und $\mu$ ist:
+$$\frac{2n}{n+k} = \Sexpr{round(nCorFact, digits = 2)}$$
+
+\noindent Somit sind die Zuchtwerte der drei V\"ater:
+
+<<BvSireProgMeanResult, echo=FALSE, results=tex>>=
+vecSireBv <- nCorFact * (vecCorAvSire - mu)
+dfSireBvTable <- data.frame(Vater = vecSirIds,
+                            Zuchtwert = vecSireBv)
+print(xtable::xtable(dfSireBvTable, digits = 2), include.rownames = FALSE)
 @
 
 
@@ -498,22 +511,152 @@ Somit sind die Zuchtwerte der drei V\"ater:
 \pagebreak
 
 \begin{enumerate}
-\item[b)]
+\item[b)] Wie lautet das BLUP-Vatermodell in Matrix-Vektor-Schreibweise f\"ur am Anfang von Aufgabe 4 gezeigten Datensatz. Benennen Sie die einzelnen Modellkomponenten. Geben Sie Erwartungswerte und die Varianzen f\"ur alle zuf\"alligen Effekte im Modell an.
 \points{\Sexpr{lPointsQ4$TaskB}}
 \end{enumerate}
 
 \sol
+
+Das allgemeine BLUP-Vatermodell lautet:
+
+$$y = Xb + Zs + e$$
+
+\begin{tabular}{lll}
+mit  &  $y$  &  Vektor der ph\"anotypischen Leistungen, entspricht der Kolonne Leistung im Datensatz \\
+     &  $b$  &  Vektor der fixen Herden-Effekte\\
+     &  $X$  &  Inzidenzmatrix verkn\"upft $b$ mit $y$\\
+     &  $s$  &  Vektor der zuf\"alligen Vatereffekte\\
+     &  $Z$  &  Inzidenzmatrix verkn\"upft $s$ mit $y$ \\
+     &  $e$  &  Vektor der Resteffekte
+\end{tabular}
+
+Die Erwartungswerte und die Varianzen f\"ur die zuf\"alligen Teile des Modells lauten:
+
+
+\begin{equation*}
+E \left[ s \right] = 0 \quad \text{und} \quad E\left[ e \right] = 0
+\end{equation*}
+
+\noindent Somit ist $$E\left[ y \right] = Xb$$.
+
+Die Varianzen von $e$ und $s$ sind definiert als
+
+\begin{equation*}
+var(s) = G = A * \sigma_s^2 = I * \sigma_s^2 \quad \text{und} \quad var(e) = R = I * \sigma_e^2
+\end{equation*}
+
+\noindent Da die V\"ater nicht miteinander verwandt sind, ist in diesem Bespiel $A = I$. Die Covarianzen zwischen $s$ und $e$ werden auf $0$ gesetzt. Daraus k\"onnen wir die Covarianzmatrix von $y$ berechnen als
+
+$$var(y) = ZGZ^T + R = ZZ^T * \sigma_s^2 + I * \sigma_e^2$$
+
 
 
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[c)]
+\item[c)] Stellen Sie die Mischmodellgleichungen f\"ur das BLUP-Vatermodell f\"ur den in dieser Aufgabe angegebenen Datensatz an.
 \points{\Sexpr{lPointsQ4$TaskC}}
 \end{enumerate}
 
 \sol
+
+Die Komponenten der Mischmodellgleichungen des Vatermodells lauten:
+
+\begin{itemize}
+\item Varianzverh\"altnis
+\end{itemize}
+
+<<SetupVarComp, echo=FALSE, results=hide>>=
+sigmas2 <- sigmaa2/4
+sigmae2Sire <- sigmap2 - sigmas2
+alphaSire <- sigmae2Sire / sigmas2
+@
+
+$$\alpha = \frac{\sigma_e^2}{\sigma_s^2} = \frac{\Sexpr{sigmae2Sire}}{\Sexpr{sigmas2}} = \Sexpr{alphaSire}$$
+
+\begin{itemize}
+\item Koeffizientenmatrix
+\end{itemize}
+
+<<CoeffMat, echo=FALSE, results=tex>>=
+matX <- matrix(c(1,0,
+                 1,0,
+                 0,1,
+                 1,0,
+                 0,1,
+                 0,1), ncol = nNrHerde)
+matZ <- matrix(c(0,0,1,
+                 1,0,0,
+                 0,1,0,
+                 0,1,0,
+                 0,0,1,
+                 1,0,0), ncol = nNrSire)
+matXtX <- crossprod(matX)
+matXtZ <- crossprod(matX,matZ)
+matZtZ <- crossprod(matZ)
+matZtZIalpha <- matZtZ + diag(1,nrow = nNrSire) * alphaSire
+
+cat("$$X^TX = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtX, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$\n")
+cat("$$X^TZ = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matXtZ, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$\n")
+cat("$$Z^TZ + I * \\alpha = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matZtZIalpha, pnDigits = 0), collapse = "\n"))
+cat("\\right]\n$$\n")
+@
+
+\begin{itemize}
+\item L\"osungsvektor
+\end{itemize}
+
+<<SolVec, echo=FALSE, results=tex>>=
+vecSol <- c("\\hat{b}_{Herde1}", "\\hat{b}_{Herde2}",
+            "\\hat{s}_{VaterA}", "\\hat{s}_{VaterB}", "\\hat{s}_{VaterC}")
+cat("$$\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSol)), collapse = "\n"))
+cat("\\right]\n$$\n")
+
+@
+
+\begin{itemize}
+\item Rechte Handseite
+\end{itemize}
+
+<<RightHandside, echo=FALSE, results=tex>>=
+vecY <- as.vector(dfMlrData$Leistung)
+vecXtY <- crossprod(matX,vecY)
+vecZtY <- crossprod(matZ,vecY)
+vecRhs <- c(vecXtY,vecZtY)
+cat("$$X^Ty = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = vecXtY, pnDigits = 2), collapse = "\n"))
+cat("\\right]\n$$\n")
+cat("$$Z^Ty = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = vecZtY, pnDigits = 2), collapse = "\n"))
+cat("\\right]\n$$\n")
+@
+
+\clearpage
+\pagebreak
+
+\begin{itemize}
+\item Zusammengesetzt
+\end{itemize}
+
+<<Mmg, echo=FALSE, results=tex>>=
+matCoef <- cbind(rbind(matXtX, t(matXtZ)),rbind(matXtZ, matZtZIalpha))
+cat("$$\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = matCoef, pnDigits = 2), collapse = "\n"))
+cat("\\right]\n")
+cat("\\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSol)), collapse = "\n"))
+cat("\\right]\n")
+cat(" = \\left[\n")
+cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhs)), collapse = "\n"))
+cat("\\right]\n$$\n")
+@
 
 
 \clearpage
