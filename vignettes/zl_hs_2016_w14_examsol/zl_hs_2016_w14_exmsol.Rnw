@@ -32,7 +32,7 @@ nPointQ2Total <- sum(unlist(lPointsQ2))
 # Assign Points for Q3
 lPointsQ3 <- list(TaskA = 10,
                   TaskB = 6,
-                  TaskC = 0)
+                  TaskC = 8)
 nPointQ3Total <- sum(unlist(lPointsQ3))
 @
 <<PointsQ4, echo=FALSE>>=
@@ -373,23 +373,125 @@ Die Sch\"atzung der Restvarianz mit der Residuen-Methode wird als glaubw\"urdige
 \pagebreak
 
 \begin{enumerate}
-\item[c)] Der Einfluss der Messperson soll in einer separaten Analyse untersucht werden, wobei die Messperson als zuf\"alliger Effekt ins Modell einfliessen soll.
+\item[c)] Der Einfluss der Messperson soll in einer separaten Analyse untersucht werden, wobei die Messperson als zuf\"alliger Effekt ins Modell einfliessen soll. Sch\"atzen Sie die Varianzkomponenten des zuf\"alligen Effektes der Messperson und des Resteffektes mit Hilfe einer Varianzanalyse. Folgendes Modell soll den Daten zu Grunde liegen.
 \points{\Sexpr{lPointsQ3$TaskC}}
 \end{enumerate}
 
+$$y = 1\mu + Zm + e$$
+
+\vspace{2ex}
+\begin{tabular}{llp{12cm}}
+mit  &  $y$    &  Vektor der gemessenen Stengell\"angen\\
+     &  $\mu$  &  allgemeines Mittel\\
+     &  $1$    &  Inzidenzvektor f\"ur $\mu$\\
+     &  $m$    &  Vektor der zuf\"alligen Effekte der Messperson\\
+     &  $Z$    &  Inzidenzmatrix f\"ur $m$\\
+     &  $e$    &  Vektor der Resteffekte
+\end{tabular}
+
+\vspace{2ex}
+\noindent Die Varianzen der zuf\"alligen Effekte haben die folgende Struktur:
+$$var(m) = I * \sigma_m^2 \quad \text{und} \quad var(e) = I * \sigma_e^2$$
+
+\noindent wobei $I$ f\"ur die Einheitsmatrix steht.
+
+Die Summenquadrate (SSQ) f\"ur die Messpersonen und die Residuen und die Freiheitsgrade (DF) sind in der folgenden Tabelle zusammengefasst.
+
+<<SummaryAnova, echo=FALSE, results=tex>>=
+nAnzObs <- nrow(dfMlrData)
+tabAnovaMessPerson <- aov(formula = Stengellaenge ~ Messperson, data = dfMlrData)
+nDfResidual <- tabAnovaMessPerson$df.residual
+vecFitMessPers <- fitted(tabAnovaMessPerson) - mean(dfMlrData$Stengellaenge)
+nSSqFitMessPers <- crossprod(vecFitMessPers)
+nDfMessPers <- nAnzObs - nDfResidual-1
+vecResMessPers <- residuals(tabAnovaMessPerson)
+nSsqResMessPers <- crossprod(vecResMessPers)
+dfSummaryAnova <- data.frame(Effekt = c("Messperson", "Residuen"),
+                             DF     = as.integer(c(nDfMessPers, nDfResidual)),
+                             SSQ    = c(nSSqFitMessPers, nSsqResMessPers))
+print(xtable::xtable(dfSummaryAnova, digits = 3), include.rownames = FALSE)
+@
+
+
 \sol
+
+<<AnovaVarEstResult>>=
+nMsqResMessPers <- nSsqResMessPers/nDfResidual
+@
+
+\noindent Somit ist die Sch\"atzung der Restvarianz:
+$$\Sexpr{round(nSsqResMessPers, digits = 3)}/\Sexpr{as.integer(nDfResidual)} = \Sexpr{round(nMsqResMessPers, digits = 3)}$$
+
+F\"ur die Varianz der Effekte der Messpersonen erhalten wir folgende Sch\"atzung:
+
+<<AnovaVarMessPersResult>>=
+nMsqMessPers <- nSSqFitMessPers / nDfMessPers
+nEstVarMessPers <- (nMsqMessPers - nMsqResMessPers)/nAnzObs
+@
+
+\noindent Die Sch\"atzung der Varianz des Effektes der Messperson lautet:
+$$(\Sexpr{round(nMsqMessPers, digits = 3)} - \Sexpr{round(nMsqResMessPers, digits = 3)} / \Sexpr{as.integer(nAnzObs)})
+  =  \Sexpr{round(nEstVarMessPers, digits = 3)}
+$$
 
 \clearpage
 \pagebreak
 
-\section*{Aufgabe 4:  (\Sexpr{nPointQ4Total})}
+\section*{Aufgabe 4: Zuchtwertsch\"atzung (\Sexpr{nPointQ4Total})}
+Der folgende Datensatz soll f\"ur die Vorhersage von Zuchtwerten verwendet werden.
+
+<<ShowDataSet, echo=FALSE, results=tex>>=
+sigmaa2 <- 32
+sigmap2 <- 128
+h2 <- sigmaa2/sigmap2
+k <- (4-h2)/h2
+nNrRecords <- 6
+nNrSire <- 3
+dfMlrData <- data.frame(Tochter = as.character(c(1:nNrRecords) + nNrSire),
+                        Herde   = c("1","1","2","1","2","2"),
+                        Vater   = c("C","A","B","B","C","A"),
+                        Leistung = c(112,105,118,120,135,115))
+nNrHerde <- length(unique(dfMlrData$Herde))
+#knitr::kable(dfMlrData)
+print(xtable::xtable(dfMlrData), include.rownames = FALSE)
+@
+
+Die Varianzen sind aus der folgenden Tabelle ersichtlich
+
+<<VarTable, echo=FALSE, results=tex>>=
+dfVarTable <- data.frame(Komponenten = c("phaentypisch", "genetisch additiv"),
+                         Symbol      = c("$\\sigma_p^2$", "$\\sigma_a^2$"),
+                         Wert        = c(sigmap2, sigmaa2))
+print(xtable::xtable(dfVarTable), include.rownames = FALSE, type = "latex", sanitize.text.function = function(x){x})
+@
+
+
+<<SetupProgMean, echo=FALSE, results=hide>>=
+mu <- mean(dfMlrData$Leistung)
+@
 
 \begin{enumerate}
-\item[a)]
+\item[a)] Sch\"atzen Sie die Zuchtwerte der V\"ater aufgrund der Mittelwerte ihrer Nachkommen. Wir nehmen an, dass das allgemeine Populationsmittel $\mu = \Sexpr{mu}$ betr\"agt.
 \points{\Sexpr{lPointsQ4$TaskA}}
 \end{enumerate}
 
 \sol
+
+Der gesch\"atzte Zuchtwert $\hat{a}_s$ eines Vaters $s$ aufgrund der Mittelwerte $\tilde{y}_s$ seiner Nachkommen lautet
+
+$$\hat{a}_s = \frac{2n}{n+k}(\tilde{y}_s - \mu)$$
+
+\noindent wobei $n$ f\"ur die Anzahl Beobachtungen steht und $k = \frac{4-h^2}{h^2} = \Sexpr{k}$ ist.
+
+Somit sind die Zuchtwerte der drei V\"ater:
+
+<<BvSireProgMean>>=
+(nCorFact <- 2*nNrRecords/(nNrRecords + k))
+(vecSirIds <- LETTERS[1:nNrSire])
+(vecCorAvSire <- sapply(vecSirIds, function(x) mean(as.vector(dfMlrData$Leistung[which(dfMlrData$Vater == x)]))))
+
+@
+
 
 
 \clearpage
