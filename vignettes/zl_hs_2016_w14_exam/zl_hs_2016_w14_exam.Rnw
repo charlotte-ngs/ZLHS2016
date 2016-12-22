@@ -130,7 +130,7 @@ print(ped)
 \pagebreak
 
 \begin{enumerate}
-\item[b)] Welche Tiere im gezeigten Pedigree sind ingez\"uchtet? Bitte tragen Sie die Inzuchtkoeffizienten $F_X$ aller Tiere in die nachfolgende Tabelle ein.
+\item[b)] Welche Tiere im gezeigten Pedigree sind ingez\"uchtet und wie gross sind die Inzuchtkoeffizienten $F_X$? Bitte vervollst\"andigen Sie die nachfolgende Tabelle.
 \points{\Sexpr{lPointsQ1$TaskB}}
 \end{enumerate}
 
@@ -159,7 +159,7 @@ Tier ID  &  ingez\"uchtet (ja/nein)  &  Inzuchtkoeffizient $F_X$ \\
 \pagebreak
 
 \begin{enumerate}
-\item[c)] In der Paarungsplanung geht es oft darum Inzucht zu verhindern oder zu begrenzen. Wenn wir einen Paarungspartner f\"ur Kuh $6$ im oben gezeigten Pedigree suchen, kommen die Stiere $1$, $3$ oder $5$ in Frage. W\"ahlen Sie den Paarungspartner so aus, dass der Nachkomme aus der Paarung nicht ingez\"uchtet ist. Begr\"unden Sie Ihre Auswahl des Paarungspartners.
+\item[c)] In der Paarungsplanung geht es oft darum Inzucht zu verhindern. Wenn wir einen Paarungspartner f\"ur Kuh $6$ im oben gezeigten Pedigree suchen, kommen die Stiere $1$, $3$ oder $5$ in Frage. W\"ahlen Sie den Paarungspartner so aus, dass das Kalb aus der Paarung nicht ingez\"uchtet ist. Begr\"unden Sie Ihre Auswahl des Paarungspartners.
 \points{\Sexpr{lPointsQ1$TaskC}}
 \end{enumerate}
 
@@ -181,12 +181,13 @@ Tier ID  &  ingez\"uchtet (ja/nein)  &  Inzuchtkoeffizient $F_X$ \\
 \includegraphics[width=7cm]{"pdf/ZuechtungElternNachkommen"}
 \end{center}
 
+
 \clearpage
 \pagebreak
 
 
 \begin{enumerate}
-\item[b)] Die Theorie des Selektionsindexes zeigt auf, wie der Gesamtzuchtwert $H$ aufgrund von verf\"ugbaren Informationsquellen gesch\"atzt werden kann. Dabei werden die Informationsquellen durch einen Vektor $x$ repr\"asentiert und mit einem Vektor $b$ von unbekannten Indexgewichten zu einem Indexwert $I$ zusammengefasst. Das Ziel ist nun den Vektor $b$ so zu bestimmen, dass $I$ den Gesamtzuchtwert $H$ m\"oglichst genau sch\"atzt. Das heisst die Fehlervarianz $var(H-I)$ soll minimal sein.
+\item[b)] Die Theorie des Selektionsindexes zeigt auf, wie der Gesamtzuchtwert $H$ aufgrund von verf\"ugbaren Informationsquellen gesch\"atzt werden kann. Dabei werden die Informationsquellen durch einen Vektor $x$ repr\"asentiert und mit einem Vektor $b$ von unbekannten Indexgewichten zu einem Index $I$ zusammengefasst. Das Ziel ist nun den Vektor $b$ so zu bestimmen, dass $I$ den Gesamtzuchtwert $H$ m\"oglichst genau sch\"atzt. Das heisst, die Fehlervarianz $var(H-I)$ soll minimal sein.
 
 Wie lauten die Indexgleichungen zur Bestimmung der Indexgewichte $b$, aufgrund der Anforderung der minimalen Fehlervarianz? Benennen Sie die Komponenten in den Indexgleichungen.
 \points{\Sexpr{lPointsQ2$TaskB}}
@@ -197,7 +198,7 @@ Wie lauten die Indexgleichungen zur Bestimmung der Indexgewichte $b$, aufgrund d
 \pagebreak
 
 \begin{enumerate}
-\item[c)] Eine Fleischrinderzuchtorganisation entwirft ein neues Zuchtziel mit den zwei Merkmalen Geburtsgewicht (\texttt{GBG}) und Absetzgewicht (\texttt{ABG}). Die gleichen Merkmale, wie im Zuchtziel, werden bei den Selektionskandidaten erhoben und stehen in Form von gesch\"atzten Zuchtwerten als Informationsquellen zur Verf\"ugung. Die wirtschaftlichen Gewichte der beiden Merkmale im Zuchtziel betragen $3.00$ Fr/kg f\"ur \texttt{GBG} und $2.50$ Fr/kg f\"ur \texttt{ABG}. Wie lauten die Gewichtungsfaktoren $b$ f\"ur einen Index aus den Informationsquellen \texttt{GBG} und \texttt{ABG}?
+\item[c)] Eine Fleischrinderzuchtorganisation entwirft ein neues Zuchtziel mit den zwei Merkmalen Geburtsgewicht (\texttt{GBG}) und Absetzgewicht (\texttt{ABG}). Die gleichen Merkmale wie im Zuchtziel, werden bei den Selektionskandidaten erhoben und stehen in Form von gesch\"atzten Zuchtwerten als Informationsquellen zur Verf\"ugung. Die wirtschaftlichen Gewichte der beiden Merkmale im Zuchtziel betragen $3.00$ Fr/kg f\"ur \texttt{GBG} und $2.50$ Fr/kg f\"ur \texttt{ABG}. Wie lauten die Gewichtungsfaktoren f\"ur einen Index aus den Informationsquellen \texttt{GBG} und \texttt{ABG}?
 \points{\Sexpr{lPointsQ2$TaskC}}
 \end{enumerate}
 
@@ -241,6 +242,7 @@ mit  &  $y$  &  Vektor der gemessenen Stengell\"angen\\
 lmRegModelSorte <- lm(Stengellaenge ~ -1 + Sorte, data = dfMlrData)
 round(coefficients(lmRegModelSorte), digits = 2)
 @
+
 
 
 \clearpage
@@ -342,7 +344,7 @@ mu <- mean(dfMlrData$Leistung)
 \pagebreak
 
 \begin{enumerate}
-\item[b)] Wie lautet das BLUP-Vatermodell in Matrix-Vektor-Schreibweise f\"ur am Anfang von Aufgabe 4 gezeigten Datensatz. Benennen Sie die einzelnen Modellkomponenten. Geben Sie Erwartungswerte und die Varianzen f\"ur alle zuf\"alligen Effekte im Modell an.
+\item[b)] Wie lautet das BLUP-Vatermodell in Matrix-Vektor-Schreibweise f\"ur den in dieser Aufgabe gezeigten Datensatz. Benennen Sie die einzelnen Modellkomponenten. Geben Sie Erwartungswerte und die Varianzen f\"ur alle zuf\"alligen Effekte im Modell an.
 \points{\Sexpr{lPointsQ4$TaskB}}
 \end{enumerate}
 
@@ -372,7 +374,6 @@ print(ped)
 \end{center}
 
 \points{\Sexpr{lPointsQ5$TaskA}}
-
 
 
 \end{document}
