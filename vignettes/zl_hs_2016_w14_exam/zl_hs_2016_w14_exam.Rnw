@@ -63,7 +63,7 @@ nPointOverallTotal <- nPointQ1Total + nPointQ2Total + nPointQ3Total + nPointQ4To
 	Institut f\"ur Agrarwissenschaften
 }
 
-\title{\vspace{5ex} L\"osungen zur Pr\"ufung \\
+\title{\vspace{5ex} Pr\"ufung \\
        Z\"uchtungslehre\\
        HS 2016 \vspace{3ex}}
 \author{Peter von Rohr \vspace{3ex}}
@@ -125,14 +125,6 @@ print(ped)
 \points{\Sexpr{lPointsQ1$TaskA}}
 \end{enumerate}
 
-\sol
-
-<<ComputePed, echo=FALSE, results=tex>>=
-matA <- as.matrix(getA(ped = ped))
-cat("$$A = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = matA, pnDigits = 3), collapse = "\n"))
-cat("\\right]\n$$")
-@
 
 \clearpage
 \pagebreak
@@ -162,24 +154,6 @@ Tier ID  &  ingez\"uchtet (ja/nein)  &  Inzuchtkoeffizient $F_X$ \\
 \hline
 \end{tabular}}
 
-\sol
-
-<<SolQ1bPrepare, echo=FALSE, results=hide>>=
-TierId <- 1:nNrAni
-vecInzCoeff <- diag(matA)-1
-igz <- unlist(lapply(TierId, function(x) ifelse(vecInzCoeff[x]>0,"ja","nein")))
-dfSolQ1b <- data.frame(TierId,igz,vecInzCoeff, row.names = NULL)
-names(dfSolQ1b) <- c("Tier Id", "ingezuechtet (ja/nein)", "Inzuchtkoeffizient")
-xSolQ1b <- xtable::xtable(dfSolQ1b, align = c("l","r","c","r"))
-@
-
-{\renewcommand{\arraystretch}{1.7}
- \renewcommand{\tabcolsep}{0.2cm}
-<<SolQ1bPrint, echo=FALSE, results=tex>>=
-print(xSolQ1b, include.rownames = FALSE, hline.after = 1:nNrAni)
-@
-}
-
 
 \clearpage
 \pagebreak
@@ -189,25 +163,6 @@ print(xSolQ1b, include.rownames = FALSE, hline.after = 1:nNrAni)
 \points{\Sexpr{lPointsQ1$TaskC}}
 \end{enumerate}
 
-\sol
-
-Der Paarungspartner muss so gew\"ahlt werden, dass er nicht mit Kuh $6$ verwandt ist. Dies ist nur f\"ur den Paarungspartner $3$ der Fall. Als Kontrolle k\"onnen wir die das Pedigree erweitern und die Inzuchtkoeffizienten nochmals rechnen.
-
-<<ExtendPed, echo=FALSE>>=
-nNrAni <- 7
-pedExt <- pedigree(sire = c(NA,NA,NA,1,1,1,3), dam = c(NA,NA,NA,2,4,4,6), label = 1:nNrAni)
-print(pedExt)
-@
-
-Die Inzuchtkoeffizienten der Tiere lauten:
-
-<<InbreedingPedExt, echo=FALSE>>=
-nAniInterest <- 7
-vecInbr <- inbreeding(ped = pedExt)
-print(vecInbr)
-@
-
-Wobei der Inzuchtkoeffizient von Tier $\Sexpr{nAniInterest}$ ist gleich: $\Sexpr{vecInbr[nAniInterest]}$
 
 \clearpage
 \pagebreak
@@ -226,59 +181,25 @@ Wobei der Inzuchtkoeffizient von Tier $\Sexpr{nAniInterest}$ ist gleich: $\Sexpr
 \includegraphics[width=7cm]{"pdf/ZuechtungElternNachkommen"}
 \end{center}
 
-\sol
-
-In den beiden Diagrammen wird der Unterschied zwischen gerichteter Selektion in Zuchtpopulationen und Vermehrung in Wildtier oder Produktions-  und Vermehrungspopulationen dargestellt.
-
-Die vier Punkte bedeuten
-
-\begin{enumerate}
-\item Nachkommendurchschnitt
-\item Elterndurchschnitt
-\item Eltern
-\item Nachkommen
-\end{enumerate}
-
 \clearpage
 \pagebreak
 
 
 \begin{enumerate}
-\item[b)] Die Theorie des Selektionsindexes zeigt auf, wie der Gesamtzuchtwert $H$ aufgrund von verf\"ugbaren Informationsquellen gesch\"atzt werden kann. Dabei werden die Informationsquellen durch einen Vektor $x$ repr\"asentiert und mit einem Vektor $b$ von unbekannten Indexgewichten zu einem Index $I$ zusammengefasst. Das Ziel ist nun den Vektor $b$ so zu bestimmen, dass $I$ den Gesamtzuchtwert $H$ m\"oglichst genau sch\"atzt. Das heisst die Fehlervarianz $var(H-I)$ soll minimal sein.
+\item[b)] Die Theorie des Selektionsindexes zeigt auf, wie der Gesamtzuchtwert $H$ aufgrund von verf\"ugbaren Informationsquellen gesch\"atzt werden kann. Dabei werden die Informationsquellen durch einen Vektor $x$ repr\"asentiert und mit einem Vektor $b$ von unbekannten Indexgewichten zu einem Indexwert $I$ zusammengefasst. Das Ziel ist nun den Vektor $b$ so zu bestimmen, dass $I$ den Gesamtzuchtwert $H$ m\"oglichst genau sch\"atzt. Das heisst die Fehlervarianz $var(H-I)$ soll minimal sein.
 
 Wie lauten die Indexgleichungen zur Bestimmung der Indexgewichte $b$, aufgrund der Anforderung der minimalen Fehlervarianz? Benennen Sie die Komponenten in den Indexgleichungen.
 \points{\Sexpr{lPointsQ2$TaskB}}
 \end{enumerate}
 
-\sol
-
-Die Indexgleichungen lauten $$Pb = Gv$$
-
-\begin{tabular}{llp{12cm}}
-mit  &  $P$  &  Covarianzmatrix zwischen den Informationsquellen $x$\\
-     &  $b$  &  Vektor der unbekannten Indexgewichte\\
-     &  $G$  &  Covarianzmatrix zwischen Informationsquellen und Merkmalen im Gesamtzuchtwert\\
-     &  $v$  &  Vektor der wirtschaftlichen Gewichte
-\end{tabular}
 
 \clearpage
 \pagebreak
 
 \begin{enumerate}
-\item[c)] Eine Fleischrinderzuchtorganisation entwirft ein neues Zuchtziel mit den zwei Merkmalen Geburtsgewicht (\texttt{GBG}) und Absetzgewicht (\texttt{ABG}). Die gleichen Merkmale wie im Zuchtziel, werden bei den Selektionskandidaten erhoben und stehen in Form von gesch\"atzten Zuchtwerten als Informationsquellen zur Verf\"ugung. Die wirtschaftlichen Gewichte der beiden Merkmale im Zuchtziel betragen $3.00$ Fr/kg f\"ur \texttt{GBG} und $2.50$ Fr/kg f\"ur \texttt{ABG}. Wie lauten die Gewichtungsfaktoren f\"ur einen Index aus den Informationsquellen \texttt{GBG} und \texttt{ABG}?
+\item[c)] Eine Fleischrinderzuchtorganisation entwirft ein neues Zuchtziel mit den zwei Merkmalen Geburtsgewicht (\texttt{GBG}) und Absetzgewicht (\texttt{ABG}). Die gleichen Merkmale, wie im Zuchtziel, werden bei den Selektionskandidaten erhoben und stehen in Form von gesch\"atzten Zuchtwerten als Informationsquellen zur Verf\"ugung. Die wirtschaftlichen Gewichte der beiden Merkmale im Zuchtziel betragen $3.00$ Fr/kg f\"ur \texttt{GBG} und $2.50$ Fr/kg f\"ur \texttt{ABG}. Wie lauten die Gewichtungsfaktoren $b$ f\"ur einen Index aus den Informationsquellen \texttt{GBG} und \texttt{ABG}?
 \points{\Sexpr{lPointsQ2$TaskC}}
 \end{enumerate}
-
-\sol
-
-Da die gleichen Merkmale im Zuchtziel und im Index sind, dann gilt $b=v$ und somit ist
-
-<<IndexWeight, echo=FALSE, results=tex>>=
-cat("$$b = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(c(3.00,2.50), ncol = 1), pnDigits = 1), collapse = "\n"))
-cat("\\right]\n$$\n")
-
-@
 
 
 \clearpage
@@ -321,29 +242,6 @@ lmRegModelSorte <- lm(Stengellaenge ~ -1 + Sorte, data = dfMlrData)
 round(coefficients(lmRegModelSorte), digits = 2)
 @
 
-\sol
-
-Der Residuenvektor lautet
-
-<<VectorResiduals>>=
-vecRes <- residuals(lmRegModelSorte)
-print(round(vecRes, digits = 2))
-@
-
-Die gesch\"atzte Restvarianz betr\"agt somit
-
-<<EstResVar>>=
-nRestVarEst <- crossprod(vecRes)/(nrow(dfMlrData) - nNrSorte)
-cat("Restvarianz: ", round(nRestVarEst, digits = 2))
-cat("Reststandardabweichung: ", round(sqrt(nRestVarEst), digits = 2))
-@
-
-Als Vergleich dazu, was \texttt{lm()} liefert
-
-<<SummaryLm>>=
-summary(lmRegModelSorte)
-@
-
 
 \clearpage
 \pagebreak
@@ -353,20 +251,6 @@ summary(lmRegModelSorte)
 \points{\Sexpr{lPointsQ3$TaskB}}
 \end{enumerate}
 
-\sol
-
-Die Maximum Likelihood Sch\"atzung der Restvarianz ist gleich, wie die Sch\"atzung aufgrund der Residuen bis auf den Faktor vor der Summe der quadrierten Residuen. Dieser lautet bei Maximum Likelihood $1/n$ und bei der Residuen-Methode $1/(n-p)$. Da der Faktor bei ML immer kleiner ist als bei der Residuen-Methode wird die Restvarianz mit ML tendenziell immer untersch\"atzt.
-
-Somit betr\"agt der ML-Sch\"atzwert f\"ur die Restvarianz
-
-<<EstResVarML>>=
-nRestVarEstML <- crossprod(vecRes)/nrow(dfMlrData)
-cat("ML-Schaetzung der Restvarianz: ", round(nRestVarEstML, digits = 2))
-cat("ML-Schaetzung der Reststandardabweichung: ",
-    round(sqrt(nRestVarEstML), digits = 2))
-@
-
-Die Sch\"atzung der Restvarianz mit der Residuen-Methode wird als glaubw\"urdiger betrachtet, da diese erwartungstreu ist.
 
 \clearpage
 \pagebreak
@@ -412,27 +296,6 @@ print(xtable::xtable(dfSummaryAnova, digits = 3), include.rownames = FALSE)
 @
 
 
-\sol
-
-<<AnovaVarEstResult>>=
-nMsqResMessPers <- nSsqResMessPers/nDfResidual
-@
-
-\noindent Somit ist die Sch\"atzung der Restvarianz:
-$$\Sexpr{round(nSsqResMessPers, digits = 3)}/\Sexpr{as.integer(nDfResidual)} = \Sexpr{round(nMsqResMessPers, digits = 3)}$$
-
-F\"ur die Varianz der Effekte der Messpersonen erhalten wir folgende Sch\"atzung:
-
-<<AnovaVarMessPersResult>>=
-nMsqMessPers <- nSSqFitMessPers / nDfMessPers
-nEstVarMessPers <- (nMsqMessPers - nMsqResMessPers)/nAnzObs
-@
-
-\noindent Die Sch\"atzung der Varianz des Effektes der Messperson lautet:
-$$(\Sexpr{round(nMsqMessPers, digits = 3)} - \Sexpr{round(nMsqResMessPers, digits = 3)} / \Sexpr{as.integer(nAnzObs)})
-  =  \Sexpr{round(nEstVarMessPers, digits = 3)}
-$$
-
 \clearpage
 \pagebreak
 
@@ -474,37 +337,6 @@ mu <- mean(dfMlrData$Leistung)
 \points{\Sexpr{lPointsQ4$TaskA}}
 \end{enumerate}
 
-\sol
-
-Der gesch\"atzte Zuchtwert $\hat{a}_s$ eines Vaters $s$ aufgrund der Mittelwerte $\tilde{y}_s$ seiner Nachkommen lautet
-
-$$\hat{a}_s = \frac{2n}{n+k}(\tilde{y}_s - \mu)$$
-
-\noindent wobei $n$ f\"ur die Anzahl Beobachtungen steht und $k = \frac{4-h^2}{h^2} = \Sexpr{k}$ ist.
-
-
-<<BvSireProgMean, echo=FALSE>>=
-nCorFact <- 2*nNrRecords/(nNrRecords + k)
-#cat("Correction factor: ", nCorFact, "\n")
-vecSirIds <- LETTERS[1:nNrSire]
-vecCorAvSire <- sapply(vecSirIds, function(x) mean(as.vector(dfMlrData$Leistung[which(dfMlrData$Vater == x)])))
-#cat("Sire averages:\n")
-#print(vecCorAvSire)
-@
-
-\noindent Der Faktor vor der Differenz zwischen $\tilde{y}_s$ und $\mu$ ist:
-$$\frac{2n}{n+k} = \Sexpr{round(nCorFact, digits = 2)}$$
-
-\noindent Somit sind die Zuchtwerte der drei V\"ater:
-
-<<BvSireProgMeanResult, echo=FALSE, results=tex>>=
-vecSireBv <- nCorFact * (vecCorAvSire - mu)
-dfSireBvTable <- data.frame(Vater = vecSirIds,
-                            Zuchtwert = vecSireBv)
-print(xtable::xtable(dfSireBvTable, digits = 2), include.rownames = FALSE)
-@
-
-
 
 \clearpage
 \pagebreak
@@ -514,41 +346,6 @@ print(xtable::xtable(dfSireBvTable, digits = 2), include.rownames = FALSE)
 \points{\Sexpr{lPointsQ4$TaskB}}
 \end{enumerate}
 
-\sol
-
-Das allgemeine BLUP-Vatermodell lautet:
-
-$$y = Xb + Zs + e$$
-
-\begin{tabular}{lll}
-mit  &  $y$  &  Vektor der ph\"anotypischen Leistungen, entspricht der Kolonne Leistung im Datensatz \\
-     &  $b$  &  Vektor der fixen Herden-Effekte\\
-     &  $X$  &  Inzidenzmatrix verkn\"upft $b$ mit $y$\\
-     &  $s$  &  Vektor der zuf\"alligen Vatereffekte\\
-     &  $Z$  &  Inzidenzmatrix verkn\"upft $s$ mit $y$ \\
-     &  $e$  &  Vektor der Resteffekte
-\end{tabular}
-
-Die Erwartungswerte und die Varianzen f\"ur die zuf\"alligen Teile des Modells lauten:
-
-
-\begin{equation*}
-E \left[ s \right] = 0 \quad \text{und} \quad E\left[ e \right] = 0
-\end{equation*}
-
-\noindent Somit ist $$E\left[ y \right] = Xb$$.
-
-Die Varianzen von $e$ und $s$ sind definiert als
-
-\begin{equation*}
-var(s) = G = A * \sigma_s^2 = I * \sigma_s^2 \quad \text{und} \quad var(e) = R = I * \sigma_e^2
-\end{equation*}
-
-\noindent Da die V\"ater nicht miteinander verwandt sind, ist in diesem Bespiel $A = I$. Die Covarianzen zwischen $s$ und $e$ werden auf $0$ gesetzt. Daraus k\"onnen wir die Covarianzmatrix von $y$ berechnen als
-
-$$var(y) = ZGZ^T + R = ZZ^T * \sigma_s^2 + I * \sigma_e^2$$
-
-
 
 \clearpage
 \pagebreak
@@ -557,105 +354,6 @@ $$var(y) = ZGZ^T + R = ZZ^T * \sigma_s^2 + I * \sigma_e^2$$
 \item[c)] Stellen Sie die Mischmodellgleichungen f\"ur das BLUP-Vatermodell f\"ur den in dieser Aufgabe angegebenen Datensatz an.
 \points{\Sexpr{lPointsQ4$TaskC}}
 \end{enumerate}
-
-\sol
-
-Die Komponenten der Mischmodellgleichungen des Vatermodells lauten:
-
-\begin{itemize}
-\item Varianzverh\"altnis
-\end{itemize}
-
-<<SetupVarComp, echo=FALSE, results=hide>>=
-sigmas2 <- sigmaa2/4
-sigmae2Sire <- sigmap2 - sigmas2
-alphaSire <- sigmae2Sire / sigmas2
-@
-
-$$\alpha = \frac{\sigma_e^2}{\sigma_s^2} = \frac{\Sexpr{sigmae2Sire}}{\Sexpr{sigmas2}} = \Sexpr{alphaSire}$$
-
-\begin{itemize}
-\item Koeffizientenmatrix
-\end{itemize}
-
-<<CoeffMat, echo=FALSE, results=tex>>=
-matX <- matrix(c(1,0,
-                 1,0,
-                 0,1,
-                 1,0,
-                 0,1,
-                 0,1), ncol = nNrHerde)
-matZ <- matrix(c(0,0,1,
-                 1,0,0,
-                 0,1,0,
-                 0,1,0,
-                 0,0,1,
-                 1,0,0), ncol = nNrSire)
-matXtX <- crossprod(matX)
-matXtZ <- crossprod(matX,matZ)
-matZtZ <- crossprod(matZ)
-matZtZIalpha <- matZtZ + diag(1,nrow = nNrSire) * alphaSire
-
-cat("$$X^TX = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = matXtX, pnDigits = 0), collapse = "\n"))
-cat("\\right]\n$$\n")
-cat("$$X^TZ = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = matXtZ, pnDigits = 0), collapse = "\n"))
-cat("\\right]\n$$\n")
-cat("$$Z^TZ + I * \\alpha = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = matZtZIalpha, pnDigits = 0), collapse = "\n"))
-cat("\\right]\n$$\n")
-@
-
-\begin{itemize}
-\item L\"osungsvektor
-\end{itemize}
-
-<<SolVec, echo=FALSE, results=tex>>=
-vecSol <- c("\\hat{b}_{Herde1}", "\\hat{b}_{Herde2}",
-            "\\hat{s}_{VaterA}", "\\hat{s}_{VaterB}", "\\hat{s}_{VaterC}")
-cat("$$\\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSol)), collapse = "\n"))
-cat("\\right]\n$$\n")
-
-@
-
-\begin{itemize}
-\item Rechte Handseite
-\end{itemize}
-
-<<RightHandside, echo=FALSE, results=tex>>=
-vecY <- as.vector(dfMlrData$Leistung)
-vecXtY <- crossprod(matX,vecY)
-vecZtY <- crossprod(matZ,vecY)
-vecRhs <- c(vecXtY,vecZtY)
-cat("$$X^Ty = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = vecXtY, pnDigits = 2), collapse = "\n"))
-cat("\\right]\n$$\n")
-cat("$$Z^Ty = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = vecZtY, pnDigits = 2), collapse = "\n"))
-cat("\\right]\n$$\n")
-@
-
-\clearpage
-\pagebreak
-
-\begin{itemize}
-\item Zusammengesetzt
-\end{itemize}
-
-<<Mmg, echo=FALSE, results=tex>>=
-matCoef <- cbind(rbind(matXtX, t(matXtZ)),rbind(matXtZ, matZtZIalpha))
-cat("$$\\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = matCoef, pnDigits = 2), collapse = "\n"))
-cat("\\right]\n")
-cat("\\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecSol)), collapse = "\n"))
-cat("\\right]\n")
-cat(" = \\left[\n")
-cat(paste(sGetTexMatrix(pmatAMatrix = as.matrix(vecRhs)), collapse = "\n"))
-cat("\\right]\n$$\n")
-@
 
 
 \clearpage
@@ -675,11 +373,6 @@ print(ped)
 
 \points{\Sexpr{lPointsQ5$TaskA}}
 
-\sol
-
-<<AInvResult>>=
-print(as.matrix(getAInv(ped = ped)))
-@
 
 
 \end{document}
